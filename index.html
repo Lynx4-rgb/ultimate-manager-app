@@ -40,6 +40,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <title>Ultimate Manager</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1664,9 +1670,17 @@ function step(m,dt){
  if(m.flash)m.flash.t-=dt;
  if(m.half===1&&m.t>=m.dur/2){m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
  if(m.t>=m.dur){
-  // play on while an attack is still alive: until a goal, or the ball comes back over halfway (or about 5 minutes)
-  const bb=m.ball;const at=bb.owner?bb.owner.team:bb.last;const A=m.teams[at];const alive=A&&progOf(A,bb.x)>0.5&&m.t<m.dur*1.06;
-  const keep=m.state==='goal'||(alive&&m.state!=='kickoff');
+  // the final whistle only goes once the ball crosses back over halfway: if a side can't clear its own half, the clock keeps ticking
+  const bb=m.ball;const side=Math.sign(bb.x-PL/2)||1;if(m.ftSide==null)m.ftSide=side;
+  const crossed=side!==m.ftSide;
+  // a corner in stoppage time is played out: the taker puts it in, and the next touch (a shot, a header or a clearance) is the last of the match
+  if(m.state==='corner'&&!m.ftCorner)m.ftCorner={taker:m.taker,taken:false};
+  const C=m.ftCorner;let keep;
+  if(C){if(m.state==='play'&&!C.taken&&bb.lastP===C.taker)C.taken=true;
+   const second=C.taken&&bb.lastP&&bb.lastP!==C.taker;
+   keep=m.state==='goal'||m.state==='corner'||!C.taken||!second||!!bb.shot;if(m.state==='kickoff')keep=false;}
+  else keep=m.state==='goal'||(m.state!=='kickoff'&&!crossed);
+  if(m.t>=m.dur*(1+15/90))keep=false; // never more than 15 minutes of stoppage time
   if(!keep){m.finished=true;m.streaker=null;ev(m,'ft','Full-time',-1);return;}
  }
  if(m.cond.streak)streakers(m,dt);
@@ -2594,11 +2608,13 @@ function recStep(m){const R=m.rec;if(!R)return;const U=m.teams[R.team];const on=
  if(m.t>=R.until){if(U.side.tactic===R.k)ev(m,'rec',`They have worked out your ${TACTICS[R.k].name}. The counter has worn off`,R.team);for(const p of U.players)p.cnt=false;m.rec=null;}}
 
 // a corner: swung in for a header, played short, or laid back to the edge of the box for someone to blast first time
-function takeCorner(m,pl){const T=m.teams[pl.team];const O=m.teams[1-pl.team].players;const g=goalOf(T);const r=m.rng();
+function takeCorner(m,pl){const T=m.teams[pl.team];const O=m.teams[1-pl.team].players;const g=goalOf(T);const late=m.t>=m.dur;const r=late?0:m.rng(); // after 90 minutes it always goes long into the box
  const mates=T.players.filter(q=>q!==pl&&q.role!=='GK');if(!mates.length)return false;
  if(r<0.62){
   let best=null,bs=-1e9;for(const q of mates){const dg=dist(q,g);if(dg>16)continue;let mk=99;for(const o of O){if(o.role==='GK')continue;const dd=dist(o,q);if(dd<mk)mk=dd;}const sc=-dg*0.08+Math.min(mk,5)*0.35+(eff(q,'str')+eff(q,'sho'))/200+m.rng()*0.6;if(sc>bs){bs=sc;best=q;}}
-  if(!best)return false;const tx=clamp(best.x+(m.rng()-0.5)*2,2,PL-2),ty=clamp(best.y+(m.rng()-0.5)*2,2,PW-2);
+  if(!best&&late)best=mates.slice().sort((a,c)=>dist(a,g)-dist(c,g))[0];
+  if(!best)return false;let tx=clamp(best.x+(m.rng()-0.5)*2,2,PL-2),ty=clamp(best.y+(m.rng()-0.5)*2,2,PW-2);
+  if(late&&dist({x:tx,y:ty},g)>14){const [px,py]=absPos(T,0.9,0.5+(m.rng()-0.5)*0.15);tx=px;ty=py;}
   ev(m,'corner',`${pl.p.name} swings the corner in`,pl.team);doPass(m,pl,best,{tx,ty,loft:true,clear:true});m.ball.cornerBall=true;m.ball.crossBall=false;return true;}
  if(r<0.8){
   const q=mates.slice().sort((a,c)=>dist(a,pl)-dist(c,pl))[0];if(!q||dist(q,pl)>18)return false;ev(m,'corner',`${pl.p.name} plays the corner short`,pl.team);doPass(m,pl,q);return true;}
