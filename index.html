@@ -34,6 +34,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Special+Elite&family=Playfair+Display:wght@700;900&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
 <title>Ultimate Manager</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1028,24 +1034,56 @@ body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;mar
 @keyframes hangdrop{from{transform:translate(-50%,-110%)}to{transform:translate(-50%,0)}}
 @keyframes hangsway{0%,100%{transform:rotate(0)}30%{transform:rotate(.8deg)}70%{transform:rotate(-.8deg)}}
 body.twl .prephang .phin{background:transparent;border:solid transparent;border-width:10px;border-image:var(--tw-panel2) 24 fill / 10px stretch;border-radius:0}
-.squadpanel.prepmode{margin-top:62px}
-.cycname.tapme{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+.squadpanel.prepmode{margin-top:0}
+.cycname.tapme{cursor:pointer}
 .tapdesc{cursor:pointer}
 .oppform{margin:6px 0 2px}.oppform .ofh{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
 .oppform table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:4px}.oppform th{font-weight:600;color:var(--muted);text-align:left;font-size:11px;padding:2px 4px;border-bottom:1px solid var(--line)}
 .oppform td{padding:3px 4px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap}.oppform .ofo{max-width:70px;overflow:hidden;text-overflow:ellipsis}
 .oppform .ofr.W b{color:var(--good,#5fcf8a)}.oppform .ofr.L b{color:var(--bad,#ef6a5b)}.oppform .ofr.D b{color:var(--mid,#d8c25a)}
-@media (orientation:landscape) and (max-height:500px){.prephang{padding-top:8px}.prephang .chain{height:9px}.prephang .phin{padding:4px 10px}.prephang .phin b{font-size:12px}.squadpanel.prepmode{margin-top:40px}.oppform table{font-size:11px}.oppform td{padding:2px 3px}}
-.ptile .tform{position:absolute;left:3px;top:3px;width:13px;height:11px;display:block}
+@media (orientation:landscape) and (max-height:500px){.prephang{padding-top:8px}.prephang .chain{height:9px}.prephang .phin{padding:4px 10px}.prephang .phin b{font-size:12px}.squadpanel.prepmode{margin-top:0}.oppform table{font-size:11px}.oppform td{padding:2px 3px}}
 .ptile .tform svg{width:100%;height:100%;fill:none;stroke:#2fd6c7;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))}
 .prepmode .tacfam{display:none}
 @media not all and (orientation:landscape) and (max-height:500px){
  .prepmode .squadfield{display:grid;grid-template-columns:auto auto minmax(260px,360px);align-items:start}
- .prepmode .bigpitch{height:calc(100vh - 360px);min-height:400px;width:auto;aspect-ratio:68/88}
+ .prepmode .bigpitch{height:calc(100vh - 360px);min-height:380px;width:auto;aspect-ratio:68/88}
  .prepmode .bench{max-height:calc(100vh - 360px)!important;overflow-y:auto!important}
  .prepmode .legend,.prepmode .legend+.note{display:none}
  .squadpanel.prepmode{margin-top:10px}
  .oppcol{align-self:start}.oppcol .oppform table{font-size:13px}.oppcol .oppform td,.oppcol .oppform th{white-space:normal}}
+.recchip[hidden]{display:none!important}
+.ptile.informed .cstar{left:calc(50% - 11px)}
+.ptile .tform{position:absolute;left:calc(50% + 3px);top:-25px;width:16px;height:13px;display:block}
+@media (orientation:landscape) and (max-height:500px){.ptile .tform{top:-17.5px;width:12px;height:10px;left:calc(50% + 1px)}.ptile.informed .cstar{left:calc(50% - 8px)}}
+.benchgrid.prepbench{grid-auto-flow:row!important;grid-template-columns:repeat(3,auto)!important;grid-template-rows:none!important;row-gap:22px;overflow:hidden;position:relative;padding-top:4px}
+.benchgrid.prepbench.open{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.prepmode .bench{position:relative}
+.benchmore{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:5;width:40px;height:24px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--chalk);font-size:11px;line-height:1;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.5)}
+@media (orientation:landscape) and (max-height:500px){.benchgrid.prepbench{row-gap:18px}}
+.wrap.hub:has(.prepmode)>div:last-child{display:none!important}
+.wrap.hub:has(.prepmode){padding-bottom:6px}
+.prepmode .taccyc{position:relative}
+.prepmode .cycname small{text-decoration:none}
+.tacpop{position:fixed;z-index:70;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,86vw);background:var(--panel,#1b2021);border:1px solid var(--amber,#e8ac3c);border-radius:10px;padding:12px 14px;box-shadow:0 14px 40px rgba(0,0,0,.7);cursor:pointer;display:grid;gap:6px}
+.tacpop p{margin:0;font-size:13px;line-height:1.4;color:var(--chalk)}.tacpop b{font-size:15px}
+body.twl .tacpop{background:#15140f}
+#tabbody[data-t=squad] .squadpanel.prepmode{grid-template-columns:max-content 236px!important}
+#tabbody[data-t=squad] .prepmode>*:not(.squadfield){width:236px;box-sizing:border-box}
+#tabbody[data-t=squad] .prepmode .tools select{width:100%}
+.prepmode .oppform table{table-layout:fixed;width:100%}.prepmode .oppform th:nth-child(1),.prepmode .oppform td:nth-child(1){width:42px}.prepmode .oppform th:nth-child(2),.prepmode .oppform td:nth-child(2){width:50px}
+.prepmode .oppform td{overflow:hidden;text-overflow:ellipsis}
+@media (min-height:501px){.prepmode .bench{max-height:calc(100vh - 250px)!important;overflow:hidden!important;padding:10px 16px!important}.prepmode .benchgrid.prepbench{row-gap:24px;column-gap:18px!important}.prepmode .bench .ptile{--s:54px}.prepmode .bench .ptile .tr{font-size:24px}.prepmode .bench .ptile .tp{font-size:9px}.prepmode .bigpitch .ptile .tp{font-size:12px}}
+@media (min-height:501px){
+ #tabbody[data-t=squad] .squadpanel.prepmode{display:grid;grid-template-columns:max-content 260px;justify-content:center;column-gap:18px;row-gap:8px;align-items:start}
+ #tabbody[data-t=squad] .squadpanel.prepmode>*{grid-column:2;margin:0!important;width:260px;box-sizing:border-box}
+ #tabbody[data-t=squad] .squadpanel.prepmode>.squadfield{grid-column:1;grid-row:1/span 12;width:auto;display:flex;gap:16px;align-items:start}
+ #tabbody[data-t=squad] .prepmode .tools{display:grid;gap:8px;grid-template-columns:auto 1fr;align-items:center}
+ #tabbody[data-t=squad] .prepmode .tools #auto{grid-column:1/-1}
+ #tabbody[data-t=squad] .prepmode .tools .note{grid-column:1/-1;margin:0!important}
+ #tabbody[data-t=squad] .prepmode .taccyc{display:grid!important;grid-template-columns:40px 1fr 40px!important;width:100%!important;max-width:none!important}
+ #tabbody[data-t=squad] .prepmode .oppcol{display:none}
+ #tabbody[data-t=squad] .prepmode .bigpitch{height:calc(100vh - 250px)}
+ #tabbody[data-t=squad] .prepmode .bench{max-height:calc(100vh - 250px)!important}}
 </style>
 </head>
 <body>
@@ -1457,7 +1495,7 @@ function makeTemporal(){const out=makeIntl(TWL_DEF.map(d=>({...d,bp:{shape:1,pat
  out.forEach((t,i)=>{const d=TWL_DEF[i];t.twl=d.twl;t.hat=d.hat;t.roundel=d.roundel||null;t.twVenue=d.venue;t.twField=d.field;t.twWhere=d.where;t.badge={shape:1,pat:0,c1:d.c1,c2:d.c2};});return out;}
 // ===== MATCH ENGINE =====
 var SEP=3.0,TACK=3.35,SEP_RAF=3.2; // RAF roundels: nobody closer than halfway across the white ring (0.6 of the tile radius)
-var EXP={};var SAVE_BASE=0.86;var SHOOT_K=2.8;
+var EXP={};var SAVE_BASE=0.9;var SHOOT_K=2.8;
 const PL=105,PW=68,GW=14.64,GY=34,ND=3.2;
 const BOOSTERS={
  power:{name:'Power shot',desc:'Every shot is struck with full power for 10 minutes.'},
@@ -1668,7 +1706,7 @@ function step(m,dt){
  {const late=m.t>m.dur*0.84;for(const T of m.teams){T.urgent=late&&m.score[T.idx]<=m.score[1-T.idx];const bs=T.boost&&m.t<T.boost.until?T.boost.type:null;for(const p of T.players){p.urg=T.urgent;p.bst=bs;p.late=m.t>m.dur*0.8;}}}
  for(const T of m.teams){if(T.tac.balanced)T.balT=(T.balT||0)+dt;else T.balT=0;const rd=T.balT>m.dur*0.22;for(const p of T.players)p.rd=rd;}
  hotStreaks(m,dt);aiSubs(m);aiTactics(m,dt);recStep(m);
- for(const T of m.teams){const O=m.teams[1-T.idx];const P=O.side.prof;const mu=P?(P.weak.includes(T.side.tactic)?1.04:P.strong.includes(T.side.tactic)?0.97:1):1;for(const q of T.players)q.mu=mu;}
+ for(const T of m.teams){const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];const mu=P?(P.weak.includes(T.side.tactic)?1.04:P.strong.includes(T.side.tactic)?0.97:1):1;for(const q of T.players)q.mu=mu;}
  {const c=m.cond;const pr=m.t/m.dur;b.k=c.rain?c.fric+pr*0.55:c.fric;if(c.rain){const a=c.acc*(0.85+0.1*pr);for(const p of m.players){p.acc=a;p.cs=c.spd*(1-0.07*pr);}}}
  if(m.twl)twlStep(m,dt);
  if(b.owner&&b.owner.team!==m.possTeam){m.possTeam=b.owner.team;const NT=m.teams[b.owner.team];if(NT.tac.counter&&progOf(NT,b.x)<0.55&&b.owner.role!=='GK'){NT.breakUntil=m.t+(NT.tac.breakT||4.5);for(const q of NT.players)if(q.role==='ST'||q.role==='WM'||q.slot==='AM')q.blitzT=m.t+3.5;}
@@ -2176,7 +2214,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  const onBall=clamp(m.t-(b.gainT||m.t),0,3);
  // time and space: nobody close, time on the ball, or one on one with only the keeper to beat -> a far more clinical finish, whoever it is
  let lane=0;for(const q of O.players){if(q.role==='GK')continue;if(segDist(q.x,q.y,pl.x,pl.y,g.x,GY)<2.2&&dist(q,g)<dG)lane++;}
- const oneV1=!!o.oneV1||(lane===0&&dG<22&&near0>2.8);if(oneV1)m.n1v1=(m.n1v1||0)+1;
+ const oneV1=!!o.oneV1||(lane===0&&dG<18&&near0>4.5);if(oneV1)m.n1v1=(m.n1v1||0)+1;
  const timeK=clamp((near0-2.5)/6,0,1)*0.6+clamp(onBall/1.8,0,1)*0.4*(near0>3.2?1:0.3);
  const clin=EXP.noclin?0:Math.max(timeK*(lane?0.75:1),oneV1?0.88:0,o.open?0.7:0,o.oneT?clamp(((o.marked??3)-1.2)/3,0,0.75):0);pl._clin=clin;
  const aim2=GY+side*(GW/2-inset*(1-0.45*clin));
@@ -2198,9 +2236,10 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   // Goals come from placement into the corners, which depends on the shooter.
   if(off<1.7&&!tap&&!o.turn&&!o.defl){const g0=pl.p&&gk.p?gk.p.gk:60;sp=Math.max(sp,clamp(0.5+(g0-45)/45,0.5,0.97));}
   {const gOff=hyp(gk.x-g.x,gk.y-g.y);if(gOff>6)sp*=clamp(1-(gOff-5)/7,0.04,1);}
-  sp=clamp(sp-0.14*clin-(oneV1?0.2:0),0.04,0.92);
+  sp=clamp(sp-0.14*clin-(oneV1?0.16:0),0.04,0.92);
   save=m.rng()<sp;o._near=off<1.7;}
- b.shot={o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(big)m.lastPower=m.t;
+ (m.sk2=m.sk2||{})[o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']=((m.sk2||{})[o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']||0)+1;
+ b.shot={kind:o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(big)m.lastPower=m.t;
  // a parked bus: bodies in the shooting lane get in the way, and better attackers find a way through
  if(O.tac.park){const e=clamp(1+(O.ovr-T.ovr)/20,0.3,1.4);let n=0;for(const q of O.players){if(q.role==='GK')continue;if(segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1)n++;}
   if(n&&m.rng()<1-Math.pow(1-0.42*e,n)){b.shot.blockBy=O.players.find(q=>q.role!=='GK'&&segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1);}}
@@ -2310,7 +2349,7 @@ function updateBall(m,dt){
  if(b.x<0||b.x>PL){
   const endRight=b.x>PL;const att=m.teams.find(T=>(T.dir>0)===endRight);const def=m.teams[1-att.idx];
   if(Math.abs(b.y-GY)<GW/2&&!b.owner&&!(b.shot&&b.shot.over)){
-   if(b.shot&&b.shot.o1)m.g1v1=(m.g1v1||0)+1;m.score[att.idx]++;m.levelSince=m.score[0]===m.score[1]?m.t:null;
+   if(b.shot&&b.shot.o1)m.g1v1=(m.g1v1||0)+1;{const k=b.shot?b.shot.kind:'loose';(m.gk2=m.gk2||{})[k]=(m.gk2[k]||0)+1;}m.score[att.idx]++;m.levelSince=m.score[0]===m.score[1]?m.t:null;
    const sc=(b.lastP&&b.lastP.team===att.idx)?b.lastP:(b.shot&&b.shot.shooter);
    const name=sc?sc.p.name:'Own goal';
    if(sc){sc.st.g++;if(sc.fromPass&&sc.fromPass.team===sc.team&&m.t-sc.fromT<8)sc.fromPass.st.as++;}
@@ -2432,6 +2471,8 @@ function aiTactics(m,dt){
  for(const T of m.teams){if(T.side.user)continue;if(T.tac0==null)T.tac0=T.side.tactic||'balanced';
   T.aiT=(T.aiT??(m.dur*(0.15+m.rng()*0.1)))-dt;if(T.aiT>0)continue;T.aiT=m.dur*(0.07+m.rng()*0.06);
   const O=m.teams[1-T.idx];const sd=m.score[T.idx]-m.score[O.idx];const pr=m.t/m.dur;const ok=O.side.tactic;let k=T.tac0;
+  {const P=T.side.profs&&T.side.profs[T.side.tactic];if(P&&P.weak.includes(ok)&&m.rng()<0.65){// they've been found out: switch to something your style doesn't hurt
+    const opts=Object.keys(T.side.profs).filter(x=>x!=='sink'&&x!==T.side.tactic&&!T.side.profs[x].weak.includes(ok));if(opts.length){setTac(m,T,opts[Math.floor(m.rng()*opts.length)],true);continue;}}}
   if(sd<0&&pr>0.88)k='sink';else if(sd<0&&pr>0.6)k=m.rng()<0.5?'attacking':(ok==='park'||ok==='defensive'?'wings':'press');
   else if(sd>0&&pr>0.82)k=sd>=2?'defensive':'park';else if(sd>0&&pr>0.65)k=m.rng()<0.6?'defensive':'counter';
   else{if(ok==='attacking'||ok==='sink'||ok==='press')k=m.rng()<0.6?'counter':'long';else if(ok==='park'||ok==='defensive')k=m.rng()<0.5?'wings':'through';else if(ok==='balanced'&&(O.balT||0)>m.dur*0.18)k=m.rng()<0.5?'press':'counter';else if(ok==='counter')k=m.rng()<0.5?'balanced':'through';else if(ok==='long')k='press';else if(m.rng()<0.5)k=T.tac0;else k=T.side.tactic;}
@@ -4247,7 +4288,7 @@ function pickScorer(t){
 }
 // ---------- play-style match-ups: every side handles some styles well and struggles against others (hidden; it changes each season) ----------
 const TAC_KEYS=()=>Object.keys(TACTICS).filter(k=>k!=='sink');
-function tacProfile(t){const ks=TAC_KEYS();const r=mkRng(hashStr((t.id||t.name)+'|tp|'+((typeof S!=='undefined'&&S)?S.season:1)));const o=ks.slice().sort(()=>r()-0.5);return {weak:o.slice(0,2),strong:o.slice(2,4)};}
+function tacProfile(t,own){const ks=TAC_KEYS();own=own||t.tactic||'balanced';const r=mkRng(hashStr((t.id||t.name)+'|tp|'+own+'|'+((typeof S!=='undefined'&&S)?S.season:1)));const o=ks.slice().sort(()=>r()-0.5);return {weak:o.slice(0,2),strong:o.slice(2,4)};}
 // how much a side concedes against a given opposing style (1 = normal)
 function tacMatchup(t,oppTac){if(!t||!oppTac)return 1;const P=tacProfile(t);return P.weak.includes(oppTac)?1.25:P.strong.includes(oppTac)?0.8:1;}
 // computer sides vary their approach from game to game, mostly sticking to what they know
@@ -4293,7 +4334,7 @@ function capOvr(p){return p.ovr+(isCaptain(p)?5:0);}
 function aiCaptain(t){const xi=xiPlayers(t).filter(Boolean);if(t.captain!=null&&xi.some(p=>p.id===t.captain))return t.captain;const c=xi.slice().sort((a,b)=>b.ovr-a.ovr)[0];t.captain=c?c.id:null;return t.captain;}
 function sideOf(t,other,isAway){
  const [kh,ka]=isAway?kits(other,t):kits(t,other);const {fill,ring}=isAway?ka:kh;
- const xi=xiPlayers(t);const ids=new Set(t.xi);return {name:t.name,short:t.short,formation:t.formation,tactic:t.tactic,xi,bench:t.squad.filter(p=>!ids.has(p.id)),auto:true,fill,ring,text:ink(fill),edge:t===myTeam()?tacEdge():1,links:t===myTeam()?(t.links||[]):[],captain:t===myTeam()?(t.squad.some(p=>p.id===t.captain)?t.captain:null):aiCaptain(t),power:t.power||null,user:t===myTeam(),prof:tacProfile(t),twl:S&&S.cup&&S.cup.kind==='temporal'&&S.cup.stage!=='done'&&t.twl?t.twl:null,hat:t.hat||null,roundel:t.roundel||null,
+ const xi=xiPlayers(t);const ids=new Set(t.xi);return {name:t.name,short:t.short,formation:t.formation,tactic:t.tactic,xi,bench:t.squad.filter(p=>!ids.has(p.id)),auto:true,fill,ring,text:ink(fill),edge:t===myTeam()?tacEdge():1,links:t===myTeam()?(t.links||[]):[],captain:t===myTeam()?(t.squad.some(p=>p.id===t.captain)?t.captain:null):aiCaptain(t),power:t.power||null,user:t===myTeam(),profs:Object.fromEntries(TAC_KEYS().concat('sink').map(k=>[k,tacProfile(t,k)])),twl:S&&S.cup&&S.cup.kind==='temporal'&&S.cup.stage!=='done'&&t.twl?t.twl:null,hat:t.hat||null,roundel:t.roundel||null,
   emblem:t.emblem||(S&&S.cup&&S.cup.kind==='emperor'&&t===myTeam()?'club':null)};
 }
 // the same formation and play style week after week: it beds in, then rivals work it out; a change gives a fresh edge
@@ -4804,7 +4845,7 @@ function traitTag(p,big){const k=traitOf(p);if(!k)return big?`<div class="ttrait
 function retireNote(p,card){if(p.retiring)return `<span class="retn">Retiring at the end of this season</span>`;const n=seasonsLeft(p);if(n<=6)return `<span class="retn soft">${card?'Nearing retirement: ':'Retires in '}${card?n+' seasons left':n+' seasons'}</span>`;return '';}
 function tileHTML(p,opts){
  const t=tier(p.ovr);const role=opts.role;const off=role&&!posOK(p,role,opts.sy);
- return `<button class="ptile ${p.ovr>=75?'gold':''} ${UI.swap===p.id?'swapping':''}" draggable="true" data-pid="${p.id}" ${opts.slot!=null?`data-slot="${opts.slot}"`:'data-bench="1"'} style="background:${t.bg};color:${t.fg}" aria-label="${esc(p.name)}, ${p.pos}, rated ${p.ovr}">
+ return `<button class="ptile ${p.ovr>=75?'gold':''} ${p.inForm?'informed':''} ${UI.swap===p.id?'swapping':''}" draggable="true" data-pid="${p.id}" ${opts.slot!=null?`data-slot="${opts.slot}"`:'data-bench="1"'} style="background:${t.bg};color:${t.fg}" aria-label="${esc(p.name)}, ${p.pos}, rated ${p.ovr}">
  ${`<span class="cstar ${myTeam().captain===p.id?'on':''}" data-cap="${p.id}" role="button" title="${myTeam().captain===p.id?'Captain - click to remove':'Make captain'}" aria-label="Captain">★</span>`}<span class="tp ${off?'off':''}">${p.pos}</span>${p.retiring?'<span class="tret" title="Retiring at the end of this season">RET</span>':''}${p.inForm?`<span class="tform" title="In form: ${esc(FORM_LABEL[p.inForm.a]||'all-round')}" aria-label="In form">${CHEV_SVG}</span>`:''}<span class="tr">${myTeam().captain===p.id?p.ovr+5:p.ovr}</span><span class="tfit" title="Fitness ${Math.round(p.fit??100)}%"><i style="width:${Math.round(p.fit??100)}%;background:${fitCol(p.fit??100)}"></i></span><span class="tn">${esc(surname(p.name))}</span></button>`;
 }
 // ---------- match tactics: line-up and play style changes made here apply to the next match only ----------
@@ -4822,14 +4863,15 @@ function tabSquad(el){
  <div class="tools"><label class="eyebrow" for="form">Formation</label><select id="form">${Object.keys(FORMATIONS).map(k=>`<option ${k===me.formation?'selected':''}>${k}</option>`).join('')}</select>
  <button class="btn sm" id="auto" title="Picks on today's form: each player's rating adjusted for his health">Auto-pick best XI</button><span class="note" style="margin-left:auto">${me.squad.length} players · XI rating <b>${teamOvr(me)}</b></span></div>
  ${tacCycler(me.tactic,"sq")}
- ${UI.prep?`${UI.tacInfo?`<p class="note tacdesc tapdesc">${esc(tac.desc)}</p>`:''}${PHONE()?oppFormHTML(UI.prep.opp):''}`:`<p class="note tacdesc">${esc(tac.desc)}</p>`}${(()=>{const n=tacRun();return n===0?`<p class="tacfam new">New set-up: opponents won't have seen this coming.</p>`:n<=8?`<p class="tacfam">Settled: ${n} game${n>1?'s':''} in a row with this formation and play style.</p>`:`<p class="tacfam stale">Rivals are reading this set-up (${n} games in a row). A change of formation or play style could catch them out.</p>`;})()}
+ ${UI.prep?`${UI.tacInfo?`<div class="tacpop tapdesc" role="dialog"><b>${esc(tac.name)}</b><p>${esc(tac.desc)}</p><span class="note">Tap to close</span></div>`:''}${oppFormHTML(UI.prep.opp)}`:`<p class="note tacdesc">${esc(tac.desc)}</p>`}${(()=>{const n=tacRun();return n===0?`<p class="tacfam new">New set-up: opponents won't have seen this coming.</p>`:n<=8?`<p class="tacfam">Settled: ${n} game${n>1?'s':''} in a row with this formation and play style.</p>`:`<p class="tacfam stale">Rivals are reading this set-up (${n} games in a row). A change of formation or play style could catch them out.</p>`;})()}
  ${UI.swap?`<div class="swapbar">Choose a player to swap with <b>${esc(playerById(UI.swap)?.name||'')}</b> <button class="btn sm ghost" id="cancelswap">Cancel</button></div>`:''}
- <div class="squadfield"><aside class="bench" aria-label="Substitutes bench"><span class="eyebrow">Bench</span>${bench.length?`<div class="benchgrid" style="grid-template-rows:repeat(${Math.min(PHONE()?4:5,bench.length)},auto)">${bench.map(p=>tileHTML(p,{})).join('')}</div>`:'<span class="note">Empty</span>'}</aside>
- <div class="bigpitch ${hz?'horiz':''}"><div class="box t"></div><div class="box b"></div><div class="six t"></div><div class="six b"></div><div class="mid"></div><div class="circ"></div>${spots}</div>${UI.prep&&!PHONE()?`<aside class="oppcol">${oppFormHTML(UI.prep.opp)}</aside>`:''}</div>
+ <div class="squadfield"><aside class="bench" aria-label="Substitutes bench"><span class="eyebrow">Bench</span>${bench.length?(UI.prep?`<div class="benchgrid prepbench ${UI.benchOpen?'open':''}">${bench.map(p=>tileHTML(p,{})).join('')}</div>${me.squad.length>25?`<button class="benchmore" id="benchmore" aria-label="${UI.benchOpen?'Collapse the bench':'Show the rest of the bench'}">${UI.benchOpen?'▲':'▼'}</button>`:''}`:`<div class="benchgrid" style="grid-template-rows:repeat(${Math.min(PHONE()?4:5,bench.length)},auto)">${bench.map(p=>tileHTML(p,{})).join('')}</div>`):'<span class="note">Empty</span>'}</aside>
+ <div class="bigpitch ${hz?'horiz':''}"><div class="box t"></div><div class="box b"></div><div class="six t"></div><div class="six b"></div><div class="mid"></div><div class="circ"></div>${spots}</div></div>
  <div class="legend">${TIERS.map((t,i)=>`<span><i style="background:${t[1]}"></i>${i===0?'≤39':i===6?'90+':(TIERS[i-1][0]+1)+'–'+t[0]}</span>`).join('')}<span><i class="g"></i>75+ gold ring</span></div>
  <p class="note" style="margin:6px 0 0">Tap a tile for the player card. Drag one tile onto another, or use Swap on the card, to change the line-up.</p></section>`;
  $('#form').onchange=e=>{me.formation=e.target.value;me.xi=autoPick(me.squad,me.formation);save();renderHub();};
  wireCycler(el,'sq',k=>{me.tactic=k;save();renderHub();});
+ if(UI.prep){const g=el.querySelector('.prepbench');if(g){const tl=g.querySelectorAll('.ptile');const k=Math.min(tl.length,12)-1;const t=tl[k];if(t){const gb=g.getBoundingClientRect(),tb=t.getBoundingClientRect();g.style.maxHeight=Math.ceil(tb.bottom-gb.top+20+g.scrollTop)+'px';}const bm=el.querySelector('#benchmore');if(bm)bm.onclick=()=>{UI.benchOpen=!UI.benchOpen;renderHub();};}}
  if(UI.prep){const nm=el.querySelector('[data-cyc="sq"] .cycname');if(nm){nm.classList.add('tapme');nm.title='Tap for what this style does';nm.onclick=()=>{UI.tacInfo=!UI.tacInfo;renderHub();};}const td=el.querySelector('.tapdesc');if(td)td.onclick=()=>{UI.tacInfo=false;renderHub();};}
  $('#auto').onclick=()=>{me.xi=autoPick(me.squad,me.formation,true);UI.swap=null;save();renderHub();};
  if(UI.swap)$('#cancelswap').onclick=()=>{UI.swap=null;renderHub();};
@@ -6305,7 +6347,7 @@ initAuth();
 function prepHang(){const P=UI.prep;return `<div class="prephang" role="region" aria-label="Match tactics"><i class="chain l"></i><i class="chain r"></i><div class="phin"><span class="eyebrow">Match tactics</span><b>${esc(P.label)}</b><div class="phbtns"><button class="btn ghost sm" id="prepx">Cancel</button><button class="btn primary" id="prepgo">Kick-off</button></div></div></div>`;}
 function oppFormHTML(t){if(!t)return '';const H=histFor(t);const ks=TACTICS;
  const row=h=>{const res=h.gf>h.ga?'W':h.gf<h.ga?'L':'D';return `<tr><td class="ofo" title="${esc(h.o)}${h.c?' · '+esc(h.c):''}">${esc(h.os||h.o)}</td><td class="ofr ${res}"><b>${res}</b> ${h.gf}–${h.ga}</td><td>${esc((ks[h.my]||ks.balanced).name)}</td><td>${esc((ks[h.op]||ks.balanced).name)}</td></tr>`;};
- return `<div class="oppform"><div class="ofh"><span class="eyebrow">${esc(t.short||t.name)} · last 5 games</span></div><table><thead><tr><th>v</th><th>Result</th><th>Their style</th><th>Opponent's style</th></tr></thead><tbody>${H.slice().reverse().map(row).join('')}</tbody></table></div>`;}
+ return `<div class="oppform"><div class="ofh"><span class="eyebrow">${esc(t.short||t.name)} · last 5 games</span></div><table><thead><tr><th>v</th><th>Result</th><th>${esc(t.short||'Them')}</th><th>Opponent</th></tr></thead><tbody>${H.slice().reverse().map(row).join('')}</tbody></table></div>`;}
 
 // ---------- in-form players: three standout games in a row in the same kind of work earns it; one poor game loses it ----------
 const FORM_LABEL={sho:'finishing',pas:'creating chances',tck:'winning the ball',gk:'shot-stopping',all:'all-round play'};
