@@ -3813,8 +3813,11 @@ async function cloudPush(force){
  if(!CLOUD_ON||!USER||!USER.cloud||!S)return;if(CL.busy){CL.dirty=true;return;}
  if(!navigator.onLine){CL.state='offline';CL.dirty=true;cloudBadge();return;}
  CL.busy=true;CL.dirty=false;CL.state='syncing';cloudBadge();
- const u=getUsers().find(x=>x.id===USER.id)||USER;const r=await cloudPut(u.cloud.key,cloudPayload(u));
- if(r.ok){CL.state='ok';CL.last=Date.now();}else{CL.state='error';CL.err=r.r&&r.r.txt;CL.dirty=true;}
+ const u=getUsers().find(x=>x.id===USER.id)||USER;
+ // first make sure nobody else has saved since we last synced: if they have, sort that out instead of overwriting it
+ if(!force){const g=await cloudGet(u.cloud.key);if(g.ok&&g.row&&g.row.data&&(g.row.data.ts||0)>cloudSynced(u)){CL.busy=false;CL.state='ok';cloudBadge();cloudResolve(u,g.row.data,true);return;}}
+ const pay=cloudPayload(u);const r=await cloudPut(u.cloud.key,pay);
+ if(r.ok){CL.state='ok';CL.last=Date.now();storeCloud(u,{synced:pay.ts});}else{CL.state='error';CL.err=r.r&&r.r.txt;CL.dirty=true;}
  CL.busy=false;cloudBadge();if(CL.dirty&&CL.state==='ok')cloudSoon();
 }
 function cloudSoon(){if(!CLOUD_ON||!USER||!USER.cloud)return;clearTimeout(CL.timer);CL.timer=setTimeout(()=>cloudPush(),4000);}
@@ -3823,14 +3826,37 @@ function cloudStatusText(){if(!USER||!USER.cloud)return 'Not linked';const t=CL.
  return CL.state==='syncing'?'Syncing…':CL.state==='offline'?'Offline: will sync when you are back online':CL.state==='error'?'Could not reach the cloud: will try again':t?`Synced at ${t}`:'Linked';}
 addEventListener('online',()=>{if(CL.dirty)cloudPush();});
 // on entering a profile: if the cloud copy is newer (played on another device), use it
+function cloudSynced(u){const x=getUsers().find(q=>q.id===u.id)||u;return (x.cloud&&x.cloud.synced)||0;}
+// how far a career has got: season, then league round, then how far into a cup
+function saveProg(s){if(!s)return -1;const c=s.cup;const st=c?['groups','league','r16','qf','sf','final','done'].indexOf(c.stage):-1;return (s.season||1)*1e6+(s.round||0)*1e3+(s.done?500:0)+(c?(st+1)*20+(c.md||0):0);}
+// the cloud copy has changed since this device last synced: take it, unless this device has also moved on further
+function cloudPick(u,d,local){const syn=cloudSynced(u);if(!d||!d.save)return false;if(!local)return true;
+ if((d.ts||0)<=syn)return false;
+ const dirty=(local._ts||0)>syn;if(!dirty)return true;
+ const a=saveProg(d.save),b=saveProg(local);return a>b||(a===b&&(d.ts||0)>(local._ts||0));}
+function cloudTake(u,d,local){if(local){try{localStorage.setItem('um-save-bak::'+u.id,JSON.stringify(local));}catch(e){}}localStorage.setItem('um-save::'+u.id,JSON.stringify(d.save));storeCloud(u,{synced:d.ts||0});}
 async function cloudEnter(u){
  if(!CLOUD_ON||!u.cloud||!navigator.onLine)return;
- const g=await cloudGet(u.cloud.key);if(!g.ok||!g.row||!g.row.data)return;const d=g.row.data;
+ const g=await cloudGet(u.cloud.key);if(!g.ok){CL.state='error';return;}if(!g.row||!g.row.data)return;const d=g.row.data;
  let local=null;try{local=JSON.parse(localStorage.getItem('um-save::'+u.id)||'null');}catch(e){}
  const all=getUsers();const x=all.find(q=>q.id===u.id);if(x&&d.img!==undefined&&d.img!==(x.img||null)){if(d.img)x.img=d.img;else delete x.img;setUsers(all);}
- if(d.save&&(!local||(d.ts||0)>(local._ts||0))){localStorage.setItem('um-save::'+u.id,JSON.stringify(d.save));CL.pulled=true;}
+ if(cloudPick(u,d,local)){cloudTake(u,d,local);CL.pulled=true;}
+ else if(local&&(local._ts||0)<=cloudSynced(u)&&(d.ts||0)<=cloudSynced(u)){}// already in step
  CL.state='ok';CL.last=Date.now();
 }
+// while the game is open: coming back to the app (or a push finding a newer save) checks the cloud again
+async function cloudResolve(u,d,fromPush){if(!S)return;
+ if(cloudPick(u,d,S)){if(!cloudSafe()){CL.waiting=d;return;}cloudTake(u,d,S);startSession();toast('Loaded your latest game from the cloud');}
+ else if(fromPush){// this device is further on: it wins, and goes up to the cloud
+  storeCloud(u,{synced:d.ts||0});cloudPush(true);}}
+function cloudSafe(){return !(typeof LIVE!=='undefined'&&LIVE)&&!document.querySelector('.pvwrap,.glory,.gtwrap')&&!(typeof UI!=='undefined'&&UI.prep);}
+async function cloudCheck(){if(!CLOUD_ON||!USER||!USER.cloud||!S||!navigator.onLine||CL.busy||CL.checking)return;
+ if(CL.waiting&&cloudSafe()){const d=CL.waiting;CL.waiting=null;return cloudResolve(USER,d);}
+ CL.checking=true;try{const g=await cloudGet(USER.cloud.key);if(g.ok&&g.row&&g.row.data){CL.state='ok';CL.last=Date.now();cloudBadge();await cloudResolve(USER,g.row.data);}}finally{CL.checking=false;}}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')cloudCheck();});
+addEventListener('pageshow',e=>{if(e.persisted)cloudCheck();});
+addEventListener('focus',()=>cloudCheck());
+setInterval(()=>{if(document.visibilityState==='visible')cloudCheck();},60000);
 // sign in on a new device with a career saved from another one
 async function cloudSignInNew(name,pw){
  const key=await cloudKey(name,pw);const g=await cloudGet(key);
@@ -3839,7 +3865,7 @@ async function cloudSignInNew(name,pw){
  const d=g.row.data;const salt=Math.random().toString(36).slice(2)+Date.now().toString(36);
  const u={id:'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:d.name||name.trim(),salt,hash:await hashPw(pw,salt),av:makeAvatar(),created:Date.now(),cloud:{key}};
  if(d.img)u.img=d.img;const all=getUsers();all.push(u);setUsers(all);
- if(d.save)localStorage.setItem('um-save::'+u.id,JSON.stringify(d.save));
+ if(d.save)localStorage.setItem('um-save::'+u.id,JSON.stringify(d.save));u.cloud.synced=d.ts||0;setUsers(getUsers().map(q=>q.id===u.id?u:q));
  return {ok:true,u};
 }
 // switch on sync for a profile (needs its password once)
@@ -3848,7 +3874,7 @@ async function cloudLink(u,pw){
  const key=await cloudKey(u.name,pw);const g=await cloudGet(key);
  if(!g.ok)return {ok:false,why:g.r.status?'other':'net',detail:g.r.txt};
  storeCloud(u,{key});
- if(g.row&&g.row.data&&g.row.data.save&&(g.row.data.ts||0)>((S&&S._ts)||0)){localStorage.setItem('um-save::'+u.id,JSON.stringify(g.row.data.save));return {ok:true,reload:true};}
+ if(g.row&&g.row.data&&g.row.data.save&&saveProg(g.row.data.save)>saveProg(S)){cloudTake(u,g.row.data,S);return {ok:true,reload:true};}
  await cloudPush(true);if(CL.state!=='ok')return {ok:false,why:'other',detail:CL.err};return {ok:true};
 }
 // new players get sync straight away
@@ -4506,10 +4532,18 @@ function ticketEmblem(){
   <g class="hl" transform="translate(0 .6)">${art}</g><g class="sh" transform="translate(0 -.4)">${art}</g><g class="mn">${art}</g></svg>`;}
 // before the office: fade to black and a line about what is at stake
 const GLORY_LINES=['Looking for glory....?',"They think it's all over...",'Legends aren’t born. They’re made...','Somewhere, a trophy is waiting...','Ninety minutes from immortality...','History has kept a seat for you...','The whole world is watching...','Silverware doesn’t polish itself...','Do you believe in miracles...?','One more mountain to climb...','This is what you dreamed of as a kid...','Fortune favours the brave...','Some nights are remembered forever...','Every great club began with a night like this...'];
+const GLORY_BY_KIND={
+ euro:['Under the floodlights of Europe...','The finest clubs on the continent are waiting...','Every legend in Europe started on a night like this...'],
+ world:["Thirty-two nations. One trophy...",'The whole world is watching...','Every great side in history wants this one...'],
+ mystery:["Beyond the clouds, the gods are waiting...","Some trophies aren't of this world...",'Elysium has sent for you...'],
+ elite:['Only the immortals are invited...','The greatest clubs of all time. Home and away...','A league above all leagues...'],
+ emperor:['Champions of every age, gathered for one crown...','Across time and space, one throne remains...','Every champion bows to an emperor...'],
+ temporal:['History is about to fight back...','The clocks have stopped. The war begins...','Seven armies. One century. No mercy...']};
 function ticketScene(kind,P,done){
- let i;const last=(typeof S!=='undefined'&&S&&S.gloryLast)||[];do{i=Math.floor(Math.random()*GLORY_LINES.length);}while(last.includes(i)&&last.length<GLORY_LINES.length);
- if(typeof S!=='undefined'&&S){S.gloryLast=last.concat(i).slice(-6);}
- const o=document.createElement('div');o.className='glory';o.innerHTML=`<p>${esc(GLORY_LINES[i])}</p>`;document.body.appendChild(o);
+ let line;const last=(typeof S!=='undefined'&&S&&S.gloryLast)||[];const own=GLORY_BY_KIND[kind]||[];
+ const pool=[...own.map(t=>'k:'+t),...own.map(t=>'k:'+t),...GLORY_LINES.map(t=>'g:'+t)].filter(t=>!last.includes(t));const pick=pool.length?pool[Math.floor(Math.random()*pool.length)]:'g:'+GLORY_LINES[0];line=pick.slice(2);
+ if(typeof S!=='undefined'&&S){S.gloryLast=last.filter(x=>typeof x==='string').concat(pick).slice(-6);}
+ const o=document.createElement('div');o.className='glory';o.innerHTML=`<p>${esc(line)}</p>`;document.body.appendChild(o);
  requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('dark')));
  let gone=false;const go=()=>{if(gone)return;gone=true;clearTimeout(t1);clearTimeout(t2);o.classList.add('textout');setTimeout(()=>{_ticketScene(kind,P,done);setTimeout(()=>o.remove(),400);},650);};
  const t1=setTimeout(()=>o.classList.add('textin'),700);const t2=setTimeout(go,3600);o.onclick=go;}
@@ -4708,8 +4742,9 @@ async function doInstall(){if(!INSTALL_EVT){toast('Use the Chrome menu (⋮) and
 function showInstallPill(){if(isStandalone()||!INSTALL_EVT||typeof LIVE!=='undefined'&&LIVE)return;if(document.querySelector('.installpill'))return;const b=document.createElement('button');b.className='installpill';b.textContent='Install app';b.onclick=doInstall;document.body.appendChild(b);}
 function installPanel(){if(isStandalone())return '';return `<div class="cloudrow"><span class="eyebrow">Install</span><p class="note" style="margin:0">Install Ultimate Manager as a real app: it goes in your app drawer and on your home screen, opens full screen and has no Chrome badge.</p><button class="btn sm" id="instbtn">${INSTALL_EVT?'Install app':'How to install'}</button></div>`;}
 function fsPanel(){if(!(window.umFullscreenAvailable&&umFullscreenAvailable()))return '';let on=true;try{on=localStorage.getItem('um-fs')!=='0';}catch(e){}return `<div class="cloudrow"><span class="eyebrow">Full screen</span><label class="chk"><input type="checkbox" id="fsopt" ${on?'checked':''}> Hide the address bar and notifications while playing (first tap goes full screen)</label></div>`;}
-function cloudPanel(){return `<div class="cloudrow"><span class="eyebrow">Cloud sync</span>${USER.cloud?`<p class="note" style="margin:0"><span id="cloudstat">${cloudStatusText()}</span>. On another device, choose "Sign in with an account from another device" and use the same name and password.</p><button class="btn sm" id="csync">Sync now</button>`:`<p class="note" style="margin:0">Save your career to the cloud so you can play it on your phone and laptop. Type the password you chose for this player.</p><form id="clinkf" class="bdgrow"><input type="password" id="clpw" placeholder="This player's password" aria-label="This player's password"><button class="btn sm primary" type="submit">Turn on cloud sync</button></form>`}</div>`;}
-function wireCloudPanel(el){const cs=el.querySelector('#csync');if(cs)cs.onclick=async()=>{cs.textContent='Syncing…';await cloudPush(true);toast(CL.state==='ok'?'Synced':cloudWhy({why:'other',detail:CL.err}));renderHub();};
+function cloudPanel(){return `<div class="cloudrow"><span class="eyebrow">Cloud sync</span>${USER.cloud?`<p class="note" style="margin:0"><span id="cloudstat">${cloudStatusText()}</span>. On another device, choose "Sign in with an account from another device" and use the same name and password.</p><button class="btn sm" id="csync">Sync now</button>${(()=>{try{return localStorage.getItem('um-save-bak::'+USER.id)}catch(e){return null}})()?'<button class="btn sm ghost" id="cundo" title="Put back the game this device had before it loaded the cloud copy">Restore previous save</button>':''}`:`<p class="note" style="margin:0">Save your career to the cloud so you can play it on your phone and laptop. Type the password you chose for this player.</p><form id="clinkf" class="bdgrow"><input type="password" id="clpw" placeholder="This player's password" aria-label="This player's password"><button class="btn sm primary" type="submit">Turn on cloud sync</button></form>`}</div>`;}
+function wireCloudPanel(el){const cs=el.querySelector('#csync');if(cs)cs.onclick=async()=>{cs.textContent='Syncing…';const before=S&&S._ts;await cloudCheck();if(S&&S._ts===before)await cloudPush();toast(CL.state==='ok'?'Up to date':cloudWhy({why:'other',detail:CL.err}));renderHub();};
+ const ub=el.querySelector('#cundo');if(ub)ub.onclick=()=>{let b=null;try{b=localStorage.getItem('um-save-bak::'+USER.id);}catch(e){}if(!b)return;localStorage.setItem('um-save::'+USER.id,b);localStorage.removeItem('um-save-bak::'+USER.id);startSession();S._ts=Date.now();save();cloudPush(true);toast('This device\'s previous game is back');};
  const f=el.querySelector('#clinkf');if(f)f.onsubmit=async e=>{e.preventDefault();const pw=el.querySelector('#clpw').value;if(!pw)return;f.querySelector('button').textContent='Linking…';const r=await cloudLink(USER,pw);if(!r.ok){toast(cloudWhy(r));renderHub();return;}
   if(r.reload){toast('Found a newer game in the cloud - loading it');S=null;startSession();return;}toast('Cloud sync is on');renderHub();};}
 function tacKey(){const t=myTeam();return t.formation+'|'+t.tactic;}
@@ -4965,7 +5000,7 @@ function buildPreSummary(){
   mp.num=0;mp.mystery=true;me.squad.push(mp);numberSquad(me);SUM.mystery=mp.id;S.news=(S.news||[]).concat(`Mystery player! ${mp.name} (${mp.pos}, rated ${mp.ovr}) joins as a reward for winning the league.`);S.boosters={};}
  return SUM;
 }
-function cupChain(){const list=wonPL()?['world','euro']:qualifiedForCup()?['euro']:[];if(!list.length){nextSeason();return;}
+function cupChain(){const list=(wonPL()||qualifiedForCup())?['euro']:[];if(!list.length){nextSeason();return;}
  const step=i=>cupPreview(list[i],()=>{createCup(list[i]);UI.tab='match';renderHub();},()=>{if(i+1<list.length)step(i+1);else nextSeason();});step(0);}
 // ---------- season roll-over ----------
 function nextSeason(){
@@ -6458,12 +6493,13 @@ function cupView(el){
   el.innerHTML=`<div class="stack">${h}</div>`;wireCupBtns(el,c);return;}
  if(c.stage==='done'){const w=cupT(c.winner);const iWon=c.winner===myCid();
   const eternal=kind==='world'&&iWon;
-  const backBtn=c.replay?`<button class="btn${iWon&&(kind==='mystery'||kind==='elite'||kind==='world')?'':' primary'}" id="backseason">Back to your season</button>`:`<button class="btn${iWon&&(kind==='mystery'||kind==='elite'||kind==='world')?'':' primary'}" id="nextseason">Return to domestic football</button>`;
-  const nextOffer=iWon&&kind==='mystery'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Elite League</span><p style="margin:0">There is a league above the Premier League, and only Eternal champions are invited. Seven of Europe's greatest clubs, at their all-time best: Real Madrid, Barcelona, Bayern Munich, Juventus, AC Milan, Paris Saint-Germain and Ajax. Plus you. Everyone plays everyone home and away.</p><p class="note" style="margin:0">${fmt(ELITE_PRIZE.win)} for every win · champions ${fmt(ELITE_PRIZE.champ)} and an invitation to the Emperor's Cup.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goelite">Enter the Elite League</button>${backBtn}</div></div>`
-   :iWon&&kind==='elite'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Emperor's Cup</span><p style="margin:0">Eight reigning champions from across time and space, every one with a power of its own: Germany 1940s, the Knights, Zeta Reticuli, Robo United, the Presidents, the Vampires, the Romans, and you. Straight knockout from the quarter-finals.</p><p class="note" style="margin:0">Semi-final ${fmt(EMPEROR_PRIZE.sf)} · winner ${fmt(EMPEROR_PRIZE.champ)}.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goemp">Enter the Emperor's Cup</button>${backBtn}</div></div>`:'';
+  const chainOn=iWon&&(kind==='euro'||kind==='mystery'||kind==='elite'||kind==='world');const backBtn=c.replay?`<button class="btn${chainOn?'':' primary'}" id="backseason">Back to your season</button>`:`<button class="btn${chainOn?'':' primary'}" id="nextseason">Return to domestic football</button>`;
+  const nextOffer=iWon&&kind==='euro'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The World Cup</span><p style="margin:0">European champions are invited to the biggest stage of all: 32 of the greatest national sides in history, at a themed venue. Groups, then knockouts.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goworld">Collect your winnings</button>${backBtn}</div></div>`
+   :iWon&&kind==='mystery'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Elite League</span><p style="margin:0">There is a league above the Premier League, and only Eternal champions are invited. Seven of Europe's greatest clubs, at their all-time best: Real Madrid, Barcelona, Bayern Munich, Juventus, AC Milan, Paris Saint-Germain and Ajax. Plus you. Everyone plays everyone home and away.</p><p class="note" style="margin:0">${fmt(ELITE_PRIZE.win)} for every win · champions ${fmt(ELITE_PRIZE.champ)} and an invitation to the Emperor's Cup.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goelite">Collect your winnings</button>${backBtn}</div></div>`
+   :iWon&&kind==='elite'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Emperor's Cup</span><p style="margin:0">Eight reigning champions from across time and space, every one with a power of its own: Germany 1940s, the Knights, Zeta Reticuli, Robo United, the Presidents, the Vampires, the Romans, and you. Straight knockout from the quarter-finals.</p><p class="note" style="margin:0">Semi-final ${fmt(EMPEROR_PRIZE.sf)} · winner ${fmt(EMPEROR_PRIZE.champ)}.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goemp">Collect your winnings</button>${backBtn}</div></div>`:'';
   head=`<section class="panel cuphead"><span class="eyebrow">${nm} · Final whistle</span><div style="display:flex;gap:14px;align-items:center">${badge(w,72)}<div><h2 style="font-size:38px">${esc(w.name)}</h2><div class="note">${CUP_KIND[kind].champs}</div></div></div>
   <p style="margin:0">Your prize money from the ${kind==="mystery"?"Eternal Cup":nm}: <b>${fmt(c.earn)}</b>.${kind==='mystery'&&c.legend?` <b>${esc(c.legend)}</b> has joined your squad.`:''}</p>
-  ${eternal?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Eternal Cup</span><p style="margin:0">A golden invitation arrives. Above the clouds, at <b>Elysium</b>, seven sides that aren't of this world are waiting: Olympus, Asgard, Camelot, the Pharaohs, the Dragon Kings, Sherwood's outlaws, and the Immortals, the greatest footballers who ever lived. Eight teams, straight knockout.</p><p class="note" style="margin:0">Semi-final ${fmt(ETERNAL_PRIZE.sf)} · winner ${fmt(ETERNAL_PRIZE.champ)} and one of the Immortals joins your club.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="eternal">Accept the invitation</button>${backBtn}</div></div>`:
+  ${eternal?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Eternal Cup</span><p style="margin:0">A golden invitation arrives. Above the clouds, at <b>Elysium</b>, seven sides that aren't of this world are waiting: Olympus, Asgard, Camelot, the Pharaohs, the Dragon Kings, Sherwood's outlaws, and the Immortals, the greatest footballers who ever lived. Eight teams, straight knockout.</p><p class="note" style="margin:0">Semi-final ${fmt(ETERNAL_PRIZE.sf)} · winner ${fmt(ETERNAL_PRIZE.champ)} and one of the Immortals joins your club.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="eternal">Collect your winnings</button>${backBtn}</div></div>`:
   nextOffer||backBtn}</section>`;
  }else if(mf){const f=mf.f;const h=cupT(f.h),a=cupT(f.a);
   const cnd=cupCond();const where=cupVenue()?`${esc(VENUES[cupVenue()].name)}`:venueLine(h,cnd,f.h===myCid());
@@ -6488,7 +6524,8 @@ function cupView(el){
 function wireCupBtns(el,c,mf){
  const ns=$('#nextseason');if(ns)ns.onclick=nextSeason;
  const rp=c.replay;const back=()=>{if(rp){S.cup=null;save();renderHub();}else nextSeason();};
- const et=$('#eternal');if(et)et.onclick=()=>cupPreview('mystery',()=>{createCup('mystery');if(rp)S.cup.replay=true;save();renderHub();},back);const ge=$('#goelite');if(ge)ge.onclick=()=>{createCup('elite');if(rp)S.cup.replay=true;save();renderHub();};
+ const et=$('#eternal');if(et)et.onclick=()=>cupPreview('mystery',()=>{createCup('mystery');if(rp)S.cup.replay=true;save();renderHub();},back);const ge=$('#goelite');if(ge)ge.onclick=()=>cupPreview('elite',()=>{createCup('elite');if(rp)S.cup.replay=true;save();renderHub();},back);
+ const gw=$('#goworld');if(gw)gw.onclick=()=>cupPreview('world',()=>{createCup('world');if(rp)S.cup.replay=true;save();UI.tab='match';renderHub();},back);
  const gm=$('#goemp');if(gm)gm.onclick=()=>cupPreview('emperor',()=>{createCup('emperor');if(rp)S.cup.replay=true;save();renderHub();},back);
  const lg=$('#legendbtn');if(lg)lg.onclick=()=>openMarket(true);
  el.querySelectorAll('[data-legsign]').forEach(b=>b.onclick=()=>{signEmperorLegend(b.dataset.legsign);UI.legendMkt=false;renderHub();});
@@ -6502,8 +6539,27 @@ function wireCupBtns(el,c,mf){
 }
 
 // ---------- cup preview screens: fade to black, then the cup's poster with Enter / Reject set into its two panels ----------
-const PV_BTN={euro:['#1f4fbf','#9cc2ff'],world:['#0e7a3c','#ffd76a'],mystery:['#c99a2e','#fff3c4'],emperor:['#8e1424','#ffd27a']};
+const PV_BTN={euro:['#1f4fbf','#9cc2ff'],world:['#0e7a3c','#ffd76a'],mystery:['#c99a2e','#fff3c4'],emperor:['#8e1424','#ffd27a'],elite:['#3a2a8c','#e9d8ff'],temporal:['#5a4a22','#f2e2b0']};
+const GEN_PV={elite:{title:'The Elite League',sub:"Europe's greatest clubs · home and away",bg:['#1b1440','#07061a'],gold:'#e8c46a',art:()=>trophySVG(5,320)},
+ temporal:{title:'The Temporal War League',sub:'Seven armies of the twentieth century',bg:['#3a2f16','#0e0b05'],gold:'#e3c27a',art:()=>twlMedal(320)}};
+// paint a poster in the same layout as the others: title at the top, the trophy in the middle, two button plates at the bottom
+function genPoster(kind){const G=GEN_PV[kind];return new Promise((res,rej)=>{try{
+ const W=1280,H=720,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+ const rg=x.createRadialGradient(W/2,H*0.45,40,W/2,H*0.5,W*0.7);rg.addColorStop(0,G.bg[0]);rg.addColorStop(1,G.bg[1]);x.fillStyle=rg;x.fillRect(0,0,W,H);
+ x.save();x.globalAlpha=0.16;x.strokeStyle=G.gold;for(let i=0;i<36;i++){const a=i/36*Math.PI*2;x.beginPath();x.moveTo(W/2,H*0.5);x.lineTo(W/2+Math.cos(a)*900,H*0.5+Math.sin(a)*900);x.lineWidth=i%2?1:3;x.stroke();}x.restore();
+ x.strokeStyle=G.gold;x.lineWidth=6;x.strokeRect(14,14,W-28,H-28);x.lineWidth=1.5;x.strokeRect(26,26,W-52,H-52);
+ const f=[[0.29,0.8,0.48,0.93],[0.52,0.8,0.71,0.93]];
+ const fin=img=>{if(img){const h=300,w=img.width*h/img.height;x.save();x.shadowColor='rgba(255,220,140,.55)';x.shadowBlur=40;x.drawImage(img,W/2-w/2,H*0.25,w,h);x.restore();}
+  x.textAlign='center';x.fillStyle=G.gold;x.shadowColor='rgba(0,0,0,.7)';x.shadowBlur=12;x.font="700 64px Cinzel,Georgia,serif";x.fillText(G.title.toUpperCase(),W/2,108);
+  x.shadowBlur=0;x.font="700 22px Cinzel,Georgia,serif";x.fillStyle='rgba(255,240,210,.8)';x.fillText(G.sub.toUpperCase(),W/2,146);
+  for(const r of f){const X=r[0]*W,Y=r[1]*H,w=(r[2]-r[0])*W,h=(r[3]-r[1])*H;x.fillStyle='rgba(10,10,20,.85)';x.strokeStyle=G.gold;x.lineWidth=3;x.beginPath();x.moveTo(X+14,Y);x.lineTo(X+w-14,Y);x.lineTo(X+w,Y+h/2);x.lineTo(X+w-14,Y+h);x.lineTo(X+14,Y+h);x.lineTo(X,Y+h/2);x.closePath();x.fill();x.stroke();}
+  res({src:c.toDataURL('image/jpeg',0.9),ar:W/H,f});};
+ let svg=G.art();if(!/xmlns=/.test(svg))svg=svg.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+ const img=new Image();const go=()=>{img.onload=()=>fin(img);img.onerror=()=>fin(null);img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);};
+ (document.fonts&&document.fonts.load?Promise.race([document.fonts.load('700 64px Cinzel'),new Promise(r=>setTimeout(r,1200))]):Promise.resolve()).then(go,go);
+ }catch(e){rej(e);}});}
 function cupPreview(kind,onEnter,onReject){
+ if(!CUP_PV[kind]&&GEN_PV[kind]){genPoster(kind).then(P=>{CUP_PV[kind]=P;cupPreview(kind,onEnter,onReject);}).catch(()=>onEnter());return;}
  const P=CUP_PV[kind];if(!P){onEnter();return;}
  document.querySelectorAll('.pvwrap').forEach(x=>x.remove());
  const [bg,hi]=PV_BTN[kind];const w=document.createElement('div');w.className='pvwrap';
@@ -6528,7 +6584,7 @@ function tabCups(el){
  <div class="cupgrid">${CUP_ORDER.filter(([k])=>W[k]).map(([k,nm,sub])=>{const n=W[k]||0;const tk=k==='mystery'?'gal':k;
   return `<div class="cupcard ${n?'':'locked'}"><div class="cuptro">${n?trophyImg(tk,64):'<span class="lock">?</span>'}</div><div class="grow"><b>${n?esc(nm):'Not yet won'}</b><span class="note">${n?esc(sub)+' · won '+n+(n===1?' time':' times'):'Win it once to unlock replays here.'}</span></div>${n?`<button class="btn sm ${busy?'':'primary'}" data-replay="${k}" ${busy?'disabled':''}>Play again</button>`:''}</div>`;}).join('')}</div>
  ${busy?`<p class="note" style="margin:10px 0 0">Finish or leave the ${esc(cupName())} first.</p>`:''}</section>`;
- el.querySelectorAll('[data-replay]').forEach(b=>b.onclick=()=>{if(S.cup&&S.cup.stage!=='done')return;const k=b.dataset.replay;const go=()=>{createCup(k);S.cup.replay=true;save();UI.tab='match';renderHub();};if(CUP_PV[k])cupPreview(k,go,()=>renderHub());else go();});
+ el.querySelectorAll('[data-replay]').forEach(b=>b.onclick=()=>{if(S.cup&&S.cup.stage!=='done')return;const k=b.dataset.replay;const go=()=>{createCup(k);S.cup.replay=true;save();UI.tab='match';renderHub();};if(CUP_PV[k]||GEN_PV[k])cupPreview(k,go,()=>renderHub());else go();});
 }
 // ---------- player profiles: several people can play on one device, each with a password ----------
 const USERS_KEY='um-users',SESSION_KEY='um-session';
@@ -6544,7 +6600,7 @@ function initAuth(){
  const users=getUsers();
  // the Claude preview keeps you signed in during a session; the app always opens on the player picker
  let sid=null;try{sid=sessionStorage.getItem(SESSION_KEY);}catch(e){}
- const u=users.find(x=>x.id===sid);if(u){USER=u;startSession();return;}
+ const u=users.find(x=>x.id===sid);if(u){USER=u;startSession();if(typeof cloudCheck==='function')setTimeout(cloudCheck,300);return;}
  UI.login={mode:users.length?'pick':'new'};renderLogin();
 }
 function signOut(){try{sessionStorage.removeItem(SESSION_KEY);localStorage.removeItem(SESSION_KEY);}catch(e){}USER=null;S=null;UI={tab:'match',sel:null,swap:null,lgView:null,confirmNew:false};UI.login={mode:getUsers().length?'pick':'new'};renderLogin();}
