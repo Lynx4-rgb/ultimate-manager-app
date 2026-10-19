@@ -706,8 +706,8 @@ html,body{margin:0}
  .mdph .md-a .bigfix{padding:2px 0}.mdph .md-a .bigfix h3{font-size:15px}.mdph .md-a .bigfix .badge,.mdph .md-a .bigfix .badge svg{width:40px!important;height:40px!important}
  .mdph .md-a .venue{flex:1;min-height:40px;height:auto;max-height:120px}.mdph .md-a .actions{gap:6px;margin-top:6px}.mdph .md-a .actions .btn{padding:6px 10px}
  .mdph .md-a .note{font-size:10px}.mdph .md-a p.note{margin-top:4px!important}
- .mdph .notes{height:calc(100dvh - 62px);overflow:hidden;display:flex;flex-direction:column;padding:8px 10px}.mdph .notes .ntree{flex:1}
- .mdph .notes .nh{font-size:13px!important;white-space:normal}.mdph .notes .nitem.lead .nh{font-size:15px!important}.mdph .notes .nd{font-size:11px!important}.mdph .notes #morenotes{align-self:flex-start;margin-top:auto}
+ .mdph .notes{height:calc(100dvh - 62px);overflow:hidden;display:flex;flex-direction:column;padding:8px 10px}.mdph .notes .ntree{flex:0 1 auto;margin-bottom:6px}
+ .mdph .notes .nh{font-size:13px!important;white-space:normal}.mdph .notes .nitem.lead .nh{font-size:15px!important}.mdph .notes .nd{font-size:11px!important}.mdph .notes #morenotes{align-self:flex-start;margin-top:0}
  .mdph .ph-mid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;align-items:stretch}
  .mdph .ph-side{display:flex;flex-direction:column;gap:10px;min-width:0}.mdph .ph-side>section:last-child{flex:1}
  .mdph .ph-bot{display:flex;justify-content:center}.mdph .ph-bot>section{width:min(560px,100%)}
@@ -1037,6 +1037,13 @@ body.twl .ftcard .eyebrow{color:#e8dcc0}body.twl .ftcard h2,body.twl .ftcard .nu
 body.twl .motm{background:linear-gradient(#e7ddc2,#d7caa6);color:#2b2213;border:0;border-left:5px solid #9b2a1e}
 body.twl .motm .eyebrow,body.twl .motm span,body.twl .motm>span{color:#5a3c14!important}body.twl .motm b{color:#1b1309}
 body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;margin-top:8px}
+.nitem[hidden]{display:none!important}
+/* short phone screens: the pitch tiles shrink a little with the pitch, so stars and names keep clear of each other */
+@media (orientation:landscape) and (max-height:395px){#tabbody[data-t=squad] .bigpitch .ptile{--s:calc((100dvh - 82px)/9.3)}#tabbody[data-t=squad] .bigpitch .ptile .tr{font-size:calc((100dvh - 82px)/20)}#tabbody[data-t=squad] .bigpitch .ptile .tn{font-size:8px;bottom:-12px}#tabbody[data-t=squad] .bigpitch .ptile .cstar{font-size:15px}}
+/* phone squad page: the bench reads in rows of three, with room between rows so a star never touches the name above it */
+#tabbody[data-t=squad] .squadpanel:not(.prepmode) .benchgrid.phbench{grid-auto-flow:row!important;column-gap:18px!important;row-gap:clamp(8px,calc((100dvh - 120px - var(--rows,3)*66px)/(var(--rows,3))),26px);justify-content:center}
+#tabbody[data-t=squad] .squadpanel:not(.prepmode) .bench{padding:6px 16px!important}
+#tabbody[data-t=squad] .squadpanel:not(.prepmode){justify-content:center}
 .ntree.scrolly{scrollbar-width:thin;padding-right:6px;overscroll-behavior:contain}
 .hubhead .kpi .rchip.sm{min-width:24px;height:17px;padding:0 3px;line-height:17px;margin-top:3px;justify-self:start;border-radius:3px}
 .prephang{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:60;padding-top:14px;animation:hangdrop .5s cubic-bezier(.2,1.4,.4,1) both}
@@ -1111,7 +1118,9 @@ body.twl .tacpop{background:#15140f}
 .gtwrap{position:fixed;inset:0;z-index:10000;background:#000;overflow:hidden}.gtcam{transition:opacity .5s}
 .gtcam{position:absolute;left:0;top:0;transform-origin:0 0}
 .gtworld{position:relative;perspective:1400px}
-.gtroom{position:absolute;inset:0;width:100%;height:100%;display:block;will-change:filter}
+.gtroom{position:absolute;inset:0;width:100%;height:100%;display:block}
+.gtblur{opacity:0}.gtdim{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.pvwrap.onticket,.pvwrap.onticket.show{background:transparent!important}.pvwrap.onticket .pvbox{position:fixed;width:auto;aspect-ratio:auto;opacity:1!important;transform:none!important}.pvwrap.onticket .pvbox img{visibility:hidden}
 .gtshelf{position:absolute;inset:0;pointer-events:none}
 .shtro{position:absolute;transform:translateX(-50%);filter:drop-shadow(6px 10px 6px rgba(0,0,0,.6)) sepia(.15) brightness(.92)}
 .shtro .trophy,.shtro svg{height:100%!important;width:auto}
@@ -1412,12 +1421,22 @@ const FORMATIONS={
  '4-5-1':[['GK',.03,.5],['LB',.2,.13],['CB',.17,.38],['CB',.17,.62],['RB',.2,.87],['LM',.42,.12],['CM',.37,.33],['CM',.32,.5],['CM',.37,.67],['RM',.42,.88],['CF',.62,.5]],
 };
 function autoPick(squad,formation,useFit){
- const slots=FORMATIONS[formation];const rr=(p,r,sy)=>roleRating(p,r,sy)*(useFit?healthFactor(p):1);const used=new Set();const xi=new Array(11).fill(null);
- const order=[0,10,9,1,2,3,4,5,6,7,8].filter(i=>i<slots.length);
- // pass 1: natural positions
- for(const i of order){let best=null,bs=-1;for(const p of squad){if(used.has(p.id)||!slotOK(p,slots[i][0],slots[i][2]))continue;const s=rr(p,slots[i][0],slots[i][2]);if(s>bs){bs=s;best=p;}}if(best){xi[i]=best.id;used.add(best.id);}}
- for(const i of order){if(xi[i])continue;let best=null,bs=-1;for(const p of squad){if(used.has(p.id))continue;const s=rr(p,slots[i][0],slots[i][2]);if(s>bs){bs=s;best=p;}}if(best){xi[i]=best.id;used.add(best.id);}}
- return xi;
+ // the strongest eleven for these slots: role ratings (a centre-forward can happily play wide in a front three),
+ // and with fitness taken into account a tired player gives way to a fresher one who can do the job
+ const slots=FORMATIONS[formation];const n=slots.length;
+ const fitK=p=>useFit?1-(100-Math.min(100,p.fit??100))/250:1;
+ const cache=new Map();const sc=(p,i)=>{const k=p.id+'|'+i;if(cache.has(k))return cache.get(k);const [r,,sy]=slots[i];let v=roleRating(p,r,sy)+(slotOK(p,r,sy)?0.6:0);
+  const fw=(p.pos==='CF'&&(r==='LW'||r==='RW'))||((p.pos==='LW'||p.pos==='RW')&&r==='CF');if(fw)v+=2;else if(!slotOK(p,r,sy)&&CAT[p.pos]!==CAT[r])v-=6;v*=fitK(p);cache.set(k,v);return v;};
+ const xi=new Array(n).fill(null);const used=new Set();const order=[0,10,9,1,2,3,4,5,6,7,8].filter(i=>i<n);
+ for(const i of order){let best=null,bs=-1e9;for(const p of squad){if(used.has(p.id))continue;const v=sc(p,i);if(v>bs){bs=v;best=p;}}if(best){xi[i]=best;used.add(best.id);}}
+ // improve: bring in anyone who does a slot better, and swap pairs of starters when both gain overall
+ for(let pass=0;pass<12;pass++){let better=false;
+  for(let i=0;i<n;i++){for(const p of squad){if(used.has(p.id))continue;if(xi[i]&&sc(p,i)>sc(xi[i],i)+0.05){used.delete(xi[i].id);xi[i]=p;used.add(p.id);better=true;}}}
+  for(let i=0;i<n;i++)for(let j=i+1;j<n;j++){const a=xi[i],b=xi[j];if(!a||!b)continue;if(sc(a,j)+sc(b,i)>sc(a,i)+sc(b,j)+0.05){xi[i]=b;xi[j]=a;better=true;}}
+  // a bench player in slot j, with the man there moving across to slot i
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++){if(i===j)continue;const a=xi[i],b=xi[j];for(const p of squad){if(used.has(p.id))continue;if(sc(b,i)+sc(p,j)>sc(a,i)+sc(b,j)+0.05){used.delete(a.id);xi[i]=b;xi[j]=p;used.add(p.id);better=true;break;}}}
+  if(!better)break;}
+ return xi.map(p=>p&&p.id);
 }
 function fixtures(n){
  // circle method with bye, double round robin
@@ -1809,7 +1828,7 @@ function step(m,dt){
   if(m.stateT<=0){
    if(m.state==='goal'){kickoff(m,m.pendingKick,false);return;}
    if(m.state==='kickoff'){for(const pl of m.players){pl.x=pl.tx??pl.x;pl.y=pl.ty??pl.y;}}
-   const tk=m.taker;if(m.state==='goalkick'){b.x=tk.x+m.teams[tk.team].dir*0.7;b.y=tk.y;}else if(m.state==='corner'&&m.cnPhase){tk.x=b.x+m.outSide*0.5;tk.y=b.y+(b.y<PW/2?-0.5:0.5);m.cnPhase=null;}else{tk.x=b.x-(m.teams[tk.team].dir)*0.5;tk.y=b.y;}tk.vx=tk.vy=0;
+   const tk=m.taker;if(m.state==='goalkick'){b.x=tk.x+m.teams[tk.team].dir*0.7;b.y=tk.y;}else if(m.state==='corner'&&m.cnPhase){tk.x=b.x+m.outSide*0.5;tk.y=b.y+(b.y<PW/2?-0.5:0.5);m.cnPhase=null;m.cnBall={x:b.x,y:b.y,tk};tk.face=[-m.outSide,b.y<PW/2?1:-1];}else{tk.x=b.x-(m.teams[tk.team].dir)*0.5;tk.y=b.y;}tk.vx=tk.vy=0;
    b.owner=tk;b.last=tk.team;b.lastP=tk;tk.decideT=m.state==='kickoff'?0.05:0.2;m.state='play';m.taker=null;
   }
   return;
@@ -2402,6 +2421,9 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
 function updateBall(m,dt){
  const b=m.ball;
  if(b.owner!==m.prevOwner){if(b.owner){const lo=m.lastOwnerP;if(lo&&lo.team!==b.owner.team&&m.t-(m.lastSwT||-9)<0.6){m.nRapid=(m.nRapid||0)+1;(m.rapidSrc=m.rapidSrc||{})[m._src||'?']=(m.rapidSrc[m._src||'?']||0)+1;}m._src=null;if(lo!==b.owner){m.lastSwT=m.t;m.lastOwnerP=b.owner;}}if(m.prevOwner){endDuel(m.prevOwner);m.prevOwner.feet=false;}m.prevOwner=b.owner;if(b.owner)b.gainT=m.t;}
+ // a corner: the ball sits on the corner spot until the taker strikes it
+ if(m.cnBall&&(b.owner!==m.cnBall.tk||m.state!=='play'))m.cnBall=null;
+ if(b.owner&&m.cnBall){b.x=m.cnBall.x;b.y=m.cnBall.y;b.vx=b.vy=0;const o=b.owner;o.vx*=0.5;o.vy*=0.5;return;}
  if(b.owner){
   const o=b.owner;const sp=hyp(o.vx,o.vy);b.shot=null;b.intended=null;
   // the player's facing turns smoothly, so the ball stays in front instead of swinging round him
@@ -2735,7 +2757,7 @@ function gkParry(m,gk,def,sh){const b=m.ball;const gr=eff(gk,'gk');const pOwn=cl
  else{const out=def.dir;b.vx=out*(5+m.rng()*5);b.vy=(m.rng()<0.5?-1:1)*(6+m.rng()*6);b.intended=null;ev(m,'save',`${gk.p.name} parries ${surname(sh.p.name)}'s shot`,gk.team);}
  b.kicker=gk;b.kickT=m.t;b.last=gk.team;b.lastP=gk;b.passBy=null;b.loft=null;b.crossBall=false;gk.st.sv++;m.flash={text:'SAVE',t:1.0,team:gk.team};}
 // every pass and shot leaves from the front of the player, in the direction it is struck
-function kickFrom(m,pl,tx,ty){const b=m.ball;const dx=tx-pl.x,dy=ty-pl.y,d=hyp(dx,dy)||1;const ux=dx/d,uy=dy/d;b.x=pl.x+ux*0.7;b.y=pl.y+uy*0.7;pl.face=[ux,uy];b.kickDir=[ux,uy];b.kickFromP=pl;}
+function kickFrom(m,pl,tx,ty){const b=m.ball;const dx=tx-pl.x,dy=ty-pl.y,d=hyp(dx,dy)||1;const ux=dx/d,uy=dy/d;if(m.cnBall&&m.cnBall.tk===pl){b.x=m.cnBall.x;b.y=m.cnBall.y;m.cnBall=null;}else{b.x=pl.x+ux*0.7;b.y=pl.y+uy*0.7;}pl.face=[ux,uy];b.kickDir=[ux,uy];b.kickFromP=pl;}
 // a suggested counter when the opposition change plan: it is never the same pairing twice, and it may only work for a short while
 function recCounter(m,U,O){if(U.side.auto)return;const ks=Object.keys(TACTICS).filter(k=>k!=='sink');let k;
  if(m.rng()<0.3)k=U.side.tactic;else{const pool=ks.filter(x=>x!==O.side.tactic);k=pool[Math.floor(m.rng()*pool.length)];}
@@ -4456,34 +4478,39 @@ function ticketHTML(kind,P){const nm=esc(CUP_KIND[kind]?CUP_KIND[kind].name:'Cup
  return `<div class="gticket" data-k="${kind}"><div class="gtin">
   <div class="gface gfront">${g}${ticketOrnate(kind)}<div class="gtmain"><span class="gtsmall">Admit one manager</span>${ticketEmblem()}<span class="gtcup"><i class="gtdia">◆</i>${nm}<i class="gtdia">◆</i></span><span class="gtline">By invitation of the organising committee · Season ${S?S.season:1}</span></div>
    <div class="gtstub"><span>No.</span><b>${serial}</b><i>ADMIT<br>ONE</i></div><span class="gtshine"></span></div>
-  <div class="gface gback"><div class="gtimg" style="background-image:url(${P.src})"></div><div class="gtstub back"><b>${serial}</b></div><span class="gtshine"></span></div></div></div>`;}
+  <div class="gface gback"><div class="gtimg" style="background-image:url(${P.src});top:${Math.max(1.5,(1-0.76*2.15/(P.ar||1.7768))/2*100).toFixed(2)}%;bottom:${Math.max(1.5,(1-0.76*2.15/(P.ar||1.7768))/2*100).toFixed(2)}%"></div><div class="gtstub back"><b>${serial}</b></div><span class="gtshine"></span></div></div></div>`;}
+function blurOf(bg){const c=document.createElement('canvas');c.width=960;c.height=540;const x=c.getContext('2d');x.filter='blur(5px)';x.drawImage(bg,-20,-12,1000,564);return c.toDataURL('image/jpeg',0.8);}
 function _ticketScene(kind,P,done){const spot=TICKET_SPOT[kind]||TICKET_SPOT.euro;const bg=paintOffice();
  const w=document.createElement('div');w.className='gtwrap';
- w.innerHTML=`<div class="gtcam"><div class="gtworld"><img class="gtroom" src="${bg.toDataURL('image/jpeg',0.86)}" alt=""><div class="gtshelf">${shelfTrophies()}</div>
+ w.innerHTML=`<div class="gtcam"><div class="gtworld"><img class="gtroom" src="${bg.toDataURL('image/jpeg',0.86)}" alt=""><img class="gtroom gtblur" src="${blurOf(bg)}" alt=""><div class="gtdim"></div><div class="gtshelf">${shelfTrophies()}</div>
   <div class="gtdust"></div>
   <div class="gtspot" style="left:${spot.x/OFF_W*100}%;top:${spot.y/OFF_H*100}%;width:${spot.w/OFF_W*100}%"><div class="gtshadow"></div>${ticketHTML(kind,P)}</div></div></div><button class="ts-skip gtskip" type="button">Skip ›</button>`;
  document.body.appendChild(w);
- const cam=w.querySelector('.gtcam'),world=w.querySelector('.gtworld'),tk=w.querySelector('.gticket'),room=w.querySelector('.gtroom');
+ const cam=w.querySelector('.gtcam'),world=w.querySelector('.gtworld'),tk=w.querySelector('.gticket'),blur=w.querySelector('.gtblur'),dim=w.querySelector('.gtdim');
+ const fx=(bl,br)=>{blur.style.opacity=Math.min(1,bl/7.2).toFixed(3);dim.style.opacity=(1-br).toFixed(3);};
  // the world is sized to cover the screen; camera moves are done in world pixels
  let VW=innerWidth,VH=innerHeight;const base=Math.max(VW/OFF_W,VH/OFF_H);world.style.width=OFF_W+'px';world.style.height=OFF_H+'px';world.style.perspectiveOrigin=`${spot.x}px ${spot.y}px`;
- const setCam=(x,y,s,rot)=>{const k=base*s;const hw=VW/2/k,hh=VH/2/k;x=Math.min(OFF_W-hw,Math.max(hw,x));y=Math.min(OFF_H-hh,Math.max(hh,y));cam.style.transform=`translate(${VW/2}px,${VH/2}px) rotate(${rot||0}deg) scale(${k}) translate(${-x}px,${-y}px)`;};
+ let camXY=[0,0];const setCam=(x,y,s,rot)=>{const k=base*s;const hw=VW/2/k,hh=VH/2/k;x=Math.min(OFF_W-hw,Math.max(hw,x));y=Math.min(OFF_H-hh,Math.max(hh,y));camXY=[x,y];cam.style.transform=`translate(${VW/2}px,${VH/2}px) rotate(${rot||0}deg) scale(${k}) translate(${-x}px,${-y}px)`;};
  const tkW=spot.w,tkH=tkW/2.15;const target={x:spot.x,y:spot.y,s:Math.min(VW*0.82/(tkW*base),VH*0.62/(tkH*base))};
  const ease=t=>t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;const lerp=(a,b,t)=>a+(b-a)*t;
- const t0=performance.now();let raf=0,phase=0,ended=false;
+ const t0=performance.now();let raf=0,phase=0,ended=false,Z=null;
+ const frameFit=()=>{setCam(target.x,target.y,target.s,0);const bk=tk.querySelector('.gback').getBoundingClientRect(),im=tk.querySelector('.gback .gtimg').getBoundingClientRect();
+  const c0=camXY.slice();const L=bk.left,R=im.right+(im.left-bk.left),T=bk.top,B=bk.bottom;const k0=base*target.s;const f=Math.min(VW*0.98/(R-L),VH*0.97/(B-T));let cx=(L+R)/2;if((bk.right-bk.left)*f<=VW*0.98)cx=(bk.left+bk.right)/2;else cx=Math.min(Math.max(cx,bk.right-(VW*0.99)/f/2),L+(VW*0.99)/f/2);
+  return {x0:c0[0],y0:c0[1],x:camXY[0]+(cx-VW/2)/k0,y:camXY[1]+((T+B)/2-VH/2)/k0,s:target.s*f};};
  tk.style.setProperty('--tilt',spot.tilt+'deg');tk.style.setProperty('--rot',spot.rot+'deg');
  const T1=900,T2=2700,T3=3500,T4=4600,T5=5600;
  const frame=now=>{const t=now-t0;
   if(t<T1){const k=t/T1;setCam(spot.cam.x,spot.cam.y,spot.cam.s*(1+0.03*k),0);cam.style.opacity=Math.min(1,k*1.6);}
   else if(t<T2){const k=ease((t-T1)/(T2-T1));const s=Math.exp(lerp(Math.log(spot.cam.s*1.03),Math.log(target.s),k));
-   setCam(lerp(spot.cam.x,target.x,k),lerp(spot.cam.y,target.y,k),s,Math.sin(k*Math.PI)*-2.5);room.style.filter=`blur(${k*3.2}px) brightness(${1-k*0.25})`;
+   setCam(lerp(spot.cam.x,target.x,k),lerp(spot.cam.y,target.y,k),s,Math.sin(k*Math.PI)*-2.5);fx(k*3.2,1-k*0.25);
    // the ticket lifts off its surface and turns to face the camera
    const lk=ease(Math.max(0,(k-0.35)/0.65));tk.style.transform=`translateZ(${lk*40}px) rotateX(${spot.tilt*(1-lk)}deg) rotateZ(${spot.rot*(1-lk)}deg) scale(${1+lk*0.04})`;}
   else if(t<T3){setCam(target.x,target.y,target.s,0);tk.style.transform='translateZ(40px) scale(1.04)';}
   else if(t<T4){const k=ease((t-T3)/(T4-T3));tk.style.transform=`translateZ(${40+Math.sin(k*Math.PI)*120}px) rotateY(${k*180}deg) scale(1.04)`;}
-  else if(t<T5){const k=ease((t-T4)/(T5-T4));const iw=0.76*tkW,ih=iw/(P.ar||1.7768);const s1=Math.min(VW/(iw*base),VH/(ih*base));const s=Math.exp(lerp(Math.log(target.s),Math.log(s1),k));setCam(target.x-tkW*0.095*k,target.y,s,0);tk.style.transform='translateZ(40px) rotateY(180deg) scale(1.04)';room.style.filter=`blur(${3.2+k*4}px) brightness(${0.75-k*0.5})`;}
+  else if(t<T5){if(!Z){tk.style.transform='translateZ(40px) rotateY(180deg) scale(1.04)';Z=frameFit();}const k=ease((t-T4)/(T5-T4));const s=Math.exp(lerp(Math.log(target.s),Math.log(Z.s),k));setCam(lerp(Z.x0,Z.x,k),lerp(Z.y0,Z.y,k),s,0);fx(3.2+k*4,0.75-k*0.5);}
   else{finish();return;}
   raf=requestAnimationFrame(frame);};
- const finish=()=>{if(ended)return;ended=true;cancelAnimationFrame(raf);done(w);};
+ const finish=()=>{if(ended)return;ended=true;cancelAnimationFrame(raf);tk.style.transform='translateZ(40px) rotateY(180deg) scale(1.04)';if(!Z)Z=frameFit();setCam(Z.x,Z.y,Z.s,0);fx(7.2,0.25);cam.style.opacity=1;w.querySelector('.gtskip').remove();done(w);};
  w.querySelector('.gtskip').onclick=e=>{e.stopPropagation();finish();};
  setCam(spot.cam.x,spot.cam.y,spot.cam.s,0);tk.style.transform=`rotateX(${spot.tilt}deg) rotateZ(${spot.rot}deg)`;cam.style.opacity=0;
  raf=requestAnimationFrame(frame);}
@@ -4872,16 +4899,23 @@ function ingestNews(){
 const NOTE_COL={'BREAKING':'#d32f2f','FULL TIME':'#e3b341','EXCLUSIVE':'#b98cff','TRANSFER WIRE':'#5fb3ff','RETIREMENT':'#c9b48a','ACADEMY':'#5fcf8a','FORM GUIDE':'#f07c1a','CUP NEWS':'#e3b341','CLUB STATEMENT':'#9fb0b5','CLUB NEWS':'#9fb0b5'};
 function wireNotes(el){const b=el.querySelector('#morenotes');const ol=el.querySelector('.notes .ntree');
  if(b)b.onclick=()=>{if(!UI.allNotes&&ol)UI.notesH=ol.getBoundingClientRect().height;UI.allNotes=!UI.allNotes;renderHub();};
+ // on the phone the wire shows as many stories as the box has room for: short ones fit four, long ones two
+ const box=el.querySelector('.mdph .notes');
+ if(box&&ol&&!UI.allNotes){const its=[...ol.querySelectorAll('.nitem')];its.forEach(i=>i.hidden=false);
+  const bh=b?b.getBoundingClientRect().height+8:0;const pb=parseFloat(getComputedStyle(box).paddingBottom)||0;const lim=box.getBoundingClientRect().bottom-pb-bh-4;
+  let shown=0;for(const it of its){if(shown>=1&&it.getBoundingClientRect().bottom>lim){it.hidden=true;}else if(!it.hidden)shown++;}
+  for(let i=shown;i<its.length;i++)its[i].hidden=true;
+  const tot=(S.notes||[]).length;if(b){const more=tot-shown;if(more>0)b.textContent=`Older news (${more})`;else b.remove();}}
  // older news scrolls inside the same-sized box rather than growing the widget
  if(ol&&UI.allNotes&&UI.notesH){ol.style.maxHeight=UI.notesH+'px';ol.style.overflowY='auto';ol.classList.add('scrolly');}}
 function notesHTML(){
  ingestNews();const N=S.notes||[];
  if(!N.length)return `<section class="panel notes"><div class="nhead"><span class="eyebrow">Club wire</span><span class="live">● On air</span></div><p class="note" style="margin:6px 0 0">No news yet. Play a match and the wire will start ticking.</p></section>`;
  const item=(n,i)=>`<li class="nitem ${i===0?'lead':''}" style="--nc:${NOTE_COL[n.k]||'#9fb0b5'}"><span class="nk">${esc(n.k)}</span><span class="nt">S${n.s} · R${n.r+1}</span><b class="nh">${esc(n.h)}</b>${n.d?`<span class="nd">${esc(n.d)}</span>`:''}</li>`;
- const nTop=3;const top=N.slice(0,nTop),rest=N.slice(nTop);
+ const nTop=PHONE()&&!UI.allNotes?Math.min(N.length,6):3;const top=N.slice(0,nTop),rest=N.slice(nTop);
  return `<section class="panel notes"><div class="nhead"><span class="eyebrow">Club wire</span><span class="live">● On air</span></div>
  <ol class="ntree">${top.map(item).join('')}${UI.allNotes?rest.map((n,i)=>item(n,i+nTop)).join(''):''}</ol>
- ${rest.length?`<button class="btn sm ghost" id="morenotes">${UI.allNotes?'Collapse older news':`Older news (${rest.length})`}</button>`:''}</section>`;
+ ${rest.length||(PHONE()&&!UI.allNotes&&N.length>1)?`<button class="btn sm ghost" id="morenotes">${UI.allNotes?'Collapse older news':`Older news (${rest.length})`}</button>`:''}</section>`;
 }
 function finishRound(userRes){
  const T=T_();T.forEach((t,i)=>{if(i!==S.me&&t.squad.some(p=>(p.fit??100)<70))t.xi=autoPick(t.squad,t.formation,true);});
@@ -5256,7 +5290,7 @@ function tabSquad(el){
  const xiSet=new Set(me.xi);
  const bench=me.squad.filter(p=>!xiSet.has(p.id)).sort((a,b)=>POSITIONS.indexOf(a.pos)-POSITIONS.indexOf(b.pos)||b.ovr-a.ovr);
  const hz=false;
- const spots=f.map((s,i)=>{const p=xi[i];const cat=CAT[s[0]];const top=93-(s[1]/0.66)*82-(cat==='CM'||cat==='WM'?7:cat==='FB'&&s[0].length===3?4:0)+((cat==='CM'||cat==='WM')?(me.formation==='4-4-2'?6:me.formation==='4-3-3'?-6:0):0)+(me.formation==='4-2-3-1'?(s[0]==='AM'?3:s[0]==='CM'?2:0):0);const sx=me.formation==='4-2-3-1'&&s[0]==='CM'?0.5+(s[2]-0.5)*1.5:s[2];return `<div class="spot" style="z-index:${Math.round(top)+2};${hz?`left:${100-top}%;top:${sx*100}%`:`left:${sx*100}%;top:${top}%`}">${p&&!posOK(p,s[0],s[2])?`<span class="slotlbl" title="Playing out of position">${s[0]}</span>`:''}${p?tileHTML(p,{slot:i,role:s[0],sy:s[2]}):''}</div>`;}).join('');
+ const spots=f.map((s,i)=>{const p=xi[i];const cat=CAT[s[0]];const top=93-(s[1]/0.66)*82-(cat==='CM'||cat==='WM'?7:cat==='FB'&&s[0].length===3?4:0)+((cat==='CM'||cat==='WM')?(me.formation==='4-4-2'?6:me.formation==='4-3-3'?-2:0):0)+(me.formation==='4-3-3'&&cat==='ST'?4:0)-(s[1]<0.25&&s[0]!=='GK'?(s[1]<0.16?6.5:3):0)-(me.formation==='3-5-2'&&s[0]==='CM'&&s[2]===0.5?2.5:0)+(me.formation==='4-2-3-1'?(s[0]==='AM'?4:s[0]==='CM'?-1:0):0);const sx=me.formation==='4-2-3-1'&&s[0]==='CM'?0.5+(s[2]-0.5)*1.5:s[2];return `<div class="spot" style="z-index:${Math.round(top)+2};${hz?`left:${100-top}%;top:${sx*100}%`:`left:${sx*100}%;top:${top}%`}">${p&&!posOK(p,s[0],s[2])?`<span class="slotlbl" title="Playing out of position">${s[0]}</span>`:''}${p?tileHTML(p,{slot:i,role:s[0],sy:s[2]}):''}</div>`;}).join('');
  const tac=TACTICS[me.tactic];
  el.innerHTML=`${UI.prep?prepHang():''}<section class="panel squadpanel ${UI.prep?'prepmode':''}">
  <div class="tools"><label class="eyebrow" for="form">Formation</label><select id="form">${Object.keys(FORMATIONS).map(k=>`<option ${k===me.formation?'selected':''}>${k}</option>`).join('')}</select>
@@ -5264,7 +5298,7 @@ function tabSquad(el){
  ${tacCycler(me.tactic,"sq")}
  ${UI.prep?`${UI.tacInfo?`<div class="tacpop tapdesc" role="dialog"><b>${esc(tac.name)}</b><p>${esc(tac.desc)}</p><span class="note">Tap to close</span></div>`:''}${oppFormHTML(UI.prep.opp)}`:`<p class="note tacdesc">${esc(tac.desc)}</p>`}${(()=>{const n=tacRun();return n===0?`<p class="tacfam new">New set-up: opponents won't have seen this coming.</p>`:n<=8?`<p class="tacfam">Settled: ${n} game${n>1?'s':''} in a row with this formation and play style.</p>`:`<p class="tacfam stale">Rivals are reading this set-up (${n} games in a row). A change of formation or play style could catch them out.</p>`;})()}
  ${UI.swap?`<div class="swapbar">Choose a player to swap with <b>${esc(playerById(UI.swap)?.name||'')}</b> <button class="btn sm ghost" id="cancelswap">Cancel</button></div>`:''}
- <div class="squadfield"><aside class="bench" aria-label="Substitutes bench"><span class="eyebrow">Bench</span>${bench.length?(UI.prep?`<div class="benchgrid prepbench ${UI.benchOpen?'open':''}">${bench.map(p=>tileHTML(p,{})).join('')}</div>${me.squad.length>25?`<button class="benchmore" id="benchmore" aria-label="${UI.benchOpen?'Collapse the bench':'Show the rest of the bench'}">${UI.benchOpen?'▲':'▼'}</button>`:''}`:`<div class="benchgrid" style="grid-template-rows:repeat(${Math.min(PHONE()?4:5,bench.length)},auto)">${bench.map(p=>tileHTML(p,{})).join('')}</div>`):'<span class="note">Empty</span>'}</aside>
+ <div class="squadfield"><aside class="bench" aria-label="Substitutes bench"><span class="eyebrow">Bench</span>${bench.length?(UI.prep?`<div class="benchgrid prepbench ${UI.benchOpen?'open':''}">${bench.map(p=>tileHTML(p,{})).join('')}</div>${me.squad.length>25?`<button class="benchmore" id="benchmore" aria-label="${UI.benchOpen?'Collapse the bench':'Show the rest of the bench'}">${UI.benchOpen?'▲':'▼'}</button>`:''}`:`<div class="benchgrid${PHONE()?' phbench':''}" style="${PHONE()?`grid-template-columns:repeat(${Math.min(bench.length,Math.max(3,Math.ceil(bench.length/4)))},auto);--rows:${Math.ceil(bench.length/Math.max(3,Math.ceil(bench.length/4)))}`:`grid-template-rows:repeat(${Math.min(5,bench.length)},auto)`}">${bench.map(p=>tileHTML(p,{})).join('')}</div>`):'<span class="note">Empty</span>'}</aside>
  <div class="bigpitch ${hz?'horiz':''}"><div class="box t"></div><div class="box b"></div><div class="six t"></div><div class="six b"></div><div class="mid"></div><div class="circ"></div>${spots}</div></div>
  <div class="legend">${TIERS.map((t,i)=>`<span><i style="background:${t[1]}"></i>${i===0?'≤39':i===6?'90+':(TIERS[i-1][0]+1)+'–'+t[0]}</span>`).join('')}<span><i class="g"></i>75+ gold ring</span></div>
  <p class="note" style="margin:6px 0 0">Tap a tile for the player card. Drag one tile onto another, or use Swap on the card, to change the line-up.</p></section>`;
@@ -6566,10 +6600,13 @@ function cupPreview(kind,onEnter,onReject){
  const btn=(f,id,label)=>`<button class="pvbtn" id="${id}" style="left:${f[0]*100}%;top:${f[1]*100}%;width:${(f[2]-f[0])*100}%;height:${(f[3]-f[1])*100}%"><span>${label}</span></button>`;
  w.innerHTML=`<div class="pvbox" style="--ar:${P.ar}"><img src="${P.src}" alt="${esc(CUP_KIND[kind].name)}">${btn(P.f[0],'pventer','Enter')}${btn(P.f[1],'pvreject','Reject')}</div>`;
  const tw=typeof ticketScene==='function'&&!matchMedia('(prefers-reduced-motion: reduce)').matches;
- if(tw){w.classList.add('fromticket');ticketScene(kind,P,tk=>{document.body.appendChild(w);w.classList.add('dark');requestAnimationFrame(()=>requestAnimationFrame(()=>{w.classList.add('show');setTimeout(()=>w.classList.add('btns'),500);setTimeout(()=>tk.remove(),900);}));});}
+ let tkw=null;
+ // the buttons sit on the poster inside the ticket's own frame: the shot never changes to the bare poster
+ if(tw){w.classList.add('fromticket','onticket');ticketScene(kind,P,tk=>{tkw=tk;const im=tk.querySelector('.gback .gtimg').getBoundingClientRect();const bx=w.querySelector('.pvbox');Object.assign(bx.style,{left:im.left+'px',top:im.top+'px',width:im.width+'px',height:im.height+'px'});
+  document.body.appendChild(w);w.classList.add('dark','show');setTimeout(()=>w.classList.add('btns'),250);});}
  else{document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('dark'));
  setTimeout(()=>{w.classList.add('show');w.classList.add('btns');},650);}
- const close=fn=>{w.classList.remove('show');setTimeout(()=>{fn();setTimeout(()=>{w.classList.remove('dark');setTimeout(()=>w.remove(),500);},60);},450);};
+ const close=fn=>{if(tkw){const t=tkw;tkw=null;w.classList.remove('btns');const cm=t.querySelector('.gtcam');if(cm)cm.style.opacity='0';w.remove();setTimeout(()=>{fn();t.style.transition='opacity .5s';t.style.opacity='0';setTimeout(()=>t.remove(),520);},520);return;}w.classList.remove('show');setTimeout(()=>{fn();setTimeout(()=>{w.classList.remove('dark');setTimeout(()=>w.remove(),500);},60);},450);};
  w.querySelector('#pventer').onclick=()=>close(onEnter);w.querySelector('#pvreject').onclick=()=>close(onReject);
 }
 // winning the Emperor's Cup: sign any one player from the beaten teams
