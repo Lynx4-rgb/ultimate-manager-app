@@ -1071,7 +1071,10 @@ body.twl .prephang .phin{background:transparent;border:solid transparent;border-
 .benchgrid.prepbench.open{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
 .prepmode .bench{position:relative}
 .benchmore{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:5;width:40px;height:24px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--chalk);font-size:11px;line-height:1;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.5)}
-@media (orientation:landscape) and (max-height:500px){.benchgrid.prepbench{row-gap:18px}}
+@media (orientation:landscape) and (max-height:500px){.benchgrid.prepbench{row-gap:clamp(4px,calc((100dvh - 300px)/8),10px)}
+ /* the pitch spans just the three control rows, so empty grid rows can't add height and push the panel off the bottom */
+ #tabbody[data-t=squad] .squadpanel.prepmode{grid-template-rows:auto auto 1fr}
+ #tabbody[data-t=squad] .squadpanel.prepmode>.squadfield{grid-row:1/span 3!important}}
 .wrap.hub:has(.prepmode)>div:last-child{display:none!important}
 .wrap.hub:has(.prepmode){padding-bottom:6px}
 .prepmode .taccyc{position:relative}
@@ -1144,7 +1147,12 @@ body.twl .tacpop{background:#15140f}
 @keyframes gtshine{0%{transform:translateX(-60%)}55%,100%{transform:translateX(60%)}}
 .gtskip{z-index:3}
 .ticker.livescores{position:relative;margin:6px 0 8px;border:1px solid #1d3550;border-radius:4px;height:26px;display:flex;align-items:center}
-.ticker.livescores .tk{padding:0;animation-duration:45s;font-size:12.5px;gap:14px;padding-left:56px}
+.ticker.livescores .lsview{position:absolute;left:46px;right:0;top:0;bottom:0;overflow:hidden;display:flex;align-items:center}
+.ticker.livescores .tk{padding:0;animation-duration:45s;font-size:12.5px;gap:0;will-change:transform}
+.ticker.livescores .lshalf{display:inline-flex;align-items:center;flex:none}
+.ticker.livescores .lshalf>*{margin-right:14px;flex:none}
+.lsi em{display:inline-block;min-width:2.4em;text-align:center;font-variant-numeric:tabular-nums}
+.lsi small{display:inline-block;width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 .ticker.livescores .lslab{position:absolute;left:0;top:0;bottom:0;z-index:2;display:grid;place-items:center;padding:0 8px;background:#c0392b;color:#fff;font:800 11px var(--data);letter-spacing:.12em}
 .lsi b{color:#e6eef8;font-weight:700}.lsi em{font-style:normal;color:#ffd166;font-weight:800;margin:0 3px}.lsi small{color:#8fb3d6;margin-left:4px}
 .lsi em.flash{animation:lsflash 1.4s}@keyframes lsflash{0%,40%{color:#fff;text-shadow:0 0 8px #ffd166}}
@@ -5227,7 +5235,7 @@ function tabSquad(el){
  <p class="note" style="margin:6px 0 0">Tap a tile for the player card. Drag one tile onto another, or use Swap on the card, to change the line-up.</p></section>`;
  $('#form').onchange=e=>{me.formation=e.target.value;me.xi=autoPick(me.squad,me.formation);save();renderHub();};
  wireCycler(el,'sq',k=>{me.tactic=k;save();renderHub();});
- if(UI.prep){const g=el.querySelector('.prepbench');if(g){const tl=g.querySelectorAll('.ptile');const k=Math.min(tl.length,12)-1;const t=tl[k];if(t){const gb=g.getBoundingClientRect(),tb=t.getBoundingClientRect();g.style.maxHeight=Math.ceil(tb.bottom-gb.top+20+g.scrollTop)+'px';}const bm=el.querySelector('#benchmore');if(bm)bm.onclick=()=>{UI.benchOpen=!UI.benchOpen;renderHub();};}}
+ if(UI.prep){const g=el.querySelector('.prepbench');if(g){benchFit(el);const bm=el.querySelector('#benchmore');if(bm)bm.onclick=()=>{UI.benchOpen=!UI.benchOpen;renderHub();};}}
  if(UI.prep){const nm=el.querySelector('[data-cyc="sq"] .cycname');if(nm){nm.classList.add('tapme');nm.title='Tap for what this style does';nm.onclick=()=>{UI.tacInfo=!UI.tacInfo;renderHub();};}const td=el.querySelector('.tapdesc');if(td)td.onclick=()=>{UI.tacInfo=false;renderHub();};}
  $('#auto').onclick=()=>{me.xi=autoPick(me.squad,me.formation,true);UI.swap=null;save();renderHub();};
  if(UI.swap)$('#cancelswap').onclick=()=>{UI.swap=null;renderHub();};
@@ -6729,8 +6737,28 @@ function liveOthers(ctx){const out=[];
  save();return out;}
 function liveScoresHTML(ctx){let L=[];try{L=liveOthers(ctx);}catch(e){console.error(e);}if(!L.length)return '';LIVE_OTHERS=L;
  const item=(o,i)=>`<span class="lsi"><b>${esc(o.H.short||o.H.name)}</b> <em data-ls="${i}">0–0</em> <b>${esc(o.A.short||o.A.name)}</b> <small data-lsm="${i}"></small></span>`;
- const row=L.map(item).join('<i class="lsdot">•</i>');
- return `<div class="ticker livescores" aria-label="Live scores from the other matches"><span class="lslab">LIVE</span><div class="tk">${row}<i class="lsdot">•</i>${row.replace(/data-ls(m?)="/g,'data-ls$1x="')}</div></div>`;}
+ const row=L.map(item).join('<i class="lsdot">•</i>')+'<i class="lsdot">•</i>';
+ LS_ROW=row.replace(/data-ls(m?)="/g,'data-ls$1x="');setTimeout(lsFit,0);
+ return `<div class="ticker livescores" aria-label="Live scores from the other matches"><span class="lslab">LIVE</span><div class="lsview"><div class="tk"><span class="lshalf">${row}</span><span class="lshalf">${LS_ROW}</span></div></div></div>`;}
+// the strip always fills the whole bar: each half is repeated until it is at least as wide as the bar, and it scrolls at a steady speed
+// the collapsed bench shows exactly four rows, and is never taller than the pitch beside it
+function benchFit(el){el=el||document;const g=el.querySelector('.prepbench');if(!g)return;const tl=g.querySelectorAll('.ptile');if(!tl.length)return;
+ g.style.zoom='';g.style.boxSizing='border-box';g.style.maxHeight='';
+ const pit=el.querySelector('.prepmode .bigpitch');const gb=g.getBoundingClientRect(),st=g.scrollTop;const bottomOK=pit?pit.getBoundingClientRect().bottom-8:1e9;
+ const big=!!el.querySelector('#benchmore');// over 25 players: tiles stay full size, the box shows the whole rows that fit and the rest scroll inside it
+ const nb=t=>{const tn=t.querySelector('.tn');return (tn||t).getBoundingClientRect().bottom+st+(tn?3:20);};
+ let k=Math.min(tl.length,12)-1;if(big){while(k>2&&nb(tl[k])>bottomOK+st)k-=3;}
+ let lim=nb(tl[k]);const nx=tl[k+1]?(tl[k+1].querySelector('.cstar')||tl[k+1]):null;if(nx)lim=Math.min(lim,nx.getBoundingClientRect().top+st-1);
+ if(big&&g.classList.contains('open')&&pit){const bm=el.querySelector('#benchmore');lim=Math.max(lim,bottomOK+st-(bm?bm.offsetHeight+6:0));lim=Math.min(lim,bottomOK+st);}
+ g.style.maxHeight=Math.ceil(lim-gb.top-(big&&g.classList.contains('open')?st:0))+'px';
+ if(!big&&pit){const avail=bottomOK-g.getBoundingClientRect().top;const need=g.getBoundingClientRect().height;if(need>avail&&avail>60)g.style.zoom=Math.max(0.6,avail/need).toFixed(3);}}
+addEventListener('resize',()=>{clearTimeout(window._bfT);window._bfT=setTimeout(()=>benchFit(),200);});
+let LS_ROW='';
+function lsFit(){const v=document.querySelector('.ticker.livescores .lsview');if(!v)return;const tk=v.querySelector('.tk');const hs=tk.querySelectorAll('.lshalf');if(hs.length<2)return;
+ const W=v.clientWidth;let guard=0;while(hs[0].offsetWidth<W+40&&guard++<12){hs[0].insertAdjacentHTML('beforeend',LS_ROW);hs[1].insertAdjacentHTML('beforeend',LS_ROW);}
+ tk.style.animationDuration=Math.max(6,hs[0].offsetWidth/95)+'s';
+ if(LIVE&&LIVE_OTHERS.length){LIVE.lsMin=null;liveScoresTick(LIVE.m);}}
+addEventListener('resize',()=>{clearTimeout(window._lsR);window._lsR=setTimeout(lsFit,250);});
 let LIVE_OTHERS=[];
 function liveScoresTick(m){if(!LIVE_OTHERS.length)return;const min=Math.min(90,Math.floor(m.t/m.dur*90));if(LIVE&&LIVE.lsMin===min&&!m.finished)return;if(LIVE)LIVE.lsMin=min;const end=m.finished;
  LIVE_OTHERS.forEach((o,i)=>{const r=o.f.pre;if(!r)return;let h=0,a=0,last=null;for(const x of r.sc){if(end||x.min<=min){if(x.team===0)h++;else a++;if(!last||x.min>last.min)last=x;}}
