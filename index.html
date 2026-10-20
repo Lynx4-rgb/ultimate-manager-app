@@ -1259,6 +1259,31 @@ body.twl .ticker.livescores{background:#15140f;border-color:#3a3224}
 .glory p{margin:0;color:#f3ead4;font:400 clamp(16px,2.1vw,25px)/1.2 'Cinzel',Georgia,serif;letter-spacing:.06em;text-align:center;padding:0 6vw;opacity:0;transform:translateY(8px) scale(.98);transition:opacity 1s ease,transform 2.4s ease;text-shadow:0 0 24px rgba(255,210,120,.25)}
 .glory.textin p{opacity:1;transform:none}
 .glory.textout p{opacity:0;transition:opacity .6s}
+/* transfer talks */
+.ngwrap{position:fixed;top:0;left:0;width:100vw;height:100vh;height:100dvh;z-index:120;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
+.ngbox{width:min(310px,90vw);max-height:94dvh;overflow-y:auto;margin:auto;background:var(--panel,#1b2021);border:1px solid #3a4446;border-radius:12px;padding:10px 14px 12px;box-shadow:0 24px 60px rgba(0,0,0,.6);text-align:center}
+.nghead{display:flex;align-items:center;gap:8px;text-align:left}.ngwho{flex:1;min-width:0;display:flex;flex-direction:column}
+.ngwho b{font-size:17px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ngwho span{font-size:12px;color:#9fb0b5}
+.ngx{width:30px;height:30px;border-radius:8px;border:1px solid #3a4446;background:transparent;color:#cfd8da;font-size:14px;cursor:pointer;flex:0 0 auto}
+.ngtip{margin:6px 0 0;font-size:13px;color:#c4cfd1}
+.ngmain{display:flex;align-items:center;justify-content:center;gap:8px;height:72px;margin:10px 0}
+.ngtile{flex:0 0 auto;width:48px;height:64px;border-radius:8px;background:#fbfaf6;color:#151a1b;display:grid;place-items:center;box-shadow:0 3px 0 #c9c4b5,0 6px 10px rgba(0,0,0,.35);transition:transform .2s ease-in,box-shadow .25s}
+.ngtile b{font:700 32px/1 var(--display,inherit)}
+.ngtile.out{transform:rotateY(90deg)}
+.ngtile.ok{box-shadow:0 3px 0 #3d9a5c,0 0 0 3px #4cc06f,0 6px 14px rgba(76,192,111,.45)}
+.ngtile.bad{background:#f7d9d6;box-shadow:0 3px 0 #a33a2f,0 0 0 3px #e45b5b,0 6px 14px rgba(228,91,91,.45);animation:ngshake .45s}
+@keyframes ngshake{20%{translate:-5px 0}40%{translate:5px 0}60%{translate:-3px 0}80%{translate:2px 0}}
+.ngarrows{display:flex;flex-direction:column;gap:6px;flex:0 0 auto}
+.ngarrows button{width:84px;height:32px;border-radius:8px;border:1px solid #4a5558;background:#273033;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+.ngarrows .ngup:not(:disabled):hover{background:#2c5a3b;border-color:#4cc06f}.ngarrows .ngdn:not(:disabled):hover{background:#5a2c2c;border-color:#e45b5b}
+.ngarrows button:disabled{opacity:.35;cursor:default}
+.ngprice{flex:0 0 auto;min-width:88px;display:flex;flex-direction:column;align-items:center}
+.ngwas{color:#8c9a9d;font-size:12px;min-height:15px}.ngnow{font-size:21px;line-height:1.1;color:#e7b93c;font-weight:800}.ngsaved{font-size:12px;color:#9fb0b5;min-height:15px}
+.ngpips{display:flex;gap:3px;margin-top:4px}.ngpips i{width:12px;height:5px;border-radius:3px;background:#3a4446}.ngpips i.on{background:#4cc06f}
+.ngmsg{margin:0 0 10px;font-size:14px}.ngmsg:empty{display:none}.ngmsg .good{color:#4cc06f}.ngmsg .bad{color:#e45b5b}
+.ngact{display:flex;gap:6px;justify-content:center}.ngact .btn{flex:0 0 auto;font-size:13px;padding:5px 12px;min-height:0}
+td b.good{color:#4cc06f}
+@media (max-width:400px){.ngarrows button{width:86px}.ngnow{font-size:22px}}
 </style>
 <div id="rotate" role="dialog" aria-label="Rotate your phone"><div><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M3 14a9 9 0 0 0 6 7M21 10a9 9 0 0 0-6-7"/><path d="M1 12l2 2 2-2M23 12l-2-2-2 2"/></svg><b>Turn your phone sideways</b><span>Ultimate Manager is built to be played in landscape.</span><button class="btn sm ghost" onclick="document.getElementById('rotate').classList.add('off')">Continue anyway</button></div></div>
 <div id="app"></div>
@@ -5396,7 +5421,7 @@ function ingestNews(){
   if(!done)addNote('CLUB NEWS',x,'');}
  save();
 }
-const NOTE_COL={'BREAKING':'#d32f2f','FULL TIME':'#e3b341','EXCLUSIVE':'#b98cff','TRANSFER WIRE':'#5fb3ff','RETIREMENT':'#c9b48a','ACADEMY':'#5fcf8a','FORM GUIDE':'#f07c1a','CUP NEWS':'#e3b341','CLUB STATEMENT':'#9fb0b5','CLUB NEWS':'#9fb0b5'};
+const NOTE_COL={'BREAKING':'#d32f2f','FULL TIME':'#e3b341','EXCLUSIVE':'#b98cff','TRANSFER WIRE':'#5fb3ff','TRANSFER NEWS':'#5fb3ff','RETIREMENT':'#c9b48a','ACADEMY':'#5fcf8a','FORM GUIDE':'#f07c1a','CUP NEWS':'#e3b341','CLUB STATEMENT':'#9fb0b5','CLUB NEWS':'#9fb0b5'};
 function wireNotes(el){const b=el.querySelector('#morenotes');const ol=el.querySelector('.notes .ntree');
  if(b)b.onclick=()=>{if(!UI.allNotes&&ol)UI.notesH=ol.getBoundingClientRect().height;UI.allNotes=!UI.allNotes;renderHub();};
  // on the phone the wire shows as many stories as the box has room for: short ones fit four, long ones two
@@ -5446,7 +5471,7 @@ function finishRound(userRes){
    for(const t of [h,a])for(const p of xiPlayers(t))if(p)p.apps++;
    if(userRes&&l===myLg()&&userRes.i===i&&userRes.m)statFromMatch(userRes.m);else{statQuick(h,f.hs,f.as,r.sc.filter(x=>x.team===0));statQuick(a,f.as,f.hs,r.sc.filter(x=>x.team===1));}
    const pay=LEAGUES[l].match;const ph=f.hs>f.as?pay:f.hs===f.as?pay*0.5:pay*0.25,pa=f.as>f.hs?pay:f.hs===f.as?pay*0.5:pay*0.25;
-   h.budget+=ph;a.budget+=pa;if(f.h===S.me)S.lastEarn=ph;if(f.a===S.me)S.lastEarn=pa;if((f.h===S.me||f.a===S.me)&&typeof staffWages==='function'){const wg=staffWages();if(wg)T[S.me].budget-=wg;}
+   h.budget+=ph;a.budget+=pa;if(f.h===S.me)S.lastEarn=ph;if(f.a===S.me)S.lastEarn=pa;
   });
  }
  {const mf=S.fx[myLg()][S.round]&&S.fx[myLg()][S.round].find(f=>f.h===S.me||f.a===S.me);
@@ -5459,7 +5484,7 @@ function finishRound(userRes){
  if(S.round>=S.fx[myLg()].length)S.done=true;
  if(S.round===3||S.round===8||S.done)makeOffers();
  S.offers=(S.offers||[]).filter(o=>!o.exp||o.exp>S.round||S.done);
- bondsAfterGame(myTeam());recoverAll(T);ingestNews();save();
+ bondsAfterGame(myTeam());recoverAll(T);negAfterGame();ingestNews();save();
 }
 
 // ---------- transfers ----------
@@ -5506,13 +5531,13 @@ function aiRestock(t){
 }
 function buy(pid){if(twlLocked())return false;
  const me=myTeam();const e=allPlayers().find(x=>x.p.id===pid);if(!e||e.club===S.me)return false;
- const price=priceOf(e);
+ const price=negPrice(e);
  if(me.squad.length>=25){toast('Your squad is full (25 players). Sell someone first.');return false;}
  if(price>me.budget){toast(`Not enough budget. You need ${fmt(price)}.`);return false;}
  me.budget-=price;
  if(e.club<0)S.world.free=S.world.free.filter(p=>p.id!==pid);
  else{const t=T_()[e.club];t.squad=t.squad.filter(p=>p.id!==pid);t.budget+=price;aiRestock(t);}
- e.p.num=0;e.p.goals=e.p.goals||0;me.squad.push(e.p);numberSquad(me);save();toast(`${e.p.name} signed for ${fmt(price)}`);return true;
+ e.p.num=0;e.p.goals=e.p.goals||0;me.squad.push(e.p);if(S.neg)delete S.neg[pid];numberSquad(me);save();toast(`${e.p.name} signed for ${fmt(price)}`);return true;
 }
 function sellFee(p){return Math.round(p.value*0.85/5000)*5000;}
 function sell(pid){if(twlLocked())return false;
@@ -5737,7 +5762,7 @@ function renderHub(){twlThemeSync();setTimeout(()=>{if(typeof showInstallPill===
  app.innerHTML=`<div class="wrap">
  <header class="hubhead">${badge(me,56)}<div class="grow"><span class="eyebrow">${LEAGUES[myLg()].name} · Season ${S.season} · ${S.cup?cupName():S.done?'Season complete':'Round '+(S.round+1)+' of '+n}</span><h1>${esc(me.name)}</h1></div>
  <div class="kpis"><div class="kpi"><span class="eyebrow">Position</span><b>${S.round||S.done?ord(pos):'–'}</b></div><div class="kpi"><span class="eyebrow">Wallet</span><b>${fmt(me.budget)}</b></div><div class="kpi"><span class="eyebrow">XI rating</span>${chip(teamOvr(me),'sm')}</div></div></header>
- <nav class="tabs" role="tablist">${[['match','Matchday'],['squad','Squad'],['market',twlLocked()?'Transfers 🔒':PHONE()?'Transfers':'Transfers ↗'],['league','League'],...(Object.keys(S.cupsWon||{}).length?[['cups','Cups']]:[]),['agency','Agency'],['settings','Settings']].map(([k,l])=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-tab="${k}">${l}</button>`).join('')}</nav>
+ <nav class="tabs" role="tablist">${[['match','Matchday'],['squad','Squad'],['market',twlLocked()?'Transfers 🔒':PHONE()?'Transfers':'Transfers ↗'],['league','League'],...(Object.keys(S.cupsWon||{}).length?[['cups','Cups']]:[]),['settings','Settings']].map(([k,l])=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-tab="${k}">${l}</button>`).join('')}</nav>
  <main id="tabbody"></main>
  <div style="margin-top:28px;display:flex;justify-content:flex-end;gap:8px">${USER?`<button class="btn sm ghost" id="switchuser">Switch player (${esc(USER.name)})</button>`:''}<button class="btn sm ghost" id="newgame">${UI.confirmNew?'Click again to abandon this save':'New game'}</button></div>
  </div>`;
@@ -5745,7 +5770,7 @@ function renderHub(){twlThemeSync();setTimeout(()=>{if(typeof showInstallPill===
  const su=$('#switchuser');if(su)su.onclick=signOut;
  $('#newgame').onclick=()=>{if(UI.confirmNew){try{localStorage.removeItem(saveKey());}catch(e){}S=null;UI.confirmNew=false;UI.sel=null;render();}else{UI.confirmNew=true;renderHub();}};
  const body=$('#tabbody');body.dataset.t=UI.tab;app.querySelector('.wrap').classList.add('hub');
- ({match:tabMatch,squad:tabSquad,league:tabLeague,cups:tabCups,agency:tabAgency,settings:tabSettings,market:tabSealed})[UI.tab==='market'&&!twlLocked()?'match':UI.tab](body);twlDecor();
+ (({match:tabMatch,squad:tabSquad,league:tabLeague,cups:tabCups,settings:tabSettings,market:tabSealed})[UI.tab==='market'&&!twlLocked()?'match':UI.tab]||tabMatch)(body);twlDecor();
 }
 
 function fixRow(f,showScore){
@@ -5861,9 +5886,9 @@ function tabSquad(el){
  const tac=TACTICS[me.tactic];
  el.innerHTML=`${UI.prep?prepHang():''}<section class="panel squadpanel ${UI.prep?'prepmode':''}">
  <div class="tools"><label class="eyebrow" for="form">Formation</label><select id="form">${Object.keys(FORMATIONS).map(k=>`<option ${k===me.formation?'selected':''}>${k}</option>`).join('')}</select>
- <button class="btn sm" id="auto" title="Picks on today's form: each player's rating adjusted for his health">Auto-pick best XI</button>${staff('asst')?`<button class="btn sm ghost asstbtn" onclick="asstPopup()">📋 Assistant</button>`:''}<span class="note" style="margin-left:auto">${me.squad.length} players · XI rating <b>${teamOvr(me)}</b></span></div>
+ <button class="btn sm" id="auto" title="Picks on today's form: each player's rating adjusted for his health">Auto-pick best XI</button><span class="note" style="margin-left:auto">${me.squad.length} players · XI rating <b>${teamOvr(me)}</b></span></div>
  ${tacCycler(me.tactic,"sq")}
- ${UI.prep?`${UI.tacInfo?`<div class="tacpop tapdesc" role="dialog"><b>${esc(tac.name)}</b><p>${esc(tac.desc)}</p><span class="note">Tap to close</span></div>`:''}<button class="btn scoutbtn" onclick="scoutPopup()"><span class="eyebrow">${staff('scout')?'Scout report':'Last 5 games'}</span><b>${esc(UI.prep.opp.name)}</b></button>`:`<p class="note tacdesc">${esc(tac.desc)}</p>`}${(()=>{const n=tacRun();return n===0?`<p class="tacfam new">New set-up: opponents won't have seen this coming.</p>`:n<=8?`<p class="tacfam">Settled: ${n} game${n>1?'s':''} in a row with this formation and play style.</p>`:`<p class="tacfam stale">Rivals are reading this set-up (${n} games in a row). A change of formation or play style could catch them out.</p>`;})()}
+ ${UI.prep?`${UI.tacInfo?`<div class="tacpop tapdesc" role="dialog"><b>${esc(tac.name)}</b><p>${esc(tac.desc)}</p><span class="note">Tap to close</span></div>`:''}${oppFormHTML(UI.prep.opp)}`:`<p class="note tacdesc">${esc(tac.desc)}</p>`}${(()=>{const n=tacRun();return n===0?`<p class="tacfam new">New set-up: opponents won't have seen this coming.</p>`:n<=8?`<p class="tacfam">Settled: ${n} game${n>1?'s':''} in a row with this formation and play style.</p>`:`<p class="tacfam stale">Rivals are reading this set-up (${n} games in a row). A change of formation or play style could catch them out.</p>`;})()}
  ${UI.swap?`<div class="swapbar">Choose a player to swap with <b>${esc(playerById(UI.swap)?.name||'')}</b> <button class="btn sm ghost" id="cancelswap">Cancel</button></div>`:''}
  <div class="squadfield"><aside class="bench" aria-label="Substitutes bench"><span class="eyebrow">Bench</span>${bench.length?(UI.prep?`<div class="benchgrid prepbench ${UI.benchOpen?'open':''}">${bench.map(p=>tileHTML(p,{})).join('')}</div>${me.squad.length>25?`<button class="benchmore" id="benchmore" aria-label="${UI.benchOpen?'Collapse the bench':'Show the rest of the bench'}">${UI.benchOpen?'▲':'▼'}</button>`:''}`:`<div class="benchgrid${PHONE()?' phbench':''}" style="${PHONE()?`grid-template-columns:repeat(${Math.min(bench.length,Math.max(3,Math.ceil(bench.length/4)))},auto);--rows:${Math.ceil(bench.length/Math.max(3,Math.ceil(bench.length/4)))}`:`grid-template-rows:repeat(${Math.min(5,bench.length)},auto)`}">${bench.map(p=>tileHTML(p,{})).join('')}</div>`):'<span class="note">Empty</span>'}</aside>
  <div class="bigpitch ${hz?'horiz':''}"><div class="box t"></div><div class="box b"></div><div class="six t"></div><div class="six b"></div><div class="mid"></div><div class="circ"></div>${spots}${!UI.prep&&(S.xpPool||0)>0?`<button class="xpbox" id="xpbox" aria-label="Award XP to a player"><b>${S.xpPool}</b><span>XP</span></button>`:''}</div></div>
@@ -5924,7 +5949,7 @@ function openCard(pid,fromEl){
   <div class="tstats t3">${statC('Speed','spd')}${statC('Shooting','sho')}${statC('Passing','pas')}${statC('Dribbling','dri')}${statC('Tackling','tck')}${statC('Strength','str')}${statC('Goalkeeping','gk')}${statC('Stamina','sta')}${stat('Form',p.form&&p.form.length?(p.form.reduce((a,b)=>a+b,0)/p.form.length).toFixed(1):'–')}</div><div class="tvalue"><span>Value</span><b>${fmt(p.value)}</b></div>
   ${traitTag(p,true)}
   ${linkHTML(p)}
-  <div class="tact">${mine?`<button class="btn primary sm" data-act="swap">Swap</button>${twlLocked()?'<button class="btn sm" disabled>Market sealed</button>':`<button class="btn sm" data-act="sell">Sell for ${fmt(sellFee(p))}</button>`}`:twlLocked()?'<button class="btn sm" disabled>Market sealed</button>':`<button class="btn primary sm" data-act="buy" ${price>myTeam().budget?'disabled':''}>Sign for ${fmt(price)}</button>`}<button class="btn ghost sm" data-act="close">Close</button></div>
+  <div class="tact">${mine?`<button class="btn primary sm" data-act="swap">Swap</button>${twlLocked()?'<button class="btn sm" disabled>Market sealed</button>':`<button class="btn sm" data-act="sell">Sell for ${fmt(sellFee(p))}</button>`}`:twlLocked()?'<button class="btn sm" disabled>Market sealed</button>':(negBanned(pid)?`<button class="btn sm" disabled>Not talking (${negBanned(pid)} game${negBanned(pid)>1?'s':''})</button>`:`<button class="btn primary sm" data-act="contact">Contact · ${fmt(negPrice(e))}</button>`)}<button class="btn ghost sm" data-act="close">Close</button></div>
  </div>`;
  document.body.appendChild(layer);
  const card=layer.querySelector('.tcard');
@@ -5937,7 +5962,7 @@ function openCard(pid,fromEl){
   if(a==='close')close();
   if(a==='swap'){close();UI.swap=pid;UI.tab='squad';renderHub();}
   if(a==='sell'){if(sell(pid)){close();renderHub();}}
-  if(a==='buy'){if(buy(pid)){close();if($('.portal'))renderMarket();else renderHub();}}
+  if(a==='contact'){close();negOpen(pid,()=>{if($('.portal'))renderMarket();else renderHub();});}
  });
  card.querySelector('[data-act]').focus();
 }
@@ -5955,7 +5980,7 @@ function openMarket(legend){
  document.body.appendChild(d);document.body.style.overflow='hidden';
  requestAnimationFrame(()=>d.classList.add('in'));
  const close=()=>{d.classList.remove('in');UI.legendMode=false;setTimeout(()=>{d.remove();document.body.style.overflow='';renderHub();},220);document.removeEventListener('keydown',kd);};
- const kd=e=>{if(e.key==='Escape'&&!document.querySelector('.cardlayer'))close();};document.addEventListener('keydown',kd);
+ const kd=e=>{if(e.key==='Escape'&&!document.querySelector('.cardlayer,.ngwrap'))close();};document.addEventListener('keydown',kd);
  $('#pclose').onclick=close;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
  setTimeout(()=>{d.querySelector('.pconnect').remove();d.querySelector('.pbody').hidden=false;renderMarket();},reduce?0:650);
@@ -5964,8 +5989,8 @@ function renderMarket(){
  const body=document.querySelector('.portal .pbody');if(!body)return;
  const F=UI.m;const me=myTeam();const T=T_();
  const LG=UI.legendMode&&S.cup&&(S.cup.kind==='emperor'||S.cup.kind==='temporal');const ET=LG?S.cup.euro:[];
- const priceOf_=e=>LG?0:priceOf(e);
- let list=LG?ET.flatMap((t,ti)=>t.squad.map(p=>({p,club:-100-ti,et:t}))):allPlayers().filter(e=>e.club!==S.me);
+ const priceOf_=e=>LG?0:negPrice(e);
+ let list=LG?ET.flatMap((t,ti)=>t.squad.map(p=>({p,club:-100-ti,et:t}))):allPlayers().filter(e=>e.club!==S.me&&!negBanned(e.p.id));
  if(LG&&!String(F.club).startsWith('-1')&&F.club!=='ALL')F.club='ALL';
  if(F.club!=='ALL')list=list.filter(e=>String(e.club)===F.club);
  if(!LG&&F.lg!=='ALL')list=list.filter(e=>F.lg==='FA'?e.club<0:e.club>=0&&String(T[e.club].league)===F.lg);
@@ -5996,7 +6021,7 @@ function renderMarket(){
  <div class="tblwrap mtable"><table><thead><tr>${th('ovr','Rating','ovrcol')}${th('name','Player')}${th('pos','Pos')}${th('age','Age','n')}${th('trait','Trait')}${th('spd','SPD','n')}${th('sho','SHO','n')}${th('pas','PAS','n')}${th('dri','DRI','n')}${th('tck','TCK','n')}${th('str','STR','n')}${th('gk','GK','n')}${th('sta','STA','n')}${th('club','Club')}${th('price','Price','n')}<th></th></tr></thead><tbody>
  ${shown.map(e=>{const p=e.p;const pr=priceOf_(e);const c=e.et||(e.club<0?null:T[e.club]);const att=k=>`<td class="n" style="color:${tier(p[k]).bg==='#7a1414'?'#e07070':tier(p[k]).bg}">${p[k]}</td>`;
   return `<tr><td class="ovrcol">${chip(p.ovr,'lg')}</td><td><button class="linkbtn" data-card="${p.id}">${esc(PHONE()?shortName(p.name):p.name)}</button>${retireNote(p)}</td><td><span class="pos ${CAT[p.pos]}">${p.pos}</span></td><td class="n">${p.age}</td><td class="trcol">${traitTag(p)||'<span class="note">–</span>'}</td>${['spd','sho','pas','dri','tck','str','gk','sta'].map(att).join('')}
-  <td>${c?`<span class="clubcell">${badge(c,20)}<span>${esc(PHONE()?c.short:c.name)}<small>${e.et?'EMP':LEAGUES[c.league].short}</small></span></span>`:'<span class="note">Free agent</span>'}</td><td class="n">${LG?'Free':fmt(pr)}</td><td><button class="btn sm ${pr<=me.budget?'primary':''}" data-buy="${p.id}" ${pr>me.budget?'disabled':''}>Sign</button></td></tr>`;}).join('')}
+  <td>${c?`<span class="clubcell">${badge(c,20)}<span>${esc(PHONE()?c.short:c.name)}<small>${e.et?'EMP':LEAGUES[c.league].short}</small></span></span>`:'<span class="note">Free agent</span>'}</td><td class="n">${LG?'Free':negDisc(p.id)?`<s class="note">${fmt(priceOf(e))}</s> <b class="good">${fmt(pr)}</b>`:fmt(pr)}</td><td>${LG?`<button class="btn sm primary" data-buy="${p.id}">Sign</button>`:`<button class="btn sm ${pr<=me.budget?'primary':''}" data-contact="${p.id}">Contact</button>`}</td></tr>`;}).join('')}
  </tbody></table></div>
  ${total>shown.length?`<div style="text-align:center;margin-top:12px"><button class="btn" id="mmore">Show more (${total-shown.length} left)</button></div>`:''}
  <p class="note">${LG?'Your reward for winning the Emperor\'s Cup: sign any one player from the teams in the competition, free.':'Free agents cost half their value. Players at other clubs cost 30% over value.'}</p>`;
@@ -6010,6 +6035,7 @@ function renderMarket(){
  $('#mreset').onclick=()=>{Object.assign(F,{q:'',club:'ALL',lg:'ALL',pos:[],amin:'',amax:'',omin:'',price:'ANY',afford:false});re();};
  body.querySelectorAll('[data-mpos]').forEach(b=>b.onclick=()=>{const k=b.dataset.mpos;if(k==='ALL')F.pos=[];else F.pos=F.pos.includes(k)?F.pos.filter(x=>x!==k):[...F.pos,k];re();});
  body.querySelectorAll('[data-msort]').forEach(b=>b.onclick=()=>{const k=b.dataset.msort;if(F.sort===k)F.dir*=-1;else{F.sort=k;F.dir=['name','club','pos','price','age'].includes(k)?1:-1;}renderMarket();});
+ body.querySelectorAll('[data-contact]').forEach(b=>b.onclick=()=>negOpen(+b.dataset.contact,()=>{if(document.querySelector('.portal'))renderMarket();}));
  body.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{if(LG){signEmperorLegend(b.dataset.buy);toast(`${S.cup.legend} has joined your squad`);const pc=$('#pclose');if(pc)pc.click();return;}if(buy(+b.dataset.buy))renderMarket();});
  if(LG)body.querySelectorAll('[data-card]').forEach(b=>{b.replaceWith(Object.assign(document.createElement('span'),{textContent:b.textContent}));});
  body.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>openCard(+b.dataset.card,b));
@@ -7523,83 +7549,77 @@ function liveScoresTick(m){if(!LIVE_OTHERS.length)return;const min=Math.min(90,M
   const txt=`${h}–${a}`;const recent=last&&!end&&min-last.min<=4;
   document.querySelectorAll(`[data-ls="${i}"],[data-lsx="${i}"]`).forEach(e=>{if(e.textContent!==txt){e.textContent=txt;e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash');}});
   document.querySelectorAll(`[data-lsm="${i}"],[data-lsmx="${i}"]`).forEach(e=>{e.textContent=end?'FT':recent&&last.p?`⚽ ${surname(last.p.name)} ${last.min}′`:'';});});}
-// ===================== THE AGENCY: scouts and assistants =====================
-// one scout and one assistant at a time; a signing fee to hire, a wage every league round, and they can only be sacked
-const STAFF_TIERS=[
- {k:'trainee',label:'Trainee',fee:60e3,wage:2e3,acc:0.6,notes:2},
- {k:'experienced',label:'Experienced',fee:300e3,wage:8e3,acc:0.78,notes:4},
- {k:'elite',label:'Elite',fee:1.2e6,wage:25e3,acc:0.93,notes:6}];
-const STAFF_FIRST=['Ray','Terry','Graham','Colin','Mick','Dave','Howard','Neil','Lenny','Archie','Stan','Frank','Gordon','Keith','Phil','Barry'];
-const STAFF_LAST=['Hollins','Pardew','Whitlock','Merrick','Dunne','Calloway','Shearing','Bramble','Kettering','Hatch','Ogilvy','Pryce','Rankin','Tolley','Vance','Warbuck'];
-const STAFF_DO={scout:['Watches the next opponent: how they concede, their weak spots and who to watch','Reports appear as a button on the match tactics page'],
- asst:['Notes on your squad: gaps, tired legs, players short of confidence or in form','A tip at half-time on what is (or isn\'t) working']};
-function staffName(role,tier){const r=mkRng(hashStr(`${role}|${tier}|${S.season}|${USER?USER.id:''}`));return STAFF_FIRST[Math.floor(r()*STAFF_FIRST.length)]+' '+STAFF_LAST[Math.floor(r()*STAFF_LAST.length)];}
-function staff(role){return S&&S.staff&&S.staff[role]||null;}
-function staffTier(role){const s=staff(role);return s?STAFF_TIERS[s.tier]:null;}
-function staffWages(){let w=0;for(const r of ['scout','asst']){const t=staffTier(r);if(t)w+=t.wage;}return w;}
-function tabAgency(el){const me=myTeam();S.staff=S.staff||{};
- const card=(role,title)=>{const s=staff(role);const T=s&&STAFF_TIERS[s.tier];
-  if(s)return `<section class="panel agcard on"><span class="eyebrow">Your ${title.toLowerCase()}</span><div class="aghead"><div class="agav">${role==='scout'?'🔭':'📋'}</div><div><b>${esc(s.name)}</b><span class="note">${T.label} ${title.toLowerCase()} · since season ${s.since}</span></div></div>
-   <ul class="agdo">${STAFF_DO[role].map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p class="note" style="margin:6px 0">Wage ${fmt(T.wage)} per league game</p>
-   <button class="btn sm ghost" data-sack="${role}">${UI.sackConfirm===role?'Click again to sack '+esc(s.name.split(' ')[0]):'Sack'}</button></section>`;
-  return `<section class="panel agcard"><span class="eyebrow">Hire a ${title.toLowerCase()}</span><ul class="agdo">${STAFF_DO[role].map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
-   <div class="aglist">${STAFF_TIERS.map((T,i)=>`<div class="agrow"><div class="grow"><b>${esc(staffName(role,i))}</b><span class="note">${T.label} · ${i===0?'gets the broad picture, sometimes wrong':i===1?'reliable, with detail':'sharp and rarely wrong'}</span></div><div class="agcost"><b>${fmt(T.fee)}</b><span class="note">then ${fmt(T.wage)}/game</span></div><button class="btn sm primary" data-hire="${role}|${i}" ${me.budget<T.fee?'disabled':''}>Hire</button></div>`).join('')}</div></section>`;};
- el.innerHTML=`<div class="stack"><section class="panel"><span class="eyebrow">The agency</span><h2 style="font-size:28px;margin:4px 0 4px">Backroom staff</h2><p class="note" style="margin:0">You can have one scout and one assistant at a time. Staff can't be sold on, only sacked, and the signing fee isn't refunded. Wages come out of your wallet every league game (${fmt(staffWages())} a game at the moment).</p></section>
-  <div class="grid2">${card('scout','Scout')}${card('asst','Assistant')}</div></div>`;
- el.querySelectorAll('[data-hire]').forEach(b=>b.onclick=()=>{const [role,i]=b.dataset.hire.split('|');const T=STAFF_TIERS[+i];if(staff(role)||me.budget<T.fee)return;me.budget-=T.fee;S.staff[role]={tier:+i,name:staffName(role,+i),since:S.season};save();toast(`${S.staff[role].name} joins as your ${role==='scout'?'scout':'assistant'}`);renderHub();});
- el.querySelectorAll('[data-sack]').forEach(b=>b.onclick=()=>{const role=b.dataset.sack;if(UI.sackConfirm!==role){UI.sackConfirm=role;renderHub();return;}UI.sackConfirm=null;const n=staff(role).name;delete S.staff[role];save();toast(`${n} has been let go`);renderHub();});}
-
-// ---------- the scout's report on the next opponent ----------
-const CONCEDE_CAT=[['wings','Crosses into the box'],['long','Balls over the top'],['through','Through balls'],['counter','Counter-attacks'],['press','Mistakes under pressure'],['attacking','Shots from distance'],['set','Set pieces']];
-function scoutData(t){const s=staff('scout');const T=staffTier('scout');const P=tacProfile(t);const r=mkRng(hashStr(`scout|${t.id||t.name}|${S.season}|${S.round}|${s?s.name:''}`));
- const keys=Object.keys(TACTICS).filter(k=>k!=='sink');const wrong=x=>{const o=keys.filter(k=>k!==x&&!P.weak.includes(k));return o[Math.floor(r()*o.length)];};
- const acc=T?T.acc:0;const weak=P.weak.map(k=>r()<acc?k:wrong(k));const strong=P.strong.map(k=>r()<acc?k:wrong(k));
- // how they've been conceding: weighted towards the styles that hurt them
- const H=histFor(t);const ga=Math.max(4,H.reduce((a,h)=>a+(h.ga||0),0)+3);const w=CONCEDE_CAT.map(([k])=>1+(weak.includes(k)?2.6*P.amp:0)+(P.strong.includes(k)?-0.5:0)+r()*0.8);const sum=w.reduce((a,b)=>a+b,0);
- let left=ga;const conc=CONCEDE_CAT.map(([k,l],i)=>{const n=Math.round(ga*w[i]/sum);return [k,l,n];}).sort((a,b)=>b[2]-a[2]);
- const xi=xiPlayers(t).filter(Boolean);const danger=xi.filter(p=>p.pos!=='GK').sort((a,b)=>(b.sho+b.ovr)-(a.sho+a.ovr))[0];
- const defs=xi.filter(p=>['CB','LB','RB','LWB','RWB'].includes(p.pos));const slow=defs.slice().sort((a,b)=>a.spd-b.spd)[0];const gk=xi.find(p=>p.pos==='GK');
- return {P,weak,strong,conc,ga,danger,slow,gk,amp:P.amp};}
-function scoutReportHTML(t){const s=staff('scout');const T=staffTier('scout');const d=s?scoutData(t):null;const nm=k=>TACTICS[k]?TACTICS[k].name:k;
- let h=`<div class="srep"><div class="srhead"><span class="eyebrow">Scout report · ${esc(t.name)}</span><button class="btn sm ghost" onclick="this.closest('.srwrap').remove()">Close</button></div>`;
- if(s){const lvl=s.tier;h+=`<p class="note" style="margin:0 0 8px">Compiled by ${esc(s.name)} (${T.label.toLowerCase()} scout)</p>`;
-  h+=`<div class="srsec"><b>How they concede</b><span class="note">From their recent goals conceded</span>${d.conc.slice(0,lvl===0?2:lvl===1?4:7).map(([k,l,n])=>`<div class="srbar"><span>${esc(l)}</span><i style="width:${Math.min(100,n/Math.max(1,d.conc[0][2])*100)}%"></i><b>${n}</b></div>`).join('')}</div>`;
-  const wk=d.amp<0.45&&lvl>0?`<p>No glaring weakness: they are well drilled. Small gains only, so pick what suits your players.</p>`:lvl===0?`<p>They <i>might</i> struggle against <b>${esc(nm(d.weak[0]))}</b>.</p>`:`<p>Best bet: <b>${d.weak.map(k=>esc(nm(k))).join('</b> or <b>')}</b>.${lvl===2?` Avoid <b>${d.strong.map(k=>esc(nm(k))).join('</b> and <b>')}</b>: they handle it well.`:''}</p>`;
-  h+=`<div class="srsec"><b>Their weak spot</b>${wk}</div>`;
-  h+=`<div class="srsec"><b>Watch out for</b><p>${esc(d.danger.name)} (${d.danger.pos}): their most dangerous player, shooting ${d.danger.sho}.</p></div>`;
-  if(lvl>=1){const sl=d.slow;const g=d.gk;h+=`<div class="srsec"><b>Weak link</b><p>${sl?`${esc(sl.name)} (${sl.pos}) is short of pace (speed ${sl.spd}): put a quick runner on him.`:''}${g&&g.gk<70?` Their keeper ${esc(g.name)} is beatable (goalkeeping ${g.gk}).`:''}</p></div>`;}}
- else h+=`<p class="note srnone">You have no scout. Hire one in the <b>Agency</b> tab for a full report on how they concede and where they're weak.</p>`;
- h+=`<div class="srsec"><b>Last 5 games</b>${oppFormHTML(t)}</div></div>`;return h;}
-function scoutPopup(){const t=UI.prep&&UI.prep.opp;if(!t)return;document.querySelectorAll('.srwrap').forEach(x=>x.remove());const o=document.createElement('div');o.className='srwrap';o.innerHTML=scoutReportHTML(t);o.onclick=e=>{if(e.target===o)o.remove();};document.body.appendChild(o);}
-
-// ---------- the assistant's notes on your squad ----------
-function assistantNotes(){const me=myTeam();const T=staffTier('asst');if(!T)return [];const out=[];const xi=xiPlayers(me).filter(Boolean);const ids=new Set(me.xi);const bench=me.squad.filter(p=>!ids.has(p.id));
- const cnt={};me.squad.forEach(p=>{cnt[p.pos]=(cnt[p.pos]||0)+1;});const need={};FORMATIONS[me.formation].forEach(([r])=>{need[r]=(need[r]||0)+1;});
- const NAMES={GK:'goalkeepers',CB:'centre-backs',LB:'left-backs',RB:'right-backs',LWB:'left wing-backs',RWB:'right wing-backs',CM:'central midfielders',AM:'attacking midfielders',LM:'left midfielders',RM:'right midfielders',LW:'left wingers',RW:'right wingers',CF:'centre-forwards'};
- const B={short:[],surplus:[],fit:[],conf:[],bench:[]};
- for(const pos in need){const have=cnt[pos]||0;if(have<need[pos]+(pos==='GK'?1:0))B.short.push(`We're short of ${NAMES[pos]||pos}: only ${have} for ${need[pos]} place${need[pos]>1?'s':''}${pos==='GK'?' and no cover':''}. Worth a look in the market.`);}
- for(const pos in cnt){if(cnt[pos]>=(need[pos]||0)+3&&pos!=='CB')B.surplus.push(`We've got ${cnt[pos]} ${NAMES[pos]||pos}: more than we'll ever play. One could be sold.`);}
- const tired=xi.filter(p=>(p.fit??100)<65).sort((a,b)=>(a.fit??100)-(b.fit??100));
- tired.slice(0,2).forEach(p=>B.fit.push(`${p.name} is running on empty (fitness ${Math.round(p.fit??100)}%). I'd rest him.`));
- if(tired.length>2)B.fit.push(`${tired.length-2} more of the starting XI are also below 65% fitness. Rotation would help.`);
- const avg=p=>{const f=p.form||[];return f.length>=3?f.slice(-3).reduce((s,x)=>s+x,0)/3:null;};
- xi.map(p=>[p,avg(p)]).filter(([p,a])=>a!=null&&a<6.0).sort((x,y)=>x[1]-y[1]).slice(0,2).forEach(([p,a])=>B.conf.push(`${p.name}'s confidence is low (${a.toFixed(1)} average lately). A spell on the bench might help.`));
- bench.map(p=>[p,avg(p)]).filter(([p,a])=>p.inForm||(a!=null&&a>=7.2)).slice(0,2).forEach(([p,a])=>B.bench.push(p.inForm?`${p.name} is flying in training and in matches. He deserves a start.`:`${p.name} has been excellent when he's played. Don't forget him.`));
- const order=['short','bench','conf','fit','surplus'];for(let i=0;i<3;i++)for(const k of order)if(B[k][i])out.push(B[k][i]);
- if(!out.length)out.push('The squad looks in good shape. No complaints from me.');
- return out.slice(0,T.notes);}
-function asstPopup(){document.querySelectorAll('.srwrap').forEach(x=>x.remove());const s=staff('asst');if(!s)return;const o=document.createElement('div');o.className='srwrap';
- o.innerHTML=`<div class="srep"><div class="srhead"><span class="eyebrow">Assistant's notes · ${esc(s.name)}</span><button class="btn sm ghost" onclick="this.closest('.srwrap').remove()">Close</button></div><ul class="asnotes">${assistantNotes().map(n=>`<li>${esc(n)}</li>`).join('')}</ul></div>`;
- o.onclick=e=>{if(e.target===o)o.remove();};document.body.appendChild(o);}
 // half-time: one thing the assistant has noticed
-function htTipHTML(m,L){const s=staff('asst');const T=staffTier('asst');if(!s||!m)return '';const me=m.teams[L.mine],O=m.teams[1-L.mine];const P=O.side.profs&&O.side.profs[O.side.tactic];const nm=k=>TACTICS[k]?TACTICS[k].name:k;const r=mkRng(hashStr(`ht|${m.t}|${s.name}`));
+function htTipHTML(m,L){if(!m)return '';const s={name:'Your assistant'};const T={acc:0.8};const me=m.teams[L.mine],O=m.teams[1-L.mine];const P=O.side.profs&&O.side.profs[O.side.tactic];const nm=k=>TACTICS[k]?TACTICS[k].name:k;const r=mkRng(hashStr(`ht|${m.t}|${s.name}`));
  let tip;const cur=me.side.tactic;
- if(P&&P.weak.includes(cur))tip=`It's working, boss. They can't cope with our ${nm(cur).toLowerCase()}. Keep at it.`;
- else if(P&&r()<T.acc){const k=P.weak[0];tip=P.strong.includes(cur)?`They're comfortable against our ${nm(cur).toLowerCase()}. I'd switch to ${nm(k)}: they've looked shaky against it.`:`I think ${nm(k)} could open them up. Their back line looks vulnerable to it.`;}
+ if(P&&P.weak.includes(cur))tip=`It's working, boss. They can't cope with ${nm(cur)}. Keep at it.`;
+ else if(P&&r()<T.acc){const k=P.weak[0];tip=P.strong.includes(cur)?`They look comfortable against ${nm(cur)}. I'd switch to ${nm(k)}: they've looked shaky against it.`:`I think ${nm(k)} could open them up. Their back line looks vulnerable to it.`;}
  else{const ks=Object.keys(TACTICS).filter(k=>k!=='sink'&&k!==cur);tip=`Hard to read them. Maybe try ${nm(ks[Math.floor(r()*ks.length)])}?`;}
  const tired=me.players.filter(q=>q.role!=='GK').sort((a,b)=>a.energy-b.energy)[0];
  const inj=me.players.find(q=>q.inj);
  const extra=inj?` And ${inj.p.name} is struggling with that knock: get him off.`:tired&&tired.energy<55?` ${tired.p.name} is tiring (${Math.round(tired.energy)}% energy).`:'';
  return `<div class="htasst"><span class="eyebrow">${esc(s.name)} says</span><p>${esc(tip+extra)}</p></div>`;}
+// ===================== TRANSFER TALKS =====================
+// "Contact" a player instead of signing him at the asking price. A run of numbers from 1 to 10 comes down a
+// conveyor: guess whether each next number is higher or lower. Every right guess knocks a bit more off the
+// fee; one wrong guess and talks collapse, and he is off the market for a few games. Stop and sign at any time.
+const NEG_STEPS=[0.1,0.25,0.45,0.7,1];// share of the full discount won after each right guess
+function negMax(pid){return 0.14+0.16*((hashStr('neg|'+pid)%1000)/1000);}// 14% to 30% off: different for every player
+function negOf(pid){return (S.neg||{})[pid]||null;}
+function negDisc(pid){const n=negOf(pid);return n&&n.step?n.max*NEG_STEPS[n.step-1]:0;}
+function negPrice(e){const base=priceOf(e);const d=negDisc(e.p.id);return d?Math.round(base*(1-d)/5000)*5000:base;}
+function negGames(){return S.gameNo||0;}
+function negBanned(pid){const b=(S.negBan||{})[pid];return b!=null&&b>negGames()?b-negGames():0;}
+// after each league game: count it, and tell the wire about anyone who is talking again
+function negAfterGame(){S.gameNo=(S.gameNo||0)+1;const B=S.negBan||{};
+ for(const id in B){if(B[id]<=S.gameNo){delete B[id];const p=playerById(+id);if(p&&clubOf(p.id)!==S.me){const ci=clubOf(p.id);const club=ci>=0?T_()[ci].name:'free agent';
+   addNote('TRANSFER NEWS',`${p.name} is back on the market`,`His agent is taking calls again. ${p.pos}, rated ${p.ovr}${ci>=0?', at '+club:', free agent'}.`);}}}}
+function negOpen(pid,after){
+ const p=playerById(pid);if(!p)return;const ci=clubOf(pid);if(ci===S.me)return;const e={p,club:ci};
+ if(negBanned(pid)){toast(`${p.name}'s agent isn't taking your calls (${negBanned(pid)} more game${negBanned(pid)>1?'s':''}).`);return;}
+ S.neg=S.neg||{};let N=S.neg[pid];if(!N){N=S.neg[pid]={max:negMax(pid),step:0,hist:[1+Math.floor(Math.random()*10)]};save();}
+ document.querySelectorAll('.ngwrap').forEach(x=>x.remove());
+ const o=document.createElement('div');o.className='ngwrap';const club=ci>=0?T_()[ci]:null;
+ o.innerHTML=`<div class="ngbox" role="dialog" aria-modal="true" aria-label="Transfer talks with ${esc(p.name)}">
+  <div class="nghead">${chip(p.ovr)}<div class="ngwho"><b>${esc(p.name)}</b><span>${p.pos} · ${club?esc(club.name):'Free agent'}</span></div><button class="ngx" data-ng="close" aria-label="Close">✕</button></div>
+  <p class="ngtip">Higher or lower? Each right guess cuts the fee. One wrong guess ends the talks.</p>
+  <div class="ngmain">
+   <div class="ngtile"><b></b></div>
+   <div class="ngarrows"><button class="ngup" data-ng="up">▲ Higher</button><button class="ngdn" data-ng="down">▼ Lower</button></div>
+   <div class="ngprice"><s class="ngwas"></s><b class="ngnow num"></b><span class="ngsaved"></span><div class="ngpips"></div></div>
+  </div>
+  <p class="ngmsg" aria-live="polite"></p>
+  <div class="ngact"><button class="btn primary" data-ng="sign"></button><button class="btn ghost" data-ng="close">Walk away</button></div></div>`;
+ document.body.appendChild(o);
+ const $o=s=>o.querySelector(s);const tile=$o('.ngtile');tile.firstChild.textContent=N.hist[N.hist.length-1];
+ let busy=false,over=false;
+ const info=()=>{const base=priceOf(e),now=negPrice(e),me=myTeam();
+  if(over){$o('.ngwas').textContent=fmt(base);$o('.ngnow').textContent='No deal';$o('.ngsaved').textContent='';}else{$o('.ngwas').textContent=now<base?fmt(base):'';$o('.ngnow').textContent=fmt(now);$o('.ngsaved').textContent=now<base?`${fmt(base-now)} saved`:'Asking price';}
+  $o('.ngpips').innerHTML=[0,1,2,3,4].map(i=>`<i class="${i<N.step?'on':''}"></i>`).join('');
+  const sb=$o('[data-ng="sign"]');if(sb){const full=me.squad.length>=25;sb.textContent=full?'Squad full':`Sign for ${fmt(now)}`;sb.disabled=full||now>me.budget||over;}
+  const done=N.step>=5;o.querySelectorAll('.ngarrows button').forEach(b=>b.disabled=done||over||busy);
+  if(done&&!over)$o('.ngmsg').innerHTML=`<b class="good">Deal on the table.</b> That's as low as he'll go.`;
+  else if(!over&&!busy&&now>me.budget)$o('.ngmsg').textContent=`You have ${fmt(me.budget)}. Keep talking, or walk away.`;
+  else if(!over&&!busy)$o('.ngmsg').textContent=N.step?`${N.step} of 5 right. Push your luck, or sign now.`:'';};
+ info();
+ const close=()=>{o.remove();document.removeEventListener('keydown',kd);if(after)after();};
+ const kd=ev=>{if(ev.key==='Escape')close();if(!busy&&!over&&N.step<5){if(ev.key==='ArrowUp')guess(1);if(ev.key==='ArrowDown')guess(-1);}};document.addEventListener('keydown',kd);
+ function guess(dir){if(busy||over||N.step>=5)return;busy=true;info();
+  const cur=N.hist[N.hist.length-1];let nx;do{nx=1+Math.floor(Math.random()*10);}while(nx===cur);
+  const ok=dir>0?nx>cur:nx<cur;N.hist.push(nx);if(N.hist.length>8)N.hist=N.hist.slice(-8);
+  if(ok)N.step++;else{delete S.neg[pid];const g=2+Math.floor(Math.random()*5);S.negBan=S.negBan||{};S.negBan[pid]=negGames()+g;over=g;}
+  save();
+  // the card flips over to show the next number
+  tile.classList.remove('ok','bad');tile.classList.add('out');
+  setTimeout(()=>{tile.firstChild.textContent=nx;tile.classList.remove('out');tile.classList.add(ok?'ok':'bad');},200);
+  setTimeout(()=>{busy=false;
+   if(ok){info();if(N.step<5)$o('.ngmsg').innerHTML=`<b class="good">Right!</b> ${cur} → ${nx}. Price down to ${fmt(negPrice(e))}.`;}
+   else{info();
+    $o('.ngmsg').innerHTML=`<b class="bad">Wrong: ${cur} → ${nx}.</b> Talks are off for ${over} game${over>1?'s':''}.`;
+    $o('.ngact').innerHTML='<button class="btn" data-ng="close">Close</button>';$o('.ngact [data-ng]').onclick=close;}},520);}
+ o.querySelectorAll('[data-ng]').forEach(b=>b.onclick=()=>{const k=b.dataset.ng;if(k==='close')close();if(k==='up')guess(1);if(k==='down')guess(-1);
+  if(k==='sign'){if(buy(pid))close();}});
+ o.onclick=ev=>{if(ev.target===o)close();};
+}
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}</script>
