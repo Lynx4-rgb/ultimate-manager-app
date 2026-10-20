@@ -1072,16 +1072,16 @@ body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;mar
 .xpname{font:700 18px var(--data);letter-spacing:.06em;color:#f3e6c4}
 .xpgain{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 12px;opacity:0;font:600 14px var(--data);color:#9be38f}.xpanim.pop .xpgain{opacity:1;transition:opacity .4s .25s}
 .ftwhistle{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(0,0,0,0);transition:background .6s ease,opacity .4s;cursor:pointer}
-.ftwhistle.on{background:rgba(0,0,0,.55)}.ftwhistle.out{opacity:0}
+.ftwhistle.on{background:rgba(0,0,0,.35)}.ftwhistle.out{opacity:0}
 .ftwhistle .ftwin{display:grid;justify-items:center;gap:6px;opacity:0;transform:scale(.8);transition:opacity .4s ease .15s,transform .5s cubic-bezier(.2,1.4,.4,1) .15s;position:relative}
 .ftwhistle.on .ftwin{opacity:1;transform:none}
-.ftwhistle .ftw{width:min(34vw,220px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6));animation:ftbuzz .07s linear infinite alternate}
-@keyframes ftbuzz{0%{transform:translate(-2px,1px) rotate(-2deg)}50%{transform:translate(2px,-1px) rotate(1.5deg)}100%{transform:translate(-1px,-2px) rotate(-1deg)}}
-.ftwhistle .ftlines{position:absolute;left:calc(50% + min(4vw,26px));top:-4%;display:flex;gap:9px;align-items:flex-end}.ftwhistle .ftlines b{width:4px!important;height:26px!important}.ftwhistle .ftlines b:nth-child(2){height:34px!important}
+.ftwhistle .ftw{width:min(17vw,104px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.6));animation:ftbuzz .07s linear infinite alternate}
+@keyframes ftbuzz{0%{transform:translate(-1px,.5px) rotate(-1.2deg)}50%{transform:translate(1px,-.5px) rotate(.8deg)}100%{transform:translate(-.5px,-1px) rotate(-.5deg)}}
+.ftwhistle .ftlines{position:absolute;left:calc(50% + min(7.5vw,46px));top:-14%;display:flex;gap:9px;align-items:flex-end}.ftwhistle .ftlines b{width:3px!important;height:12px!important}.ftwhistle .ftlines b:nth-child(2){height:16px!important}
 .ftwhistle .ftlines b{display:block;height:4px;border-radius:2px;background:#fff;width:34px;opacity:0;animation:ftblow .5s ease-out infinite}
 .ftwhistle .ftlines b:nth-child(1){transform:rotate(-24deg);animation-delay:.05s}.ftwhistle .ftlines b:nth-child(3){transform:rotate(24deg);animation-delay:.15s}.ftwhistle .ftlines b:nth-child(2){animation-delay:.1s}
 @keyframes ftblow{0%{opacity:0;translate:0 6px}30%{opacity:1}100%{opacity:0;translate:0 -14px}}
-.ftwhistle span{font:800 clamp(34px,7vw,64px)/1 'Big Shoulders Display','Oswald',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 3px 12px rgba(0,0,0,.7);animation:ftbuzz .09s linear infinite alternate}
+.ftwhistle span{font:800 clamp(20px,3.4vw,30px)/1 'Big Shoulders Display','Oswald',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 3px 12px rgba(0,0,0,.7);animation:ftbuzz .09s linear infinite alternate}
 /* the back pages: a photograph of the papers in place of the headline */
 .nitem.npitem .npimg{display:block;width:100%;aspect-ratio:16/10;margin-top:6px;border-radius:4px;background:#1a1a1a;object-fit:cover;object-position:50% 0;box-shadow:0 2px 8px rgba(0,0,0,.45)}
 .nitem.npitem .npimg.crop{aspect-ratio:auto}
@@ -1643,7 +1643,7 @@ function makeTemporal(){const out=makeIntl(TWL_DEF.map(d=>({...d,bp:{shape:1,pat
  out.forEach((t,i)=>{const d=TWL_DEF[i];t.twl=d.twl;t.hat=d.hat;t.roundel=d.roundel||null;t.twVenue=d.venue;t.twField=d.field;t.twWhere=d.where;t.badge={shape:1,pat:0,c1:d.c1,c2:d.c2};});return out;}
 // ===== MATCH ENGINE =====
 var SEP=3.0,TACK=3.35,SEP_RAF=3.2; // RAF roundels: nobody closer than halfway across the white ring (0.6 of the tile radius)
-var EXP={};var SAVE_BASE=0.9;var SHOOT_K=2.8;
+var EXP={};var SAVE_BASE=1.1;var SHOOT_K=2.8;
 const PL=105,PW=68,GW=14.64,GY=34,ND=3.2;
 const BOOSTERS={
  power:{name:'Power shot',desc:'Every shot is struck with full power for 10 minutes.'},
@@ -2445,9 +2445,9 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  const clin=EXP.noclin?0:Math.max(timeK*(lane?0.75:1),oneV1?0.88:0,o.open?0.7:0,wNip&&dG<16?0.42:0,o.oneT?clamp(((o.marked??3)-1.2)/3,0,0.75):0);pl._clin=clin;
  const aim2=o.aimY!=null?o.aimY:GY+side*(GW/2-inset*(1-0.45*clin));
  const composure=clamp(1.18-onBall*0.1-clamp((near0-2)*0.035,0,0.18)+(near0<1.8?0.12:0),0.72,1.3);
- let ty=aim2+gauss(m.rng)*(1-0.45*clin)*(o.header?clamp(1.7-(eff(pl,'str')+eff(pl,'sho'))/170,0.75,1.35):1)*composure*(0.8+dG*0.14)*(1.4-sho/100)*(pl.bst==='sniper'?0.55:1)*(T.tac.sink?0.8:1)*(tap?0.45:o.turn?clamp(1.6-(sho+eff(pl,'str'))/170,0.5,1.2):o.snap?1.2:o.quick?1.15:o.power?0.9:1)*calm*(1+clamp((angT0-0.55)/0.6,0,1)*(o.byline?0.15:0.8))*(o.byline?clamp(1.5-(sho+eff(pl,'str'))/180,0.45,1):1);
+ let ty=aim2+gauss(m.rng)*(1-0.45*clin)*(o.header?clamp(1.7-(eff(pl,'str')+eff(pl,'sho'))/170,0.75,1.35):1)*composure*(0.8+dG*0.14)*clamp(1.62-sho/60,0.2,0.95)*(pl.bst==='sniper'?0.55:1)*(T.tac.sink?0.8:1)*(tap?0.45:o.turn?clamp(1.6-(sho+eff(pl,'str'))/170,0.5,1.2):o.snap?1.2:o.quick?1.15:o.power?0.9:1)*calm*(1+clamp((angT0-0.55)/0.6,0,1)*(o.byline?0.15:0.8))*(o.byline?clamp(1.5-(sho+eff(pl,'str'))/180,0.45,1):1);
  // a few shots are simply dragged wide; everything stays on the ground
- if(m.rng()<(0.05+dG/160*(1.3-sho/100))*(1-0.8*clin))ty=GY+(m.rng()<0.5?-1:1)*(GW/2+0.6+m.rng()*3);
+ if(m.rng()<(0.015+dG/170)*clamp((100-sho)/40,0.12,1.3)*(1-0.8*clin))ty=GY+(m.rng()<0.5?-1:1)*(GW/2+0.6+m.rng()*3);
  const on=Math.abs(ty-GY)<GW/2-0.12;
  const angT=Math.abs(pl.y-GY)/Math.max(1,Math.abs(g.x-pl.x));const tight=clamp((angT-0.55)/0.6,0,1)*(o.byline?0.3:1);
  const big=pl.bst==='power'||!!o.force;pl.windBig=false;m.nBig=(m.nBig||0)+(big?1:0);const thump=o.power?(big?7+clamp((eff(pl,'str')-62)*0.25,0,7)+clamp((sho-78)*0.2,0,3):3.5):0;const speed=((tap?17:13+sho*0.21+m.rng()*2)+thump+(pl.hot>0?2:0))*(1-0.18*tight)*(o.header?0.66+eff(pl,'str')/600:1);
@@ -2475,7 +2475,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   if(off<1.7&&!tap&&!o.turn&&!o.defl){const g0=pl.p&&gk.p?gk.p.gk:60;sp=Math.max(sp,clamp(0.5+(g0-45)/45,0.5,0.97));}
   {const gOff=hyp(gk.x-g.x,gk.y-g.y);if(gOff>6)sp*=clamp(1-(gOff-5)/7,0.04,1);}
   if(o.aimY!=null)sp*=0.3;
-  sp=clamp(sp-0.14*clin-(oneV1?0.16:0)-(o.byline?clamp(((sho+eff(pl,'str'))/2-68)/45,0,0.5):0),0.04,0.92);
+  sp=clamp(sp-0.12*clin-(oneV1?0.13:0)-(o.byline?clamp(((sho+eff(pl,'str'))/2-68)/45,0,0.5):0),0.04,0.92);
   save=m.rng()<sp;o._near=off<1.7;}
  (m.sk2=m.sk2||{})[o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']=((m.sk2||{})[o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']||0)+1;
  b.shot={kind:o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(big)m.lastPower=m.t;
@@ -2484,6 +2484,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   if(n&&m.rng()<1-Math.pow(1-0.42*e,n)){b.shot.blockBy=O.players.find(q=>q.role!=='GK'&&segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1);}}
  if(hasT(pl,'longshot')&&dG>18)tGood(pl,on);if(hasT(pl,'selfish'))tGood(pl,on);
  m.stats.shots[pl.team]++;if(on)m.stats.ont[pl.team]++;pl.st.sh++;if(on)pl.st.on++;b.passBy=null;
+ if(EXP.slog)(m.slog=m.slog||[]).push([sho,on?1:0,Math.round(dG),b.shot.kind,save?1:0]);
 }
 
 function updateBall(m,dt){
@@ -5247,6 +5248,7 @@ function wireNotes(el){const b=el.querySelector('#morenotes');const ol=el.queryS
  if(b)b.onclick=()=>{if(!UI.allNotes&&ol)UI.notesH=ol.getBoundingClientRect().height;UI.allNotes=!UI.allNotes;renderHub();};
  // on the phone the wire shows as many stories as the box has room for: short ones fit four, long ones two
  const box=el.querySelector('.mdph .notes')||el.querySelector('.mdgrid .notes');
+ if(!box&&ol&&!UI.allNotes){const its=[...ol.querySelectorAll('.nitem')];its.forEach((it,k)=>it.hidden=k>=3);const b2=el.querySelector('#morenotes');const more=(S.notes||[]).length-Math.min(3,its.length);if(b2){if(more>0)b2.textContent=`Older news (${more})`;else b2.remove();}npFill(el);}
  if(box&&box.closest('.mdgrid')){const ref=el.querySelector('.md-a>section');if(ref)box.style.height=ref.getBoundingClientRect().height+'px';}
  if(box&&ol&&!UI.allNotes){const its=[...ol.querySelectorAll('.nitem')];its.forEach(i=>i.hidden=false);
   const bh=b?b.getBoundingClientRect().height+8:0;const pb=parseFloat(getComputedStyle(box).paddingBottom)||0;const lim=box.getBoundingClientRect().bottom-pb-bh-4;
@@ -5476,7 +5478,7 @@ function nextSeason(){
   for(let k=0;k<n&&me.squad.length<28;k++){const pos=FREE_POS[Math.floor(r0()*FREE_POS.length)];const target=Math.round(avg-2-r0()*4);
    const np=makePlayer(r0,pos,target,used0);np.id=S.nextId++;np.age=16+Math.floor(r0()*2);np.ageM=0;np.academy=true;
    let g=0;while(overall(np)>target&&g++<40){capTo(np,target);}while(overall(np)<target-1&&g++<80){for(const a of Object.keys(WEIGHTS[pos]))np[a]=Math.min(97,np[a]+1);}
-   refresh(np);np.pot=Math.min(92,np.ovr+12+Math.floor(r0()*12));np.retAge=retAgeFor(np,r0);np.num=0;me.squad.push(np);
+   refresh(np);np.pot=Math.min(FAKE_CAP,np.ovr+12+Math.floor(r0()*12));np.retAge=retAgeFor(np,r0);np.num=0;me.squad.push(np);
    news.push(`${np.name} (${np.pos}, ${np.age}) graduates from the academy, rated ${np.ovr} with potential to reach ${np.pot}.`);}}
  const r=Math.random,used=new Set(allPlayers().map(e=>e.p.name));
  for(let i=0;i<40;i++){const pos=FREE_POS[Math.floor(r()*FREE_POS.length)];const np=makePlayer(r,pos,50+r()*18+(r()<.1?8:0),used);np.age=17+Math.floor(r()*4);np.id=S.nextId++;refresh(np);np.num=0;S.world.free.push(np);}
@@ -5661,9 +5663,15 @@ function applyForm(m){
  }
  if(msgs.length){S.news=(S.news||[]).concat(msgs);toast(msgs[0]);}
 }
+// quick results follow the form book: the engine plays the match, and if the much stronger side loses it is replayed
+// (more often the bigger the gap), so shocks still happen but rarely
+function quickFair(H,A,mk){let m=mk();const g=teamOvr(H)-teamOvr(A);const ad=Math.abs(g);if(ad<4)return m;
+ for(let k=0;k<2;k++){const fav=g>0?0:1;const lost=m.score[fav]<m.score[1-fav];const drew=m.score[0]===m.score[1];
+  if(!(lost&&Math.random()<clamp((ad-3)/10,0,0.85))&&!(drew&&Math.random()<clamp((ad-6)/20,0,0.4)))break;m=mk();}
+ return m;}
 function quickMine(mf){
  const T=T_();const f=mf.f;fixXI(myTeam());
- const m=runQuick(sideOf(T[f.h],T[f.a],false),sideOf(T[f.a],T[f.h],true),MATCH_DUR,undefined,engineCond(matchCond(T[f.h],S.round)));
+ const m=quickFair(T[f.h],T[f.a],()=>runQuick(sideOf(T[f.h],T[f.a],false),sideOf(T[f.a],T[f.h],true),MATCH_DUR,undefined,engineCond(matchCond(T[f.h],S.round))));
  const res={i:mf.i,hs:m.score[0],as:m.score[1],sc:m.scorers.map(s=>({team:s.team,p:s.pid?{id:s.pid,name:s.name}:null,min:s.min})),m};
  applyForm(m);finishRound(res);
  const mine=f.h===S.me?0:1;const gf=m.score[mine],ga=m.score[1-mine];
@@ -6181,11 +6189,20 @@ function showHT(){
 }
 // the final whistle: the pitch dims, a referee's whistle shakes with FULL TIME, then the result and ratings
 function showFT(){const L=LIVE;if(!L||L.skipping||matchMedia('(prefers-reduced-motion: reduce)').matches){_showFT();return;}
- const o=document.createElement('div');o.className='ftwhistle';o.innerHTML=`<div class="ftwin"><svg class="ftw" viewBox="0 0 220 130" aria-hidden="true"><defs><linearGradient id="ftwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f8"/><stop offset=".45" stop-color="#b9c0c8"/><stop offset=".55" stop-color="#8b939c"/><stop offset="1" stop-color="#dfe4ea"/></linearGradient><radialGradient id="ftwh" cx=".35" cy=".3" r=".7"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
-  <circle cx="52" cy="70" r="12" fill="none" stroke="#c9ced4" stroke-width="5"/>
-  <path d="M60 46 L 196 46 Q 206 46 206 56 L 206 70 Q 206 78 198 78 L 150 78" fill="url(#ftwg)" stroke="#5d646c" stroke-width="2"/>
-  <circle cx="98" cy="84" r="40" fill="url(#ftwg)" stroke="#5d646c" stroke-width="2"/><circle cx="98" cy="84" r="40" fill="url(#ftwh)"/><rect x="128" y="50" width="16" height="18" rx="2" fill="#2a2f35"/>
-  <path d="M60 46 L 70 46 L 70 60" fill="none" stroke="#5d646c" stroke-width="2"/></svg>
+ const o=document.createElement('div');o.className='ftwhistle';o.innerHTML=`<div class="ftwin"><svg class="ftw" viewBox="0 0 200 120" aria-hidden="true"><defs>
+  <linearGradient id="ftc1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b6168"/><stop offset=".12" stop-color="#e9edf1"/><stop offset=".3" stop-color="#ffffff"/><stop offset=".48" stop-color="#9aa2ab"/><stop offset=".62" stop-color="#4a5058"/><stop offset=".82" stop-color="#b7bec6"/><stop offset="1" stop-color="#3a3f45"/></linearGradient>
+  <radialGradient id="ftc2" cx=".38" cy=".3" r=".75"><stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="#dfe4e9"/><stop offset=".6" stop-color="#7d858e"/><stop offset=".85" stop-color="#3d4248"/><stop offset="1" stop-color="#9aa2ab"/></radialGradient>
+  <linearGradient id="ftc3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2f34"/><stop offset=".5" stop-color="#0c0e10"/><stop offset="1" stop-color="#2b2f34"/></linearGradient>
+  <linearGradient id="ftc4" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d949c"/><stop offset=".5" stop-color="#f4f6f8"/><stop offset="1" stop-color="#6b7179"/></linearGradient></defs>
+  <ellipse cx="96" cy="112" rx="70" ry="5" fill="rgba(0,0,0,.35)"/>
+  <circle cx="34" cy="72" r="13" fill="none" stroke="url(#ftc4)" stroke-width="4.5"/><circle cx="34" cy="72" r="13" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1" />
+  <circle cx="84" cy="70" r="36" fill="url(#ftc2)"/><circle cx="84" cy="70" r="36" fill="none" stroke="#2f3439" stroke-width="1.2"/>
+  <path d="M70 40 L 182 40 Q 190 40 190 48 L 190 60 Q 190 68 182 68 L 118 68 Q 110 52 84 44 Z" fill="url(#ftc1)" stroke="#2f3439" stroke-width="1.2"/>
+  <rect x="176" y="41" width="14" height="26" rx="5" fill="url(#ftc3)" opacity=".9"/><rect x="178" y="47" width="10" height="14" rx="3" fill="#050607"/>
+  <path d="M104 40 L 130 40 L 130 46 L 104 46 Z" fill="#121417"/><path d="M106 41 L 128 41" stroke="rgba(255,255,255,.35)" stroke-width="1"/>
+  <path d="M74 43 L 180 43" stroke="rgba(255,255,255,.85)" stroke-width="1.6" stroke-linecap="round"/>
+  <ellipse cx="72" cy="56" rx="12" ry="7" fill="rgba(255,255,255,.75)" transform="rotate(-30 72 56)"/>
+  <path d="M60 92 Q 84 104 110 90" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"/></svg>
   <i class="ftlines"><b></b><b></b><b></b></i><span>Full time</span></div>`;
  document.body.appendChild(o);requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('on')));
  let gone=false;const go=()=>{if(gone)return;gone=true;o.classList.add('out');_showFT();setTimeout(()=>o.remove(),450);};o.onclick=go;setTimeout(go,2400);}
@@ -6891,14 +6908,22 @@ function venueCond(key,tag){
 function cupVenue(){const c=S.cup;if(c.kind==='elite'){const f=cupMyFix();if(f){const H=cupT(f.f.h);if(H.twVenue)return H.twVenue;}}if(c.kind==='temporal'){const f=cupMyFix();if(!f)return null;const o=cupT(f.f.h===myCid()?f.f.a:f.f.h);return o.twVenue||null;}if(c.kind==='emperor'){if(c.stage==='final')return 'empfinal';const f=cupMyFix();if(!f)return 'empfinal';const o=cupT(f.f.h===myCid()?f.f.a:f.f.h);return EMP_VENUE[o.id]||'empfinal';}return c.venue||null;}
 function cupCond(){const c=S.cup;const tag='cup-'+c.stage+(c.stage==='groups'||c.stage==='league'?c.md:'');
  const vk=cupVenue();if(vk){const cd=venueCond(vk,tag);if(c.kind==='elite'){const f0=cupMyFix();const H0=f0&&cupT(f0.f.h);if(H0&&H0.twField){cd.tname=H0.twField;cd.ground=H0.twField;}}if(c.kind==='temporal'){const f=cupMyFix();const o=f&&cupT(f.f.h===myCid()?f.f.a:f.f.h);if(o&&o.twField){cd.tname=o.twField;cd.ground=o.twField;}cd.w='clear';}return cd;}const f=cupMyFix();return matchCond(f?cupT(f.f.h):myTeam(),c.stage==='groups'?c.md:9,'cup-'+c.stage);}
-function cupResFromMatch(mf,m){return {i:mf.i,hs:m.score[0],as:m.score[1],pens:m.pens};}
+// a cup match makes the papers too
+function cupNews(mf,m){try{const f=mf.f;const mine=f.h===myCid()?0:1;const me=myTeam(),opp=cupT(mine?f.h:f.a);const gf=m.score[mine],ga=m.score[1-mine];
+ const pw=m.pens?(m.pens[mine]>m.pens[1-mine]):null;const verb=gf>ga||pw===true?(gf-ga>=3?'thrash':'beat'):gf<ga||pw===false?'lose to':'draw with';
+ const mySc=m.scorers.filter(x=>x.team===mine);const cnt={};mySc.forEach(x=>{cnt[x.name]=(cnt[x.name]||0)+1;});const isReal=n=>!!(me.squad.find(q=>q.name===n)||{}).real;
+ const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1])[0];const mate=Object.entries(cnt).filter(([n])=>!isReal(n)&&(!top||n!==top[0])).sort((a,b)=>b[1]-a[1])[0];
+ const sc=mySc.map(x=>surname(x.name)+' '+x.min+'′').join(', ');
+ addNote('CUP NEWS',`${cupName()}: ${me.name} ${verb} ${opp.name} ${gf}–${ga}${m.pens?` (${m.pens[mine]}–${m.pens[1-mine]} pens)`:''}`,sc?`Scorers: ${sc}.`:'',
+  {kind:gf>ga||pw===true?'win':gf<ga||pw===false?'loss':'draw',me:me.name,opp:opp.name,mine:gf,theirs:ga,hero:top?surname(top[0]):'',heroReal:!!(top&&isReal(top[0])),mate:mate?surname(mate[0]):'',hat:!!(top&&top[1]>=3),myLum:npLum(me.c1),oppLum:npLum(opp.c1)});}catch(e){console.error(e);}}
+function cupResFromMatch(mf,m){cupNews(mf,m);return {i:mf.i,hs:m.score[0],as:m.score[1],pens:m.pens};}
 function cupWatch(mf){
  const f=mf.f;const H=cupT(f.h),A=cupT(f.a);const ko=!['groups','league'].includes(S.cup.stage);const cnd=cupCond();
  startMatch(H,A,{cupMatch:true,mine:f.h===myCid()?0:1,cond:cnd,pitch:cnd.pitch,ko,label:cupName()+' · '+STAGE_NAME[S.cup.stage],onDone:m=>{const before=S.cup.earn;applyForm(m);cupAdvance(cupResFromMatch(mf,m));UI.tab='match';render();toast(`${cupName()} prize money: ${fmt(S.cup.earn-before)}`);}});
 }
 function cupQuick(mf){
  const f=mf.f;const H=cupT(f.h),A=cupT(f.a);fixXI(myTeam());
- const m=runQuick(sideOf(H,A,false),sideOf(A,H,true),MATCH_DUR,undefined,engineCond(cupCond()));
+ const m=quickFair(H,A,()=>runQuick(sideOf(H,A,false),sideOf(A,H,true),MATCH_DUR,undefined,engineCond(cupCond())));
  if(!['groups','league'].includes(S.cup.stage)&&m.score[0]===m.score[1])m.pens=penalties(H,A);
  const before=S.cup.earn;applyForm(m);cupAdvance(cupResFromMatch(mf,m));
  toast(`${H.short} ${m.score[0]}–${m.score[1]} ${A.short}${m.pens?` (${m.pens[0]}–${m.pens[1]} pens)`:''} · prize ${fmt(S.cup.earn-before)}`);renderHub();
@@ -7201,6 +7226,7 @@ if(S&&!S.real2){
 if(S&&!S.ret2){const all=[...S.world.teams.flatMap(t=>t.squad),...S.world.free];for(const p of all){p.ageM=p.ageM||0;p.retAge=Math.max(retAgeFor(p),p.age+1);p.retiring=false;}S.ret2=1;save();}
 if(S&&!S.lgCap){relocateStars();S.lgCap=1;save();}
 if(S&&realHomeFix())save();
+if(S&&!S.potFix){for(const t of S.world.teams)for(const p of t.squad)if(!p.real&&p.pot!=null)p.pot=Math.min(p.pot,p.mystery?85:FAKE_CAP);S.potFix=1;save();}
 if(S){S.world.teams.forEach(t=>t.squad.forEach(p=>{if(p.pos==='DM'){p.pos='CM';refresh(p);}}));S.world.free.forEach(p=>{if(p.pos==='DM'){p.pos='CM';refresh(p);}});}
 if(S){const mig=p=>{const r=Math.random();
   if(p.pos==='FB')p.pos=r<0.5?'LB':'RB';else if(p.pos==='WM')p.pos=['LM','RM','LW','RW'][Math.floor(r*4)];else if(p.pos==='ST')p.pos='CF';
