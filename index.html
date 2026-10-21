@@ -1290,9 +1290,9 @@ body.twl .ticker.livescores{background:#15140f;border-color:#3a3224}
 .ngarrows button{width:84px;height:32px;border-radius:8px;border:1px solid #4a5558;background:#273033;color:#fff;font-size:14px;font-weight:700;cursor:pointer}
 .ngarrows .ngup:not(:disabled):hover{background:#2c5a3b;border-color:#4cc06f}.ngarrows .ngdn:not(:disabled):hover{background:#5a2c2c;border-color:#e45b5b}
 .ngarrows button:disabled{opacity:.35;cursor:default}
-.ngprice{flex:0 0 auto;min-width:88px;display:flex;flex-direction:column;align-items:center}
+.ngprice{flex:0 0 auto;min-width:96px;display:flex;flex-direction:column;align-items:center}
 .ngwas{color:#8c9a9d;font-size:12px;min-height:15px}.ngnow{font-size:21px;line-height:1.1;color:#e7b93c;font-weight:800}.ngsaved{font-size:12px;color:#9fb0b5;min-height:15px}
-.ngpips{display:flex;gap:3px;margin-top:4px}.ngpips i{width:12px;height:5px;border-radius:3px;background:#3a4446}.ngpips i.on{background:#4cc06f}
+.ngpips{display:flex;gap:3px;margin-top:5px}.ngpips i{width:16px;height:15px;border-radius:3px;background:#3a4446;font:700 10px/15px var(--data);font-style:normal;color:#0d1a10;text-align:center}.ngpips i.on{background:#4cc06f}.ngpips i.bad{background:#e45b5b;color:#fff}
 .ngmsg{margin:0 0 10px;font-size:14px}.ngmsg:empty{display:none}.ngmsg .good{color:#4cc06f}.ngmsg .bad{color:#e45b5b}
 .ngact{display:flex;gap:6px;justify-content:center}.ngact .btn{flex:0 0 auto;font-size:13px;padding:5px 12px;min-height:0}
 td b.good{color:#4cc06f}
@@ -1311,6 +1311,7 @@ td b.good{color:#4cc06f}
 #tabbody .ptile.xpno{filter:grayscale(1) brightness(.55);opacity:.55;transition:filter .15s,opacity .15s}
 #tabbody .ptile.xpyes{transition:transform .12s}#tabbody .ptile.xphover{transform:scale(1.12);box-shadow:0 0 0 3px #fff,0 0 16px rgba(255,255,255,.7)}
 @media (max-width:640px),(max-height:500px){.bigpitch .xpstack,.xptile{width:32px;height:32px}.xptile b{font-size:15px;margin-top:2px}.xptile span{font-size:10px;margin-bottom:3px}}
+.recchip .rct{display:block}.recchip .rcgo{display:inline-block;margin-top:6px;padding:4px 10px;border-radius:5px;background:#e8ac3c;color:#1d1405;font-weight:800;font-size:12px;letter-spacing:.02em}.recchip:not(.on){cursor:pointer}
 </style>
 <div id="rotate" role="dialog" aria-label="Rotate your phone"><div><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M3 14a9 9 0 0 0 6 7M21 10a9 9 0 0 0-6-7"/><path d="M1 12l2 2 2-2M23 12l-2-2-2 2"/></svg><b>Turn your phone sideways</b><span>Ultimate Manager is built to be played in landscape.</span><button class="btn sm ghost" onclick="document.getElementById('rotate').classList.add('off')">Continue anyway</button></div></div>
 <div id="app"></div>
@@ -1366,6 +1367,8 @@ const REAL_DEF=[
  {id:'sou',lg:1,name:'Southampton',short:'SOU',c1:'#d71920',c2:'#f4f4f0',ground:'The Dell',formation:'4-4-2',budget:17e6,pl:'Tim Flowers|GK|79|27;Aaron Ramsdale|GK|79|28;Jan Bednarek|CB|75|30;Taylor Harwood-Bellis|CB|76|24;Francis Benali|CB|74|27;Luke Shaw|FB|80|31;Nathaniel Clyne|FB|76|25;James Ward-Prowse|CM|81|29|pas:88;Adam Lallana|CM|80|26;Morgan Schneiderlin|CM|79|25;Pierre-Emile Højbjerg|CM|80|27;Theo Walcott|WM|78|24|spd:94,str:60;Matt Le Tissier|WM|86|27|sho:91;Rickie Lambert|ST|79|30;Danny Ings|ST|79|28;James Beattie|ST|78|25'},
 ];
 const LEAGUES=[{name:'Premier League',short:'PL',match:100e3,title:1e6},{name:'Championship',short:'CH',match:60e3,title:600e3},{name:'Division 1',short:'D1',match:35e3,title:400e3},{name:'Division 2',short:'D2',match:20e3,title:250e3},{name:'National League N/S',short:'NL',match:12e3,title:150e3},{name:'Non-League',short:'NON',match:6e3,title:80e3}];
+// league prize money doubled (title, and through PLACE_SHARE the 2nd-4th place prizes)
+LEAGUES.forEach(l=>l.title*=2);
 const NL=LEAGUES.length;
 // new lower divisions (made-up clubs)
 const D2_DEF=[
@@ -1752,16 +1755,16 @@ function useBoost(m,ti,k){
  T.boost={type:k,until:m.t+m.dur*10/90};ev(m,'boost',`Booster: ${BOOSTERS[k].name}`,ti);
 }
 const TACTICS={
- park:{name:'Park the bus',desc:'Everyone behind the ball. Pros: your half and your goalmouth are crammed with bodies, so you are very hard to score against and block a lot of shots. Cons: you offer nothing going forward except building slowly from the back.',ment:-2,possShift:-0.12,defShift:-0.16,holdBack:true,park:true,runs:.25,shoot:.6,block:2.6,short:1},
- defensive:{name:'Defensive',desc:'A less intense version of park the bus. Pros: your team are organised and compact at the back. Cons: you offer less going forward, and what does happen relies on passing your way out.',ment:-1,possShift:-0.07,defShift:-0.06,holdBack:true,compact:0.82,runs:.45,shoot:.85,block:1.7,short:1},
- counter:{name:'Counter attack',desc:'Hit teams on the break with speed. Pros: when you win the ball in your own half your forwards burst away and catch the opposition by surprise. Cons: you invite pressure, and unless they make a mistake it can be hard to win the ball back.',ment:-1,defShift:-0.07,possShift:-0.03,counter:true,breakT:5.5},
- balanced:{name:'Balanced',desc:'A mixture of everything. It sounds perfect and can sometimes work, but not always: leave it on too long and the opposition work you out and set up to counter it.',balanced:true},
- long:{name:'Long balls',desc:'Long balls over the top for runners, and switches between the wings. Pros: finds players in space, landing the ball in front of them to run on to. Cons: it relies on players with good passing.',long:true,prog:1.15,runs:1.4},
- wings:{name:'Wings',desc:'Midfielders and defenders get the ball out wide whenever they can. Wingers hold the ball on the flank and drive low balls across from tight angles, even from the corner, to a team-mate free near goal: a tap-in if he is rushed, a touch and a shot if he has time. Lots of balls go into the box, and your forwards attack the space early and are sharper at nipping in to finish. The better the passer, the more accurate the ball. Cons: the longer you stay on it, the faster your wingers tire.',wide:1.32,wing:.6,cross:true,shoot:1.2},
- through:{name:'Through balls',desc:'Players keep threading balls through the middle. Pros: sharper vision, and strikers time runs across the defender to latch on to a ball played into the space on his other side.',through:true,runs:1.9,prog:1.25,vision:0.85},
- press:{name:'High press',desc:'Commit bodies high up the pitch, in and out of possession. Pros: opponents struggle to clear or keep the ball, and you close them down more quickly. Cons: it leaves space behind your back line.',defShift:.15,possShift:.07,pushUp:true,press:true,runs:1.4},
- attacking:{name:'Attacking',desc:'One thing in mind: to attack. Not everyone floods forward, but your team keep trying different things to break the opposition down. Pros: aggressive, front-foot football with hard tackling, shooting on sight, and great vision and understanding between team-mates. Cons: the focus is on attack, so your defence can be caught out.',ment:1,possShift:.07,pushUp:true,runs:1.7,shoot:1.45,longRange:4,aggro:true,vision:0.88},
- sink:{name:'Kitchen sink',desc:'Everyone forward, keeper up to the halfway line. Pros: players fly into tackles, run harder and pepper the goal from distance. Cons: your team burns energy twice as fast, so save it for the last few minutes when you need a goal, and your back line is left completely exposed.',ment:3,possShift:.22,defShift:.2,pushUp:true,press:true,aggro:true,runs:2.2,shoot:1.9,longRange:10,sink:true},
+ park:{name:'Park the bus',desc:'Everyone behind the ball. Pros: keeps players deep and compact, so opponents struggle to find space and score; excellent for protecting a lead. Cons: you invite pressure and struggle to create chances or get players forward.',ment:-2,possShift:-0.12,defShift:-0.16,holdBack:true,park:true,runs:.25,shoot:.6,block:2.6,short:1},
+ defensive:{name:'Defensive',desc:'A less extreme version of park the bus. Pros: prioritises defensive shape and reduces the risk of being caught out of position; useful against strong attacking sides. Cons: you may lack attacking support and struggle to break down teams who also defend deep.',ment:-1,possShift:-0.07,defShift:-0.06,holdBack:true,compact:0.82,runs:.45,shoot:.85,block:1.7,short:1},
+ counter:{name:'Counter attack',desc:'Hit teams on the break. Pros: exploits the space opponents leave when they attack, creating quick chances and punishing sides that commit too many forward. Cons: if the opposition stay deep or have strong defensive cover, your counter-attacks may come to nothing.',ment:-1,defShift:-0.07,possShift:-0.03,counter:true,breakT:5.5},
+ balanced:{name:'Balanced',desc:'A mix of everything. Pros: a good balance of attack and defence that keeps you flexible against different opponents. Cons: it lacks the specialist strengths of the other styles, and left on too long the opposition work it out.',balanced:true},
+ long:{name:'Long balls',desc:'Long balls over the top and switches of play. Pros: gets the ball into advanced areas quickly, bypasses a crowded midfield, and suits fast strikers or strong target men. Cons: you can lose the ball a lot, especially if your forwards are weak in the air or your passing is poor.',long:true,prog:1.15,runs:1.4},
+ wings:{name:'Wings',desc:'Get the ball wide and deliver it into the box. Pros: stretches the opposition, creates crossing chances and exploits space on the flanks. Cons: attacks can become predictable, and strong full-backs or good wide cover can shut it down. It also tires your wide players.',wide:1.32,wing:.6,cross:true,shoot:1.2},
+ through:{name:'Through balls',desc:'Thread balls through the middle for runners. Pros: sends attackers into the space behind the defence for clear chances, ideal for quick forwards with good movement. Cons: it relies on precise timing and passing; an organised, deep defence can stop it, and misplaced passes invite counters.',through:true,runs:1.9,prog:1.25,vision:0.85},
+ press:{name:'High press',desc:'Close the opposition down high up the pitch. Pros: forces mistakes and wins the ball near their goal for quick chances. Cons: leaves space behind your back line, tires your players, and good passing sides can play through it.',defShift:.15,possShift:.07,pushUp:true,press:true,runs:1.4},
+ attacking:{name:'Attacking',desc:'Commit more players forward. Pros: more passing options in the final third and constant pressure on their defence. Cons: fewer players protect your own goal, so you are vulnerable to counter-attacks.',ment:1,possShift:.07,pushUp:true,runs:1.7,shoot:1.45,longRange:4,aggro:true,vision:0.88},
+ sink:{name:'Kitchen sink',desc:'Everything forward, keeper up to the halfway line. Pros: an all-out attempt to score, for when you desperately need a goal late on. Cons: your defence is left wide open, so the opposition can easily score again on the counter, and your players burn energy twice as fast.',ment:3,possShift:.22,defShift:.2,pushUp:true,press:true,aggro:true,runs:2.2,shoot:1.9,longRange:10,sink:true},
 };
 const hasT=(pl,k)=>pl.p.trait===k;
 // connections: small groups of team-mates who have played together long enough to read each other
@@ -2012,7 +2015,7 @@ function step(m,dt){
  for(const T of m.teams){if(T.tac.balanced)T.balT=(T.balT||0)+dt;else T.balT=0;const rd=workedOut(m,T);for(const p of T.players)p.rd=rd;
   if(rd&&!T.woAnn&&T.side.user){T.woAnn=true;const a=tacAdvice(m,T);ev(m,'rec',`They have worked out your ${(TACTICS[T.side.tactic]||{name:"style"}).name}.${a&&a.k!==T.side.tactic?` Switch to ${TACTICS[a.k].name}`:''}`,T.idx);}}
  hotStreaks(m,dt);aiSubs(m);aiTactics(m,dt);recStep(m);
- for(const T of m.teams){const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];const ex=clamp(1+(O.ovr-T.ovr)/25,0.6,1.6);const k=P?P.amp*ex:0;const wo=workedOut(m,T);let mu=P?(P.weak.includes(T.side.tactic)&&!wo?1+TAC_W*k:P.strong.includes(T.side.tactic)?1-TAC_S*k:1):1;for(const q of T.players)q.mu=mu;}
+ for(const T of m.teams){const mu=styleMu(m,T,T.side.tactic,workedOut(m,T));for(const q of T.players)q.mu=mu;}
  {const c=m.cond;const pr=m.t/m.dur;b.k=c.rain?c.fric+pr*0.55:c.fric;if(c.rain){const a=c.acc*(0.85+0.1*pr);for(const p of m.players){p.acc=a;p.cs=c.spd*(1-0.07*pr);}}}
  if(m.twl)twlStep(m,dt);
  if(b.owner&&b.owner.team!==m.possTeam){m.possTeam=b.owner.team;const NT=m.teams[b.owner.team];if(NT.tac.counter&&progOf(NT,b.x)<0.55&&b.owner.role!=='GK'){NT.breakUntil=m.t+(NT.tac.breakT||4.5);for(const q of NT.players)if(q.role==='ST'||q.role==='WM'||q.slot==='AM')q.blitzT=m.t+3.5;}
@@ -2912,9 +2915,9 @@ function setTac(m,T,k,announce){if(!TACTICS[k]||T.side.tactic===k)return;T.tac=T
  if(announce){ev(m,'tac',`${T.side.name} switch to ${TACTICS[k].name}`,T.idx);const U=m.teams[1-T.idx];if(U.side.user)recCounter(m,U,T);if(!m.flash||m.flash.t<=0)m.flash={text:'CHANGE OF PLAN',sub:`${T.side.short||T.side.name}: ${TACTICS[k].name}`,t:1.6,team:T.idx};}}
 function aiTactics(m,dt){
  for(const T of m.teams){if(T.side.user)continue;if(T.tac0==null)T.tac0=T.side.tactic||'balanced';
-  T.aiT=(T.aiT??(m.dur*(0.15+m.rng()*0.1)))-dt;if(T.aiT>0)continue;T.aiT=m.dur*(0.07+m.rng()*0.06);
+  T.aiT=(T.aiT??(m.dur*(0.15+m.rng()*0.1)))-dt;if(T.aiT>0)continue;T.aiT=m.dur*(0.11+m.rng()*0.08);
   const O=m.teams[1-T.idx];const sd=m.score[T.idx]-m.score[O.idx];const pr=m.t/m.dur;const ok=O.side.tactic;let k=T.tac0;
-  {const P=T.side.profs&&T.side.profs[T.side.tactic];if(P&&P.weak.includes(ok)&&m.t-(O.tacT0||0)>m.dur*0.12&&m.rng()<0.65){// they've been found out: switch to something your style doesn't hurt
+  {const P=T.side.profs&&T.side.profs[T.side.tactic];if(P&&P.weak.includes(ok)&&m.t-(O.tacT0||0)>m.dur*clamp(0.17+(O.ovr-T.ovr)/100,0.1,0.28)&&m.rng()<clamp(0.55+(T.ovr-O.ovr)/40,0.3,0.8)){// they've been found out: switch to something your style doesn't hurt
     const opts=Object.keys(T.side.profs).filter(x=>x!=='sink'&&x!==T.side.tactic&&!T.side.profs[x].weak.includes(ok));if(opts.length){setTac(m,T,opts[Math.floor(m.rng()*opts.length)],true);continue;}}}
   if(sd<0&&pr>0.88)k='sink';else if(sd<0&&pr>0.6)k=m.rng()<0.5?'attacking':(ok==='park'||ok==='defensive'?'wings':'press');
   else if(sd>0&&pr>0.82)k=sd>=2?'defensive':'park';else if(sd>0&&pr>0.65)k=m.rng()<0.6?'defensive':'counter';
@@ -3040,14 +3043,38 @@ function cornerHold(m,tEnd){const bb=m.ball;if(m.t>tEnd+m.dur*3/90){m.whC=null;r
  const keep=m.state==='goal'||m.state==='corner'||!C.taken||!second||!!bb.shot;if(!keep||m.state==='kickoff'){m.whC=null;return false;}return true;}
 function workedOut(m,T){const k=T.side.tactic;if(k==='sink')return false;if(tacKnown(m,T,k)&&m.t-(T.tacT0||0)>m.dur*2/90)return true;
  if(m.t-(T.tacT0||0)>woLimit(m,T,k)){(T.woT=T.woT||{})[k]=m.t;return true;}return false;}
+// how well a style suits this match: the opposition's hidden weak/strong spots (bigger for the underdog), plus plain football
+// sense from the players on the pitch: wingers against their full-backs, forwards against their centre-backs, and so on
+function styleMu(m,T,k,wo){const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];const ex=clamp(1+(O.ovr-T.ovr)/25,0.6,1.6);const a=P?P.amp*ex:0;
+ let mu=P?(P.weak.includes(k)&&!wo?1+TAC_W*a:P.strong.includes(k)?1-TAC_S*a:1):1;if(wo)mu=Math.min(mu,1);return mu*(1+(wo?0:styleEdge(m,T,k)));}
+function styleEdge(m,T,k){const c=(m._se=m._se||{});const key=T.idx+k+Math.floor(m.t/(m.dur/90*3));if(c[key]!=null)return c[key];const O=m.teams[1-T.idx];const ok=O.side.tactic;
+ const av=(ps,f)=>ps.length?ps.reduce((s,q)=>s+f(q.p),0)/ps.length:65;const rl=(X,r)=>X.players.filter(q=>q.role===r);let e=0;
+ if(k==='wings')e=clamp((av(T.players.filter(q=>q.role==='WM'||q.role==='FB'),p=>(p.spd+p.dri)/2)-av(rl(O,'FB'),p=>(p.tck+p.spd)/2))/120,-0.04,0.04);
+ else if(k==='long')e=clamp((av(rl(T,'ST'),p=>Math.max(p.str,p.spd))-av(rl(O,'CB'),p=>(p.str+p.spd)/2))/120,-0.04,0.04)+clamp((av(T.players.filter(q=>q.role!=='ST'&&q.role!=='GK'),p=>p.pas)-70)/300,-0.02,0.02);
+ else if(k==='through')e=clamp((av(rl(T,'ST'),p=>p.spd)-av(rl(O,'CB'),p=>p.spd))/120,-0.04,0.04)-(ok==='park'||ok==='defensive'?0.03:0);
+ else if(k==='counter')e=ok==='attacking'||ok==='press'||ok==='sink'?0.03:ok==='park'||ok==='defensive'?-0.03:0;
+ else if(k==='press')e=-clamp((av(O.players.filter(q=>q.role!=='GK'),p=>p.pas)-av(T.players.filter(q=>q.role!=='GK'),p=>p.tck))/150,-0.03,0.03);
+ else if(k==='attacking')e=ok==='counter'?-0.03:ok==='park'?0.01:0;
+ c[key]=e;return e;}
+// what each style looks like when it is working, in plain football terms
+const STYLE_WORKS={park:'They cannot find a way through your low block',defensive:'Your defensive shape is keeping them quiet',counter:'Your counter-attacks are catching them out',balanced:'Your mix of styles is keeping them guessing',long:'The long balls are getting in behind them',wings:'They cannot cope with your width',through:'Your through balls are splitting their back line',press:'Your press is forcing them into mistakes',attacking:'Your numbers going forward are overwhelming them'};
+const STYLE_WHY={park:'it shuts them out',defensive:'it takes the sting out of their attacks',counter:'they are leaving space behind them',balanced:'it keeps them guessing',long:'balls over the top should find space behind them',wings:'their full-backs look vulnerable',through:'there is room to play balls in behind them',press:'they look shaky on the ball',attacking:'their defence looks stretched'};
+// why a style should work here: a real football reason when there is one, otherwise what has been seen of them
+function styleWhy(m,U,k){const e=styleEdge(m,U,k);const ok=m.teams[1-U.idx].side.tactic;
+ if(e>0.012)return {wings:'their full-backs look vulnerable',long:'our forwards can beat their centre-backs over the top',through:'our forwards are quicker than their centre-backs',counter:'they are leaving space behind them',press:'they look shaky on the ball',attacking:'their defence looks stretched'}[k]||'it suits this match';
+ return {park:'they have struggled to break down a deep block',defensive:'they have struggled against a compact side',counter:'they have been caught out on the break',balanced:'a mix of styles keeps them guessing',long:'they have looked uneasy with balls over the top',wings:'they have struggled with width',through:'gaps keep appearing in their back line',press:'they have looked uncomfortable under pressure',attacking:'they look nervous when we commit bodies forward'}[k];}
 function tacAdvice(m,U){const O=m.teams[1-U.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];if(!P)return null;const cur=U.side.tactic;if(cur==='sink')return null;const wo=workedOut(m,U);
- const nm=k=>TACTICS[k].name;const fresh=k=>k!=='sink'&&k!==cur&&!tacKnown(m,U,k);
- const weak=P.weak.filter(k=>k!=='sink');const wAlt=weak.find(fresh);const nAlt=TAC_ORDER.find(k=>fresh(k)&&!P.strong.includes(k));const alt=wAlt||nAlt;
- if(weak.includes(cur)&&!wo)return {k:cur,stay:true,text:`${nm(cur)} is working against their ${nm(O.side.tactic)}: stay on it`};
- if(wo)return alt?{k:alt,wo:true,text:`They have worked out your ${nm(cur)}: switch to ${nm(alt)}`}:{k:cur,stay:true,text:`They have read most of our styles: keep going with ${nm(cur)}`};
- if(P.strong.includes(cur))return {k:alt||cur,text:`They are comfortable against ${nm(cur)}: switch to ${nm(alt||cur)}`};
- if(wAlt)return {k:wAlt,text:`Their ${nm(O.side.tactic)} looks vulnerable to ${nm(wAlt)}: switch to it`};
- return {k:cur,stay:true,text:`No clear weakness left to hit: ${nm(cur)} is fine for now`};}
+ const nm=k=>TACTICS[k].name;const sd=m.score[U.idx]-m.score[O.idx];const late=m.t>m.dur*0.7;
+ // only sensible options for the scoreline: no parking the bus when you need a goal
+ const ok=k=>k!=='sink'&&!(sd<=0&&(k==='park'||(k==='defensive'&&late)))&&!(sd>0&&late&&k==='attacking'&&sd>=2);
+ const fresh=k=>ok(k)&&k!==cur&&!tacKnown(m,U,k);const score=k=>styleMu(m,U,k,false);
+ const cands=TAC_ORDER.filter(fresh).sort((a,b)=>score(b)-score(a));const best=cands[0];const curS=wo?1:score(cur);
+ if(!wo&&ok(cur)&&(!best||curS>=score(best)-0.012)){return {k:cur,stay:true,text:curS>1.02?`${STYLE_WORKS[cur]}: stay on ${nm(cur)}`:`${nm(cur)} is fine for now: nothing better stands out`};}
+ if(!best)return {k:cur,stay:true,text:`They have read most of our styles: keep going with ${nm(cur)}`};
+ if(wo)return {k:best,wo:true,text:`They have worked out your ${nm(cur)}: switch to ${nm(best)}, ${styleWhy(m,U,best)}`};
+ if(!ok(cur))return {k:best,text:sd<=0?`We need a goal: switch to ${nm(best)}, ${styleWhy(m,U,best)}`:`Switch to ${nm(best)}: ${styleWhy(m,U,best)}`};
+ if(P.strong.includes(cur))return {k:best,text:`They are comfortable against ${nm(cur)}: switch to ${nm(best)}, ${styleWhy(m,U,best)}`};
+ return {k:best,text:`Switch to ${nm(best)}: ${styleWhy(m,U,best)}`};}
 const TAC_ORDER=['balanced','counter','through','wings','press','long','attacking','defensive','park'];
 function recCounter(m,U,O){if(U.side.auto)return;const a=tacAdvice(m,U);m.recT=m.t;if(a)ev(m,'rec',a.stay?`They have changed to ${TACTICS[O.side.tactic].name}, but ${TACTICS[a.k].name} still works: stay on it`:`They have changed to ${TACTICS[O.side.tactic].name}. ${a.text.replace(/^./,c=>c.toUpperCase())}`,U.idx);}
 function recStep(m){}
@@ -5356,7 +5383,14 @@ const TAC_KEYS=()=>Object.keys(TACTICS).filter(k=>k!=='sink');
 function tacProfile(t,own){const ks=TAC_KEYS();own=own||t.tactic||'balanced';const r=mkRng(hashStr((t.id||t.name)+'|tp|'+own+'|'+((typeof S!=='undefined'&&S)?S.season:1)));const o=ks.slice().sort(()=>r()-0.5);
  // how readable the pattern is: some sides have a glaring weakness, some a subtle one, some barely any (go with your gut)
  const x=r();const amp=x<0.3?1.25+r()*0.35:x<0.7?0.75+r()*0.35:0.45+r()*0.25;
- return {weak:o.slice(0,r()<0.5?1:2),strong:o.slice(4,4+(r()<0.5?1:2)),amp};}
+ let weak=o.slice(0,r()<0.5?1:2),strong=o.slice(4,4+(r()<0.5?1:2));
+ // football sense on top of the hidden pattern: a side sitting deep leaves no space to counter into or thread balls through;
+ // a side that pushes up (pressing, attacking, kitchen sink) leaves space behind it for counters and balls over the top
+ const NO={park:['counter','through','park','defensive'],defensive:['counter','through','park'],press:['press'],attacking:['park']};
+ const YES={press:['counter','long','through'],attacking:['counter','long'],sink:['counter','long'],park:['wings','long'],defensive:['wings','long']};
+ const no=NO[own]||[];weak=weak.filter(k=>!no.includes(k));const yes=YES[own];if(yes&&!weak.some(k=>yes.includes(k)))weak.unshift(yes[Math.floor(r()*yes.length)]);
+ weak=weak.slice(0,2);for(const k of no)if(!strong.includes(k)&&k!=='park'&&k!=='defensive')strong.push(k);strong=strong.filter(k=>!weak.includes(k));
+ return {weak,strong,amp};}
 // how much a side concedes against a given opposing style (1 = normal)
 // exec: how well the side using the style can carry it out (their quality against the opposition's)
 function tacMatchup(t,oppTac,exec){if(!t||!oppTac)return 1;const P=tacProfile(t);const e=exec??1;const k=P.amp*e;return P.weak.includes(oppTac)?1+0.32*k:P.strong.includes(oppTac)?1/(1+0.26*k):1;}
@@ -6421,7 +6455,7 @@ function hud(m){
   feed.innerHTML=m.events.slice().reverse().map(e=>`<div class="${e.type==='clue'?'clue':e.type==='injury'?'injury':''}"><span class="m">${e.type==='pen'?'Pen':(e.lab||e.min)+'′'}</span><span class="dot" style="background:${e.team<0?'var(--dim)':sides[e.team].fill};box-shadow:0 0 0 1px ${e.team<0?'transparent':sides[e.team].ring}"></span><span class="${e.type==='goal'?'goal':''}">${esc(e.text)}</span></div>`).join('');}
  {const rc=$('#recchip');if(rc){const U=m.teams[L.mine];const A=!m.finished&&m.t>m.dur*8/90&&U.side.tactic!=='sink'?tacAdvice(m,U):null;rc.hidden=!A;
    if(A){const same=A.stay;const txt=same?`✓ ${A.text}`:A.text;
-    if(rc.textContent!==txt)rc.textContent=txt;rc.classList.toggle('on',same);rc.classList.toggle('fresh',!same&&m.t-(m.recT||-99)<m.dur*4/90);rc.onclick=same?null:()=>{L.setTac(A.k);const box=app.querySelector('[data-cyc="live"] .cycname');if(box){const ks=Object.keys(TACTICS);box.innerHTML=`<b>${TACTICS[A.k].name}</b><small>${ks.indexOf(A.k)+1} / ${ks.length}</small>`;}};}}}
+    if(rc.dataset.t!==txt){rc.dataset.t=txt;rc.innerHTML=`<span class="rct">${esc(txt)}</span>${same?'':`<b class="rcgo">Switch to ${esc(TACTICS[A.k].name)} ›</b>`}`;}rc.classList.toggle('on',same);rc.classList.toggle('fresh',!same&&m.t-(m.recT||-99)<m.dur*4/90);rc.onclick=same?null:()=>{L.setTac(A.k);const box=app.querySelector('[data-cyc="live"] .cycname');if(box){const ks=Object.keys(TACTICS);box.innerHTML=`<b>${TACTICS[A.k].name}</b><small>${ks.indexOf(A.k)+1} / ${ks.length}</small>`;}};}}}
  liveScoresTick(m);
  if(!L.statT||performance.now()-L.statT>400){L.statT=performance.now();
   const s=m.stats;const pt=s.poss[0]+s.poss[1]||1;const p0=Math.round(s.poss[0]/pt*100);
@@ -6493,6 +6527,14 @@ function subTip(L,m){
   const en=p=>p._endE??p.fit??100;
   const c=bench.filter(p=>p.pos===pl.p.pos||posOK(p,pl.slot)).filter(p=>en(p)>pl.energy+15).sort((a,b)=>b.ovr-a.ovr)[0];
   if(c&&(!best||pl.energy<best.pl.energy))best={pl,i,c,ce:en(c)};});
+ // make sure all five substitutions get offered over the game: if you are behind schedule, suggest a change
+ // for the most tired outfield player even if he isn't exhausted yet
+ if(!best){const mn=m.t/m.dur*90;const need=[58,66,74,81,87].filter(x=>mn>=x).length;const used=(m.subs||[0,0])[L.mine];
+  if(used<need&&!m.etOn||m.etOn&&used<MAXSUB&&mn>=100){const en=p=>p._endE??p.fit??100;
+   const cands=T.players.map((pl,i)=>({pl,i})).filter(({pl})=>pl.role!=='GK'&&m.ball.owner!==pl&&!(L.tipNo[pl.p.id]&&m.t<L.tipNo[pl.p.id])).sort((a,b)=>a.pl.energy-b.pl.energy);
+   for(const {pl,i} of cands){const pool=bench.filter(p=>p.pos!=='GK'&&en(p)>pl.energy+5);
+    const c=pool.filter(p=>p.pos===pl.p.pos||posOK(p,pl.slot)).sort((a,b)=>b.ovr-a.ovr)[0]||pool.filter(p=>CAT[p.pos]===CAT[pl.p.pos]).sort((a,b)=>b.ovr-a.ovr)[0]||pool.sort((a,b)=>b.ovr-a.ovr)[0];
+    if(c){best={pl,i,c,ce:en(c)};break;}}}}
  if(!best)return;
  const d=document.createElement('div');d.className='subtip';
  d.innerHTML=`<span class="eyebrow">Sub suggestion</span><div class="strow"><span class="pos ${best.pl.role}">${best.pl.slot}</span><b>${esc(surname(best.pl.p.name))}</b><span class="num tired">${Math.round(best.pl.energy)}%</span></div>
@@ -7140,7 +7182,7 @@ function acceptOffer(id){
 const STAGES=['groups','r16','qf','sf','final','done'];
 const STAGE_NAME={league:'League',groups:'Group stage',r16:'Last 16',qf:'Quarter-finals',sf:'Semi-finals',final:'Final',done:'Finished'};
 const CUP_KIND={euro:{name:'European Cup',champs:'European champions'},world:{name:'World Cup',champs:'World champions'},mystery:{name:'The Eternal Cup',champs:'Eternal champions'},temporal:{name:'The Temporal War League',champs:'Masters of time'},elite:{name:'The Elite League',champs:'Elite League champions'},emperor:{name:"The Emperor's Cup",champs:'Emperors of football'}};
-const ELITE_PRIZE={win:1.5e6,champ:40e6};
+const ELITE_PRIZE={win:500e3,draw:250e3,loss:100e3,champ:10e6};
 const EMPEROR_PRIZE={part:0,win:0,draw:0,r16:0,qf:0,sf:10e6,runner:0,champ:60e6};
 const ELITE_IDS=['rma','bar','bay','juv','mil','psg','ajx'];
 const WORLD_PRIZE=Object.fromEntries(Object.entries(CUP_PRIZE).map(([k,v])=>[k,v*2]));
@@ -7238,19 +7280,20 @@ function pitchShootout(m,L,done){const so=shootout(m,L);const b=m.ball;m.flash=n
  const home=new Map();lines.forEach((L0,i)=>L0.forEach((q,k)=>{const n=L0.length;home.set(q,[PL/2+(k-(n-1)/2)*Math.min(4.4,58/n),i===0?3.2:PW-3.2]);}));
  gks.forEach((g,i)=>{if(g)home.set(g,[PL/2+((lines[i].length-1)/2)*Math.min(4.4,58/lines[i].length)+5,i===0?3.2:PW-3.2]);});
  const behind=q=>{const h=home.get(q);return [h[0],h[1]+(q.team===0?-3.6:3.6)];};
- for(const q of m.players){const h=home.get(q);if(h){q.x=h[0];q.y=h[1];}q.vx=q.vy=0;q.dive=0;}
+ const OFF=q=>{q.x=-40-q.id%7;q.y=-40;q.vx=q.vy=0;q.dive=0;};for(const q of m.players)OFF(q);
  b.owner=null;b.shot=null;b.loft=null;b.vx=b.vy=0;b.x=spot[0];b.y=spot[1];
  const sc=[0,0];let k=-1,ph='next',t=0,cur=null,kp=null,taker=null,from=null,to=null,ended=false;
  const mv=(q,x,y,v,dt)=>{const dx=x-q.x,dy=y-q.y,d=Math.hypot(dx,dy);if(d<0.05){q.vx=q.vy=0;return true;}const s=Math.min(d,v*dt);q.x+=dx/d*s;q.y+=dy/d*s;q.vx=dx/d*v;q.vy=dy/d*v;return d<=v*dt;};
  const ctl={sc,tick(dt){if(ended)return;t+=dt;
   if(ph==='next'){k++;if(k>=so.kicks.length){ctl.end();return;}cur=so.kicks[k];const i=cur.team;taker=T[i].players.find(q=>q.p.name===cur.name)||lines[i][0];
    kp=gks[1-i];taker._out=true;
-   b.x=spot[0];b.y=spot[1];b.vx=b.vy=0;ph='walk';t=0;}
+   for(const q of m.players)if(q!==taker&&q!==kp)OFF(q);taker.x=spot[0]-3.2;taker.y=spot[1]+(cur.team?0.8:-0.8);taker.vx=taker.vy=0;if(kp){kp.x=gx-0.6;kp.y=GY;kp.vx=kp.vy=0;kp.dive=0;}
+   b.x=spot[0];b.y=spot[1];b.vx=b.vy=0;ph='wait';t=-0.35;}
   // everyone else drifts back to their place in the line
-  for(const q of m.players){if(q===taker||q===kp)continue;const h=home.get(q);if(!h)continue;if(q._ret){const bp=behind(q);if(Math.abs(q.x-h[0])>0.4||Math.abs(q.y-bp[1])>0.4&&Math.abs(q.y-h[1])>Math.abs(bp[1]-h[1])){mv(q,bp[0],bp[1],9,dt);if(Math.abs(q.x-h[0])<=0.4)q._ret=false;}else q._ret=false;}else mv(q,h[0],h[1],6,dt);}
+  if(false)for(const q of m.players){if(q===taker||q===kp)continue;const h=home.get(q);if(!h)continue;if(q._ret){const bp=behind(q);if(Math.abs(q.x-h[0])>0.4||Math.abs(q.y-bp[1])>0.4&&Math.abs(q.y-h[1])>Math.abs(bp[1]-h[1])){mv(q,bp[0],bp[1],9,dt);if(Math.abs(q.x-h[0])<=0.4)q._ret=false;}else q._ret=false;}else mv(q,h[0],h[1],6,dt);}
   if(kp&&ph!=='kick'&&ph!=='result')mv(kp,gx-0.6,GY,13,dt);
   if(ph==='walk'){if(taker._out&&taker.role!=='GK'){const bp=behind(taker);const endX=PL/2+((lines[taker.team].length-1)/2)*Math.min(4.4,58/lines[taker.team].length)+9;if(taker._out===true){if(mv(taker,bp[0],bp[1],9,dt))taker._out=2;}else if(mv(taker,endX,bp[1],11,dt))taker._out=false;}else if(mv(taker,spot[0]-3.2,spot[1]+(cur.team?0.8:-0.8),11,dt)&&t>0.5){ph='wait';t=0;}}
-  else if(ph==='wait'){taker.vx=1;taker.vy=0;if(t>0.45){ph='run';t=0;}}
+  else if(ph==='wait'){taker.vx=1;taker.vy=0;if(t>0.5){ph='run';t=0;}}
   else if(ph==='run'){if(mv(taker,spot[0]-0.7,spot[1],7,dt)){ph='kick';t=0;
     const sg=cur.side==='l'?-1:cur.side==='r'?1:0;const st=cur.style||'corner';const f=cur.f??Math.random();
     // a goal tucked into the corner sits just inside the post; a saved one is a little closer to the keeper
@@ -7288,7 +7331,7 @@ function cupAdvance(userRes){
   histAdd(cupT(f.h),cupT(f.a),f.hs,f.as,cupName());
  });
  if(c.stage==='league'){
-  fx.forEach(f=>{if(f.hs!==f.as)payCup(f.hs>f.as?f.h:f.a,P.win);});
+  fx.forEach(f=>{if(f.hs!==f.as){payCup(f.hs>f.as?f.h:f.a,P.win);if(P.loss)payCup(f.hs>f.as?f.a:f.h,P.loss);}else if(P.draw){payCup(f.h,P.draw);payCup(f.a,P.draw);}});
   c.md++;if(c.md<c.gfx.length){save();return;}
   c.winner=groupTable(c.teams)[0].cid;payCup(c.winner,P.champ);c.stage='done';
   if(c.kind==='temporal'){twlFinished(c);save();return;}
@@ -7389,10 +7432,10 @@ function cupView(el){
    <div class="actions"><button class="btn primary" id="retdom">Return to domestic football</button></div></section>`;
   el.innerHTML=`<div class="stack">${h}</div>`;wireCupBtns(el,c);return;}
  if(c.stage==='done'){const w=cupT(c.winner);const iWon=c.winner===myCid();
-  const eternal=kind==='world'&&iWon;
-  const chainOn=iWon&&(kind==='euro'||kind==='mystery'||kind==='elite'||kind==='world');const backBtn=c.replay?`<button class="btn${chainOn?'':' primary'}" id="backseason">Back to your season</button>`:`<button class="btn${chainOn?'':' primary'}" id="nextseason">Return to domestic football</button>`;
-  const nextOffer=iWon&&kind==='euro'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The World Cup</span><p style="margin:0">European champions are invited to the biggest stage of all: 32 of the greatest national sides in history, at a themed venue. Groups, then knockouts.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goworld">Collect your winnings</button>${backBtn}</div></div>`
-   :iWon&&kind==='mystery'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Elite League</span><p style="margin:0">There is a league above the Premier League, and only Eternal champions are invited. Seven of Europe's greatest clubs, at their all-time best: Real Madrid, Barcelona, Bayern Munich, Juventus, AC Milan, Paris Saint-Germain and Ajax. Plus you. Everyone plays everyone home and away.</p><p class="note" style="margin:0">${fmt(ELITE_PRIZE.win)} for every win · champions ${fmt(ELITE_PRIZE.champ)} and an invitation to the Emperor's Cup.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goelite">Collect your winnings</button>${backBtn}</div></div>`
+  const eternal=kind==='world'&&iWon&&!c.replay;
+  const chainOn=iWon&&!c.replay&&(kind==='euro'||kind==='mystery'||kind==='elite'||kind==='world');const backBtn=c.replay?`<button class="btn${chainOn?'':' primary'}" id="backseason">Back to your season</button>`:`<button class="btn${chainOn?'':' primary'}" id="nextseason">Return to domestic football</button>`;
+  const nextOffer=c.replay?'':iWon&&kind==='euro'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The World Cup</span><p style="margin:0">European champions are invited to the biggest stage of all: 32 of the greatest national sides in history, at a themed venue. Groups, then knockouts.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goworld">Collect your winnings</button>${backBtn}</div></div>`
+   :iWon&&kind==='mystery'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Elite League</span><p style="margin:0">There is a league above the Premier League, and only Eternal champions are invited. Seven of Europe's greatest clubs, at their all-time best: Real Madrid, Barcelona, Bayern Munich, Juventus, AC Milan, Paris Saint-Germain and Ajax. Plus you. Everyone plays everyone home and away.</p><p class="note" style="margin:0">${fmt(ELITE_PRIZE.win)} a win, ${fmt(ELITE_PRIZE.draw)} a draw, ${fmt(ELITE_PRIZE.loss)} a defeat · champions ${fmt(ELITE_PRIZE.champ)} and an invitation to the Emperor's Cup.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goelite">Collect your winnings</button>${backBtn}</div></div>`
    :iWon&&kind==='elite'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Emperor's Cup</span><p style="margin:0">Eight reigning champions from across time and space, every one with a power of its own: Germany 1940s, the Knights, Zeta Reticuli, Robo United, the Presidents, the Vampires, the Romans, and you. Straight knockout from the quarter-finals.</p><p class="note" style="margin:0">Semi-final ${fmt(EMPEROR_PRIZE.sf)} · winner ${fmt(EMPEROR_PRIZE.champ)}.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goemp">Collect your winnings</button>${backBtn}</div></div>`:'';
   head=`<section class="panel cuphead"><span class="eyebrow">${nm} · Final whistle</span><div style="display:flex;gap:14px;align-items:center">${badge(w,72)}<div><h2 style="font-size:38px">${esc(w.name)}</h2><div class="note">${CUP_KIND[kind].champs}</div></div></div>
   <p style="margin:0">Your prize money from the ${kind==="mystery"?"Eternal Cup":nm}: <b>${fmt(c.earn)}</b>.</p>
@@ -7404,7 +7447,7 @@ function cupView(el){
   head=`<section class="panel cuphead"><div class="venuebar"><span class="eyebrow">${nm} · ${STAGE_NAME[c.stage]}${c.stage==='groups'?` · Matchday ${c.md+1} of 3`:c.stage==='league'?` · Matchday ${c.md+1} of ${c.gfx.length}`:''}${where?' · '+where:''}</span>${wxIcon(cnd)}</div>
   <div class="bigfix"><div class="t">${badge(h,72)}<h3>${esc(h.name)}</h3><span class="note">${chip(teamOvr(h),'sm')} ${h.formation}</span></div><div class="vs">VS</div><div class="t">${badge(a,72)}<h3>${esc(a.name)}</h3><span class="note">${chip(teamOvr(a),'sm')} ${a.formation}</span></div></div>
   <div class="actions"><button class="btn primary" id="cwatch">Kick off</button><button class="btn" id="tolineup">Tactics</button><button class="btn ghost" id="cquick">Quick result</button></div>
-  <p class="note" style="text-align:center;margin:12px 0 0">${c.stage==='league'?`${fmt(P.win)} for every win. The champions take ${fmt(P.champ)}.`:c.stage==='groups'?`No money for group games. Top two reach the last 16 (${fmt(P.r16)}); knocked-out teams earn nothing more.`:c.stage==='final'?`Winner takes ${fmt(P.champ)}; the loser gets nothing. Draws go to penalties.`:`Win to reach the ${STAGE_NAME[STAGES[STAGES.indexOf(c.stage)+1]].toLowerCase()}${P[STAGES[STAGES.indexOf(c.stage)+1]]?` (${fmt(P[STAGES[STAGES.indexOf(c.stage)+1]])})`:''}. Draws go to penalties.`} Prize money so far ${fmt(c.earn)}.</p>
+  <p class="note" style="text-align:center;margin:12px 0 0">${c.stage==='league'?`${fmt(P.win)} a win${P.draw?`, ${fmt(P.draw)} a draw, ${fmt(P.loss)} a defeat`:''}. The champions take ${fmt(P.champ)}.`:c.stage==='groups'?`No money for group games. Top two reach the last 16 (${fmt(P.r16)}); knocked-out teams earn nothing more.`:c.stage==='final'?`Winner takes ${fmt(P.champ)}; the loser gets nothing. Draws go to penalties.`:`Win to reach the ${STAGE_NAME[STAGES[STAGES.indexOf(c.stage)+1]].toLowerCase()}${P[STAGES[STAGES.indexOf(c.stage)+1]]?` (${fmt(P[STAGES[STAGES.indexOf(c.stage)+1]])})`:''}. Draws go to penalties.`} Prize money so far ${fmt(c.earn)}.</p>
   ${kind!=='euro'?`<div class="actions" style="margin-top:6px">${leaveBtn()}</div>`:''}</section>`;
  }else{
   head=`<section class="panel cuphead"><span class="eyebrow">${nm} · ${STAGE_NAME[c.stage]}</span><h2 style="font-size:30px">${c.out?'Knocked out':'No match this round'}</h2>
@@ -7735,7 +7778,7 @@ function liveScoresTick(m){if(!LIVE_OTHERS.length)return;const min=Math.min(90,M
 // half-time: one thing the assistant has noticed
 function htTipHTML(m,L){if(!m)return '';const me=m.teams[L.mine];const A=tacAdvice(m,me);const nm=k=>TACTICS[k]?TACTICS[k].name:k;
  // the same read as the live recommendation: it never says one thing while the touchline box says another
- let tip=!A?'Keep going, boss.':A.stay?`It's working, boss. ${nm(A.k)} is causing them real problems: stay on it.`:A.wo?`They've worked out our ${nm(me.side.tactic)}. Switch to ${nm(A.k)} for the second half.`:/comfortable/.test(A.text)?`They look comfortable against ${nm(me.side.tactic)}. I'd switch to ${nm(A.k)}: it's what hurts them.`:`I'd go with ${nm(A.k)}. Against their ${nm(m.teams[1-L.mine].side.tactic)} it's the one that hurts them.`;
+ let tip=!A?'Keep going, boss.':A.stay?(/: stay on/.test(A.text)?`It's working, boss. ${A.text.split(':')[0]}. Stay on ${nm(A.k)}.`:`${A.text.replace(/^./,c=>c.toUpperCase())}.`):A.wo?`They've worked out our ${nm(me.side.tactic)}. Switch to ${nm(A.k)} for the second half: ${styleWhy(m,me,A.k)}.`:`I'd switch to ${nm(A.k)}: ${styleWhy(m,me,A.k)}.`;
  // if we keep the same style into the second half it will be worked out soon after
  if(A&&A.stay){const left=woLimit(m,me,me.side.tactic)-(m.t-(me.tacT0||0));if(left<m.dur*0.12)tip+=` They'll work it out early in the second half though, so be ready to change.`;}
  const tired=me.players.filter(q=>q.role!=='GK').sort((a,b)=>a.energy-b.energy)[0];
@@ -7778,7 +7821,7 @@ function negOpen(pid,after){
  let busy=false,over=false;
  const info=()=>{const base=priceOf(e),now=negPrice(e),me=myTeam();
   if(over){$o('.ngwas').textContent=fmt(base);$o('.ngnow').textContent='No deal';$o('.ngsaved').textContent='';}else{$o('.ngwas').textContent=now<base?fmt(base):'';$o('.ngnow').textContent=fmt(now);$o('.ngsaved').textContent=now<base?`${fmt(base-now)} saved`:'Asking price';}
-  $o('.ngpips').innerHTML=[0,1,2,3,4].map(i=>`<i class="${i<N.step?'on':''}"></i>`).join('');
+  $o('.ngpips').innerHTML=[0,1,2,3,4].map(i=>{const v=N.hist[i+1];const bad=over&&i===N.step;return `<i class="${i<N.step?'on':''} ${bad?'bad':''}">${v!=null&&(i<N.step||bad)?v:''}</i>`;}).join('');
   const sb=$o('[data-ng="sign"]');if(sb){const full=me.squad.length>=25;sb.textContent=full?'Squad full':`Sign for ${fmt(now)}`;sb.disabled=full||now>me.budget||over;}
   const done=N.step>=5;o.querySelectorAll('.ngarrows button').forEach(b=>b.disabled=done||over||busy);
   if(done&&!over)$o('.ngmsg').innerHTML=`<b class="good">Deal on the table.</b> That's as low as he'll go.`;
