@@ -1055,10 +1055,10 @@ body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;mar
 .asnotes{margin:6px 0;padding-left:18px;display:grid;gap:8px;font-size:14px}
 .htasst{margin:8px 0;padding:8px 12px;border-left:3px solid #e7b93c;background:rgba(231,185,60,.08);border-radius:4px}.htasst p{margin:2px 0 0;font-size:14px}
 /* match events */
-.momo{position:absolute;left:10px;bottom:8px;z-index:4;display:grid;gap:3px;pointer-events:none;font:700 9px var(--data);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);text-shadow:0 1px 2px #000}
+.momo{position:absolute;left:10px;bottom:24px;z-index:4;display:grid;gap:3px;pointer-events:none;font:700 9px var(--data);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.75);text-shadow:0 1px 2px #000}
 .momo .mbar{position:relative;width:120px;height:7px;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.5);display:flex}.momo .mh,.momo .ma{flex:1;opacity:.85}
 .momo b{position:absolute;top:-2px;bottom:-2px;width:4px;margin-left:-2px;border-radius:2px;background:#fff;box-shadow:0 0 4px #000;transition:left .4s ease}
-@media (orientation:landscape) and (max-height:500px){.momo{left:6px;bottom:4px;font-size:7px}.momo .mbar{width:80px;height:5px}}
+@media (orientation:landscape) and (max-height:500px){.momo{left:6px;bottom:14px;font-size:7px}.momo .mbar{width:80px;height:5px}}
 .pitchwrap .blackout{position:absolute;inset:0;z-index:5;display:grid;place-items:center;background:rgba(0,0,0,.88);opacity:0;pointer-events:none;transition:opacity .8s}.pitchwrap.dark .blackout{opacity:1}
 .blackout span{font:800 22px 'Big Shoulders Display',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#cfd8ff;animation:flick 1.3s steps(2) infinite}@keyframes flick{50%{opacity:.35}}
 .feed .clue{color:#ffd76a;font-style:italic}.feed .injury{color:#ff8a8a}
@@ -1259,6 +1259,19 @@ body.twl .ticker.livescores{background:#15140f;border-color:#3a3224}
 .glory p{margin:0;color:#f3ead4;font:400 clamp(16px,2.1vw,25px)/1.2 'Cinzel',Georgia,serif;letter-spacing:.06em;text-align:center;padding:0 6vw;opacity:0;transform:translateY(8px) scale(.98);transition:opacity 1s ease,transform 2.4s ease;text-shadow:0 0 24px rgba(255,210,120,.25)}
 .glory.textin p{opacity:1;transform:none}
 .glory.textout p{opacity:0;transition:opacity .6s}
+/* momentum: whose end is whose */
+.momo .mrow{display:flex;align-items:center;gap:5px}
+.momo .mt{font:800 10px/1 var(--data);letter-spacing:.06em;font-style:normal;color:#fff;padding:2px 4px 2px 5px;border-radius:3px;background:rgba(0,0,0,.55);border-left:3px solid var(--tc)}
+.momo .mrow .mt:last-child{border-left:0;border-right:3px solid var(--tc);padding:2px 5px 2px 4px}
+.momo .mbar u{position:absolute;left:50%;top:0;bottom:0;width:1px;margin-left:-.5px;background:rgba(0,0,0,.7)}
+.momo .mh{box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+@media (max-height:500px){.momo .mt{font-size:8px;padding:1px 3px 1px 4px}.momo .mrow{gap:4px}}
+/* injured, in recovery */
+.ptile.hurt .tr,.ptile.hurt .tp,.ptile.hurt .tn{opacity:.6}
+.ptile .tinj{position:absolute;left:calc(50% + 12px);top:-24px;width:15px;height:15px;display:block;z-index:3;filter:drop-shadow(0 1px 1px rgba(0,0,0,.6))}
+.ptile.informed .tinj{left:calc(50% + 21px)}
+.ptile .tinj svg{width:100%;height:100%;display:block}
+@media (max-width:640px),(max-height:500px){.ptile .tinj{top:-17px;width:11px;height:11px;left:calc(50% + 8px)}.ptile.informed .tinj{left:calc(50% + 14px)}}
 /* transfer talks */
 .ngwrap{position:fixed;top:0;left:0;width:100vw;height:100vh;height:100dvh;z-index:120;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
 .ngbox{width:min(310px,90vw);max-height:94dvh;overflow-y:auto;margin:auto;background:var(--panel,#1b2021);border:1px solid #3a4446;border-radius:12px;padding:10px 14px 12px;box-shadow:0 24px 60px rgba(0,0,0,.6);text-align:center}
@@ -1284,6 +1297,20 @@ body.twl .ticker.livescores{background:#15140f;border-color:#3a3224}
 .ngact{display:flex;gap:6px;justify-content:center}.ngact .btn{flex:0 0 auto;font-size:13px;padding:5px 12px;min-height:0}
 td b.good{color:#4cc06f}
 @media (max-width:400px){.ngarrows button{width:86px}.ngnow{font-size:22px}}
+.subinj{display:inline-block;width:13px;height:13px;margin-left:6px;vertical-align:-1px}.subinj svg{width:100%;height:100%;display:block}.injtxt{color:#ff7a7a;font-weight:700}
+.mtable td.clubcol,.mtable th.clubcol{text-align:center}.mtable td.clubcol .clubcell{justify-content:center;text-align:left}.mtable td.potcol{color:#cfd8da;font-weight:700}
+.momo{display:none!important}
+/* the XP tile */
+.bigpitch .xpstack{position:absolute;left:6px;bottom:6px;z-index:5;width:38px;height:38px}
+.xptile{position:absolute;inset:0;width:38px;height:38px;border-radius:6px;border:0;padding:0;display:grid;grid-template-rows:1fr auto;justify-items:center;align-items:center;background:linear-gradient(180deg,#ffffff,#e9edf0);color:#1a1f22;box-shadow:0 3px 0 #b9c1c6,0 5px 10px rgba(0,0,0,.45);font-family:inherit}
+.xptile b{font:800 18px/1 'Big Shoulders Display',sans-serif;margin-top:3px}.xptile span{font:800 11px/1 var(--data);letter-spacing:.08em;margin-bottom:4px;color:#4a5458}
+.xptile.top{cursor:grab;touch-action:none;animation:xpbob 2.4s ease-in-out infinite}.xptile.top.lifted{visibility:hidden}
+.xptile.under{visibility:hidden;opacity:.9}.xpstack.lift .xptile.under{visibility:visible}
+@keyframes xpbob{50%{transform:translateY(-2px)}}
+.xpfloat{position:fixed;z-index:400;pointer-events:none;cursor:grabbing;transform:scale(1.12) rotate(-4deg);box-shadow:0 10px 24px rgba(0,0,0,.55);animation:none}
+#tabbody .ptile.xpno{filter:grayscale(1) brightness(.55);opacity:.55;transition:filter .15s,opacity .15s}
+#tabbody .ptile.xpyes{transition:transform .12s}#tabbody .ptile.xphover{transform:scale(1.12);box-shadow:0 0 0 3px #fff,0 0 16px rgba(255,255,255,.7)}
+@media (max-width:640px),(max-height:500px){.bigpitch .xpstack,.xptile{width:32px;height:32px}.xptile b{font-size:15px;margin-top:2px}.xptile span{font-size:10px;margin-bottom:3px}}
 </style>
 <div id="rotate" role="dialog" aria-label="Rotate your phone"><div><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M3 14a9 9 0 0 0 6 7M21 10a9 9 0 0 0-6-7"/><path d="M1 12l2 2 2-2M23 12l-2-2-2 2"/></svg><b>Turn your phone sideways</b><span>Ultimate Manager is built to be played in landscape.</span><button class="btn sm ghost" onclick="document.getElementById('rotate').classList.add('off')">Continue anyway</button></div></div>
 <div id="app"></div>
@@ -1405,7 +1432,8 @@ function makeEuroClubs(){
 const CUP_PRIZE={part:0,win:0,draw:0,r16:400e3,qf:700e3,sf:1.2e6,runner:0,champ:3e6};
 const PITCHES=[{name:'Parkland pitch'},{name:'Blue stand stadium'},{name:'Village ground'},{name:'Snow-dusted ground'},{name:'Worn summer pitch'},{name:'Red stand stadium'}];
 const POSITIONS=['GK','CB','LB','RB','LWB','RWB','CM','AM','LM','RM','LW','RW','CF'];
-const COMPAT={CF:['LW','RW'],CM:['AM'],AM:['CM'],LM:['LW','LWB'],LW:['LM','LWB'],RM:['RW','RWB'],RW:['RM','RWB'],LWB:['LB','LM','LW'],RWB:['RB','RM','RW'],LB:['LWB'],RB:['RWB']};
+// which slots each position can fill: RB/RWB and LB/LWB swap, CM/AM swap, an AM can lead the line, wide midfielders and wingers swap
+const COMPAT={CM:['AM'],AM:['CM','CF'],LM:['LW'],LW:['LM'],RM:['RW'],RW:['RM'],LWB:['LB'],RWB:['RB'],LB:['LWB'],RB:['RWB']};
 const CAT={GK:'GK',CB:'CB',LB:'FB',RB:'FB',LWB:'FB',RWB:'FB',DM:'CM',CM:'CM',AM:'CM',LM:'WM',RM:'WM',LW:'WM',RW:'WM',CF:'ST',FB:'FB',WM:'WM',ST:'ST'};
 const MIRROR={LB:'RB',RB:'LB',LWB:'RWB',RWB:'LWB',LM:'RM',RM:'LM',LW:'RW',RW:'LW'};
 const POS_NAME={GK:'Goalkeeper',CB:'Centre-back',LB:'Left-back',RB:'Right-back',LWB:'Left wing-back',RWB:'Right wing-back',DM:'Defensive midfield',CM:'Central midfield',AM:'Attacking midfield',LM:'Left midfield',RM:'Right midfield',LW:'Left wing',RW:'Right wing',CF:'Centre-forward'};
@@ -1438,7 +1466,8 @@ const WEIGHTS={
 WEIGHTS.FB=WEIGHTS.LB;WEIGHTS.WM=WEIGHTS.LM;WEIGHTS.ST=WEIGHTS.CF;
 // sy: where the slot sits across the pitch (0 = left touchline, 1 = right), so a right-sided midfield slot also suits a right midfielder
 function slotOK(p,role,sy){if(p.pos===role||(COMPAT[p.pos]||[]).includes(role))return true;if(sy==null)return false;
- if(['CM','AM','RM','LM','RW','LW'].includes(role)){if(sy>0.7&&(p.pos==='RM'||p.pos==='RW'))return true;if(sy<0.3&&(p.pos==='LM'||p.pos==='LW'))return true;}return false;}
+ // a front two: a left winger can play as the left-sided striker, a right winger on the right
+ if(role==='CF'&&sy!==0.5){if(sy<0.5&&p.pos==='LW')return true;if(sy>0.5&&p.pos==='RW')return true;}return false;}
 function roleRating(p,role,sy){const w=WEIGHTS[role];let s=0;for(const k in w)s+=p[k]*w[k];
  if(p.pos!==role){if(slotOK(p,role,sy)){if(p.pos!=='GK'&&role!=='GK')s=Math.max(s,(p.ovr??overall(p))-2);}
   else{if(role==='GK'||p.pos==='GK')s-=15;else if(CAT[role]===CAT[p.pos])s-=MIRROR[p.pos]===role?3:2;else s-=4;}}
@@ -1466,8 +1495,9 @@ function makePlayer(r,pos,base,used,pool){
  return p;
 }
 // made-up players never climb above the real stars at the top of the game
-const FAKE_CAP=80;
-function capFake(p){if(p.real)return;capTo(p,p.mystery?85:FAKE_CAP);}
+const FAKE_CAP=80,POT_CAP=90;
+// made-up players arrive no better than 80, but can grow (with XP) up to their potential, which peaks at 90
+function capFake(p){if(p.real||p.superstar)return;capTo(p,Math.max(p.mystery?85:FAKE_CAP,Math.min(POT_CAP,p.pot||0)));}
 function capTo(p,cap){let g=0;while(overall(p)>cap&&g++<120){const w=WEIGHTS[p.pos];let best=null,bv=-1;for(const k in w){if(p[k]*w[k]>bv){bv=p[k]*w[k];best=k;}}p[best]--;}}
 // the best a player can be while playing at each level (Premier League has no limit)
 const LEAGUE_CAP=[99,85,80,75,70,60];const FREE_CAP=72;
@@ -1532,9 +1562,9 @@ function autoPick(squad,formation,useFit){
  // the strongest eleven for these slots: role ratings (a centre-forward can happily play wide in a front three),
  // and with fitness taken into account a tired player gives way to a fresher one who can do the job
  const slots=FORMATIONS[formation];const n=slots.length;
- const fitK=p=>useFit?1-(100-Math.min(100,p.fit??100))/250:1;
+ const fitK=p=>useFit?(p.injG>0?0.5:1)*(1-(100-Math.min(100,p.fit??100))/250):1;
  const cache=new Map();const sc=(p,i)=>{const k=p.id+'|'+i;if(cache.has(k))return cache.get(k);const [r,,sy]=slots[i];let v=roleRating(p,r,sy)+(slotOK(p,r,sy)?0.6:0);
-  const fw=(p.pos==='CF'&&(r==='LW'||r==='RW'))||((p.pos==='LW'||p.pos==='RW')&&r==='CF');if(fw)v+=2;else if(!slotOK(p,r,sy)&&CAT[p.pos]!==CAT[r])v-=6;v*=fitK(p);cache.set(k,v);return v;};
+  if(!slotOK(p,r,sy))v-=CAT[p.pos]===CAT[r]?8:12;v*=fitK(p);cache.set(k,v);return v;};
  const xi=new Array(n).fill(null);const used=new Set();const order=[0,10,9,1,2,3,4,5,6,7,8].filter(i=>i<n);
  for(const i of order){let best=null,bs=-1e9;for(const p of squad){if(used.has(p.id))continue;const v=sc(p,i);if(v>bs){bs=v;best=p;}}if(best){xi[i]=best;used.add(best.id);}}
  // improve: bring in anyone who does a slot better, and swap pairs of starters when both gain overall
@@ -1569,6 +1599,9 @@ const TRAITS={
  biggame:{name:'Big-game player',desc:'Raises his level against better opponents.',cats:['ST','CM','WM','CB']},
  clutch:{name:'Late show',desc:'At his most dangerous in the last ten minutes.',cats:['ST','WM','CM']},
  crosser:{name:'Crossing specialist',desc:'Takes it to the byline and fizzes it across the six-yard box.',cats:['WM','FB']},
+ fkspec:{name:'Free-kick specialist',desc:'Bends powerful shots round defenders and walls: the ball swerves in the air and dips back in. First choice for every free kick in range.',cats:['CM','WM','ST','FB']},
+ cutinside:{name:'Cuts inside',desc:'Flies down the wing, then suddenly cuts inside onto his stronger foot and bends a powerful shot into the far corner.',cats:['WM']},
+ fortress:{name:'Fortress',desc:'Built like a brick wall. Wins nearly every header and most of his battles, unless his man is a lot stronger.',cats:['CB']},
  icecold:{name:'Ice-cold finisher',desc:'Calm and clinical when it is one-on-one.',cats:['ST','WM']},
  sweeper:{name:'Sweeper keeper',desc:'Races off his line to snuff out through balls.',cats:['GK']},
  shotstopper:{name:'Shot-stopper',desc:'Lightning reflexes from close range.',cats:['GK']},
@@ -1576,7 +1609,7 @@ const TRAITS={
  hothead:{name:'Hothead',desc:'Plays on the edge. Wins his battles, but a red card is never far away.',cats:['CB','CM','ST','FB'],bad:1},
  showboat:{name:'Showboat',desc:'Plays to the crowd with tricks, even when the simple pass is on.',cats:['WM','CM','ST'],bad:1},
 };
-const TRAIT_OF={'Thierry Henry':'icecold','Steven Gerrard':'longshot','Frank Lampard':'longshot','Roy Keane':'enforcer','Patrick Vieira':'engine','Paul Scholes':'longshot','Ryan Giggs':'flair','Cristiano Ronaldo':'flair','David Beckham':'crosser','Alan Shearer':'poacher','Didier Drogba':'biggame','Wayne Rooney':'hothead','Eric Cantona':'leader','John Terry':'leader','Tony Adams':'leader','Kevin De Bruyne':'playmaker','Luka Modrić':'retainer','NGolo Kanté':"engine",'N\'Golo Kanté':'engine','Erling Haaland':'poacher','Harry Kane':'icecold','Mohamed Salah':'icecold','Dennis Bergkamp':'playmaker','Paul Gascoigne':'showboat','Gareth Bale':'longshot','Jamie Vardy':'runner','Peter Schmeichel':'shotstopper','Edwin van der Sar':'sweeper','Alisson Becker':'sweeper','Ederson':'sweeper','Virgil van Dijk':'leader','Claude Makélélé':'retainer','Rodri':'retainer','Bruno Fernandes':'playmaker','Cole Palmer':'icecold','Bukayo Saka':'flair','Jude Bellingham':'biggame','Matt Le Tissier':'longshot','Gianfranco Zola':'flair','Ian Wright':'poacher','Robert Pires':'flair','Arjen Robben':'flair','Jamal Musiala':'flair','Trent Alexander-Arnold':'crosser','Andy Robertson':'crosser','Sergio Agüero':'clutch','Florian Wirtz':'playmaker','Martin Ødegaard':'playmaker','Declan Rice':'engine','Phil Foden':'flair','Son Heung-min':'runner','Dwight Yorke':'icecold','Kenny Dalglish':'playmaker','Ian Rush':'poacher','Fernando Torres':'runner','John Barnes':'flair','Jimmy Greaves':'poacher','Dixie Dean':'target','Gary Lineker':'poacher','Rio Ferdinand':'retainer','Nemanja Vidić':'enforcer','Bobby Moore':'leader','Stuart Pearce':'enforcer','Mark Viduka':'target','Christophe Dugarry':'showboat','Robbie Savage':'hothead','Lucas Paquetá':'flair','Dimitri Payet':'longshot','Paolo Di Canio':'hothead','Viktor Gyökeres':'target','Alexander Isak':'icecold','Hugo Ekitiké':'flair','Jérémy Doku':'flair','Rayan Cherki':'showboat','Eberechi Eze':'flair','Kai Havertz':'target','Bruno Guimarães':'playmaker','Anthony Gordon':'runner','Ollie Watkins':'runner','Jack Grealish':'retainer','Yaya Touré':'biggame','Kevin Phillips':'poacher','Les Ferdinand':'target','Zinedine Zidane':'flair','Lionel Messi':'flair','Ronaldinho':'showboat','Ronaldo Nazário':'icecold','Zlatan Ibrahimović':'selfish','Andrea Pirlo':'playmaker','Xavi':'retainer','Andrés Iniesta':'retainer','Gianluigi Buffon':'shotstopper','Manuel Neuer':'sweeper','Pelé':'biggame','Diego Maradona':'flair','Johan Cruyff':'playmaker','Gerd Müller':'poacher','Lev Yashin':'shotstopper','Franz Beckenbauer':'leader','George Best':'showboat','Bobby Charlton':'longshot','Eusébio':'longshot','Thor':'target','Loki':'showboat','Robin Hood':'icecold','Little John':'enforcer','Hermes':'runner','Sun Wukong':'flair','Arthur':'leader','Achilles':'hothead'};
+const TRAIT_OF={'Thierry Henry':'icecold','Steven Gerrard':'longshot','Frank Lampard':'longshot','Roy Keane':'enforcer','Patrick Vieira':'engine','Paul Scholes':'longshot','Ryan Giggs':'flair','Cristiano Ronaldo':'flair','David Beckham':'fkspec','Alan Shearer':'poacher','Didier Drogba':'biggame','Wayne Rooney':'hothead','Eric Cantona':'leader','John Terry':'leader','Tony Adams':'leader','Kevin De Bruyne':'playmaker','Luka Modrić':'retainer','NGolo Kanté':"engine",'N\'Golo Kanté':'engine','Erling Haaland':'poacher','Harry Kane':'icecold','Mohamed Salah':'icecold','Dennis Bergkamp':'playmaker','Paul Gascoigne':'showboat','Gareth Bale':'longshot','Jamie Vardy':'runner','Peter Schmeichel':'shotstopper','Edwin van der Sar':'sweeper','Alisson Becker':'sweeper','Ederson':'sweeper','Virgil van Dijk':'fortress','Claude Makélélé':'retainer','Rodri':'retainer','Bruno Fernandes':'playmaker','Cole Palmer':'icecold','Bukayo Saka':'flair','Jude Bellingham':'biggame','Matt Le Tissier':'longshot','Gianfranco Zola':'flair','Ian Wright':'poacher','Robert Pires':'flair','Arjen Robben':'cutinside','Jamal Musiala':'flair','Trent Alexander-Arnold':'crosser','Andy Robertson':'crosser','Sergio Agüero':'clutch','Florian Wirtz':'playmaker','Martin Ødegaard':'playmaker','Declan Rice':'engine','Phil Foden':'flair','Son Heung-min':'runner','Dwight Yorke':'icecold','Kenny Dalglish':'playmaker','Ian Rush':'poacher','Fernando Torres':'runner','John Barnes':'flair','Jimmy Greaves':'poacher','Dixie Dean':'target','Gary Lineker':'poacher','Rio Ferdinand':'retainer','Nemanja Vidić':'fortress','Bobby Moore':'leader','Stuart Pearce':'enforcer','Mark Viduka':'target','Christophe Dugarry':'showboat','Robbie Savage':'hothead','Lucas Paquetá':'flair','Dimitri Payet':'fkspec','Paolo Di Canio':'hothead','Viktor Gyökeres':'target','Alexander Isak':'icecold','Hugo Ekitiké':'flair','Jérémy Doku':'flair','Rayan Cherki':'showboat','Eberechi Eze':'flair','Kai Havertz':'target','Bruno Guimarães':'playmaker','Anthony Gordon':'runner','Ollie Watkins':'runner','Jack Grealish':'retainer','Yaya Touré':'biggame','Kevin Phillips':'poacher','Les Ferdinand':'target','Zinedine Zidane':'flair','Lionel Messi':'flair','Ronaldinho':'showboat','Ronaldo Nazário':'icecold','Zlatan Ibrahimović':'selfish','Andrea Pirlo':'fkspec','Xavi':'retainer','Andrés Iniesta':'retainer','Gianluigi Buffon':'shotstopper','Manuel Neuer':'sweeper','Pelé':'biggame','Diego Maradona':'flair','Johan Cruyff':'playmaker','Gerd Müller':'poacher','Lev Yashin':'shotstopper','Franz Beckenbauer':'leader','George Best':'showboat','Bobby Charlton':'longshot','Eusébio':'longshot','Thor':'target','Loki':'showboat','Robin Hood':'icecold','Little John':'enforcer','Hermes':'runner','Sun Wukong':'flair','Arthur':'leader','Achilles':'hothead','Riyad Mahrez':'cutinside','Ángel Di María':'cutinside','Mohammed Kudus':'cutinside','Jarrod Bowen':'cutinside','Franck Ribéry':'cutinside','Marcel Desailly':'fortress','Giorgio Chiellini':'fortress','Ibrahima Konaté':'fortress','Dan Burn':'fortress','Rúben Dias':'fortress','James Ward-Prowse':'fkspec','Siniša Mihajlović':'fkspec','Roberto Carlos':'fkspec','Michel Platini':'fkspec','Christian Eriksen':'fkspec','James Maddison':'fkspec','Kieran Trippier':'fkspec'};
 function traitOf(p){
  if(p.trait!==undefined)return p.trait;
  let t=TRAIT_OF[p.name];
@@ -1703,7 +1736,7 @@ function makeTemporal(){const out=makeIntl(TWL_DEF.map(d=>({...d,bp:{shape:1,pat
  out.forEach((t,i)=>{const d=TWL_DEF[i];t.twl=d.twl;t.hat=d.hat;t.roundel=d.roundel||null;t.twVenue=d.venue;t.twField=d.field;t.twWhere=d.where;t.badge={shape:1,pat:0,c1:d.c1,c2:d.c2};});return out;}
 // ===== MATCH ENGINE =====
 var SEP=3.0,TACK=3.35,SEP_RAF=3.2; // RAF roundels: nobody closer than halfway across the white ring (0.6 of the tile radius)
-var EXP={};var G_FIN=1.55;var SAVE_BASE=1.4;var SHOOT_K=2.2;
+var EXP={};var TAC_W=0.11,TAC_S=0.07;const SP_CLOCK={corner:0.4,pen:0.3,fk:0.35,free:0.5,dark:0.25,offside:0.4};var G_FIN=1.45;var SAVE_BASE=1.4;var SHOOT_K=2.2;
 const PL=105,PW=68,GW=14.64,GY=34,ND=3.2;
 const BOOSTERS={
  power:{name:'Power shot',desc:'Every shot is struck with full power for 10 minutes.'},
@@ -1818,7 +1851,7 @@ function minLabel(m){if(m.etOn)return m.t<=m.endT?String(minute(m)):'120+'+Math.
 function ev(m,type,text,team){m.events.push({min:minute(m),lab:minLabel(m),type,text,team});}
 // tired legs: every attribute drops by (100 - energy) / 5 per cent: 90% energy = 2% weaker, 75% = 5% weaker
 function enF(pl){return 1-(100-clamp(pl.energy,0,100))/500;}
-function maxSpeed(pl){return (pl.sink?1.15:1)*(pl.duel||pl.duelOn?0.85:1)*(pl.bst==='turbo'?1.08:1)*(pl.hot>0?1.07:1)*(pl.urg?1.04:1)*(pl.cs||1)*(5.4+pl.p.spd/100*3.6)*enF(pl)*(pl.stun>0?0.45:1)*(pl.burst>(pl._mt||0)?1.28:1)*(pl.blitzT>(pl._mt||0)?1.18:1)*(pl.brk>(pl._mt||0)?1.1:1);}
+function maxSpeed(pl){return (pl.sink?1.15:1)*(pl.duel||pl.duelOn?0.85:1)*(pl.bst==='turbo'?1.08:1)*(pl.hot>0?1.07:1)*(pl.urg?1.04:1)*(pl.cs||1)*(5.4+gulf(pl.p.spd)/100*3.6)*enF(pl)*(pl.stun>0?0.45:1)*(pl.burst>(pl._mt||0)?1.28:1)*(pl.blitzT>(pl._mt||0)?1.18:1)*(pl.brk>(pl._mt||0)?1.1:1);}
 function pwMul(pl,a){switch(pl.pw){
  case 'armour':return a==='str'?1.16:a==='tck'?1.12:a==='spd'?0.97:1;
  case 'telepathy':return a==='pas'?1.14:a==='dri'?1.08:1;
@@ -1827,7 +1860,8 @@ function pwMul(pl,a){switch(pl.pw){
  case 'testudo':return a==='gk'?1.1:a==='tck'?1.1:a==='str'?1.05:1;
  case 'blitz':return a==='spd'?1.04:1;
  default:return 1;}}
-function eff(pl,a){return Math.min(99,(pl.p[a]+(pl.cap?5:0))*(pl.rd?0.96:1)*(pl.pw?pwMul(pl,a):1)*(pl.sink?(a==='tck'||a==='str'||a==='spd'?1.12:a==='sho'?1.08:1):1)*(!LKOFF.sharp&&pl.lkOn&&(a==='pas'||a==='dri'||a==='tck')?1.06:1)*(pl.day||1)*(pl.late&&pl.p.trait==='clutch'?1.06:1)*(pl.cnt?1.06:1)*(pl.mu||1)*(pl.fa?(pl.fa===a?1.07:pl.fa==='all'?1.03:1):1)*(pl.twm?(pl.twm[a]||1)*(pl.twm.all||1):1)*enF(pl)*(pl.hot>0?1.12:1)*(pl.urg?1.05:1)*(pl.inj?0.72:1)*(pl.psych>pl._mt?1.05:1)*(pl.crowd?1.04:1));}
+const GULF=1.35;function gulf(v){return v>=50?70+(v-70)*GULF:v*(70-20*GULF)/50;}
+function eff(pl,a){return Math.min(pl.p.superstar?125:99,(gulf(pl.p[a])+(pl.cap?5:0))*(pl.rd?0.97:1)*(pl.pw?pwMul(pl,a):1)*(pl.sink?(a==='tck'||a==='str'||a==='spd'?1.12:a==='sho'?1.08:1):1)*(!LKOFF.sharp&&pl.lkOn&&(a==='pas'||a==='dri'||a==='tck')?1.06:1)*(pl.day||1)*(pl.late&&pl.p.trait==='clutch'?1.06:1)*(pl.cnt?1.06:1)*(pl.mu||1)*(pl.fa?(pl.fa===a?1.07:pl.fa==='all'?1.03:1):1)*(pl.twm?(pl.twm[a]||1)*(pl.twm.all||1):1)*enF(pl)*(pl.hot>0?1.12:1)*(pl.urg?1.05:1)*(pl.inj?0.72:1)*(pl.psych>pl._mt?1.05:1)*(pl.crowd?1.04:1));}
 
 function kickoff(m,teamIdx,snap){
  const b=m.ball;m.rip=null;for(const p of m.players){p.duel=null;p.duelOn=null;}b.x=PL/2;b.y=GY;b.vx=b.vy=0;b.shot=null;b.intended=null;b.trail=[];
@@ -1843,7 +1877,7 @@ function kickoff(m,teamIdx,snap){
 }
 
 function restart(m,teamIdx,x,y,kind){
- const b=m.ball;
+ const b=m.ball;m.offPend=null;
  if(kind==='goalkick'){
   // ball stays where it went out; the keeper fetches it and walks it back to the six-yard box
   const T=m.teams[teamIdx];const gk=T.gk;
@@ -1866,24 +1900,25 @@ function restart(m,teamIdx,x,y,kind){
  b.owner=null;b.shot=null;b.intended=null;b.last=teamIdx;
  const T=m.teams[teamIdx];let taker;
  if(kind==='goalkick')taker=T.gk;
- else if(kind==='pen'||kind==='fk'){let bs=-1;for(const pl of T.players){if(pl.role==='GK')continue;const v=eff(pl,'sho')+(pl.cap?3:0)+(pl.p.age||25)*0.15;if(v>bs){bs=v;taker=pl;}}}
+ else if(kind==='corner'){let bs=-1;for(const pl of T.players){if(pl.role==='GK')continue;const v=eff(pl,'pas')+(hasT(pl,'crosser')?6:0);if(v>bs){bs=v;taker=pl;}}}
+ else if(kind==='pen'||kind==='fk'){let bs=-1;for(const pl of T.players){if(pl.role==='GK')continue;const v=eff(pl,'sho')+(pl.cap?3:0)+(pl.p.age||25)*0.15+(kind==='fk'&&hasT(pl,'fkspec')?100:0);if(v>bs){bs=v;taker=pl;}}}
  else{let bd=1e9;for(const pl of T.players){if(pl.role==='GK')continue;const d=hyp(pl.x-x,pl.y-y);if(d<bd){bd=d;taker=pl;}}}
  m.taker=taker;taker.tx=x-T.dir*1.2;taker.ty=y;m.penKick=kind==='pen'?{taker}:null;m.fkKick=kind==='fk'?{taker}:null;if(kind!=='fk')m.fkWall=null;
  m.cornerKick=kind==='corner'?{taker}:null;
  if(kind!=='corner')m.cnPhase=null;
- m.state=kind;m.stateT=kind==='corner'?99:kind==='goalkick'?2.0:kind==='pen'?4.2:kind==='fk'?4.0:kind==='free'?1.8:1.3;b.passBy=null;b.loft=null;m.forcePass=kind!=='pen'&&kind!=='fk';m.cross=kind==='corner';
+ m.state=kind;m.stateT=kind==='corner'?99:kind==='goalkick'?2.0:kind==='pen'?6.5:kind==='fk'?6.0:kind==='free'?2.4:1.3;b.passBy=null;b.loft=null;m.forcePass=kind!=='pen'&&kind!=='fk';m.cross=kind==='corner';
 }
 
 function step(m,dt){
  if(m.finished)return;
  if(m.capPick!=null){if(m.autoCap){const T=m.teams[m.capPick];m.capPick=null;passArmband(m,T);}else return;}
  const b=m.ball;
- m.t+=dt;
+ m.t+=dt*(SP_CLOCK[m.state]||1);
  // connected team-mates close by: they read each other's game, so passing, control and tackling are a touch sharper
  for(const pl of m.players){pl._mt=m.t;pl.sink=!!m.teams[pl.team].tac.sink;}
  if(((m.lkT=(m.lkT||0)+dt))>0.2){m.lkT=0;for(const pl of m.players){pl.lkOn=false;if(!pl.lk)continue;for(const q of m.teams[pl.team].players)if(linked(pl,q)){pl.lkOn=true;break;}}}
  if(m.flash)m.flash.t-=dt;
- if(m.half===1&&m.t>=m.dur/2){m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
+ if(m.half===1&&m.t>=m.dur/2){m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
  // extra time: half-time at 105, ends swap
  if(m.etOn&&m.etHalf===1&&m.t>=m.etStart+m.dur/6){m.etHalf=2;ev(m,'ht','Extra time: half-time',-1);for(const T of m.teams)T.dir*=-1;kickoff(m,0,true);m.stateT=1.6;m.flash={text:'EXTRA TIME · HALF-TIME',t:2.5,team:-1};}
  if(m.t>=endT(m)){
@@ -1901,7 +1936,7 @@ function step(m,dt){
   if(m.gkBooted&&m.state!=='goal')keep=false; // after 90 minutes, the keeper's kick upfield is the last action // never more than 15 minutes of stoppage time
   if(!keep&&m.ko&&!m.etOn&&m.score[0]===m.score[1]){// level after 90 in a knockout tie: thirty minutes of extra time
    m.etOn=true;m.etStart=m.t;m.endT=m.t+m.dur/3;m.etHalf=1;m.ftSide=null;m.ftCorner=null;m.gkBooted=false;m.cornerKick=null;
-   for(const p of m.players)p.energy=Math.min(100,p.energy+4);ev(m,'et','Full-time: extra time to come',-1);kickoff(m,1,true);m.stateT=2.4;m.etPause=true;m.flash={text:'EXTRA TIME',t:3,team:-1};return;}
+   for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+4);ev(m,'et','Full-time: extra time to come',-1);kickoff(m,1,true);m.stateT=2.4;m.etPause=true;m.flash={text:'EXTRA TIME',t:3,team:-1};return;}
   if(!keep){m.finished=true;m.streaker=null;if(m.ko&&m.score[0]===m.score[1])m.needPens=true;ev(m,'ft',m.etOn?'Full-time after extra time':'Full-time',-1);return;}
  }
  if(m.cond.streak)streakers(m,dt);
@@ -1921,7 +1956,7 @@ function step(m,dt){
    else if(pl===m.taker&&m.state==='corner'&&m.cnPhase){
     m.cnT+=dt;const [cx,cy]=m.cnSpot;const T=m.teams[pl.team];
     if(m.cnPhase==='fetch'){const [wx,wy]=goalRoute(pl,b.x,b.y);moveTo(pl,wx,wy,1.05,dt,14,true);
-     if(dist(pl,b)<1.3||m.cnT>5){if(m.cnT>5){pl.x=b.x;pl.y=b.y;}m.cnPhase='carry';m.cnT=0;b.vx=b.vy=0;}}
+     if(dist(pl,b)<1.3||m.cnT>8){if(m.cnT>8){pl.x=b.x;pl.y=b.y;}m.cnPhase='carry';m.cnT=0;b.vx=b.vy=0;}}
     else if(m.cnPhase==='carry'){
      // stand just outside the flag, ball at his feet
      const sx=cx+m.outSide*0.5,sy=cy+(cy<PW/2?-0.5:0.5);const [wx,wy]=goalRoute(pl,sx,sy);moveTo(pl,wx,wy,0.95,dt,12,true);
@@ -1941,7 +1976,7 @@ function step(m,dt){
     if(m.state==='pen'&&m.taker){const AT=m.teams[m.taker.team],g=goalOf(AT);if(pl.role==='GK'&&pl.team!==m.taker.team){x=g.x-AT.dir*0.6;y=GY;}
      else if(Math.abs(x-g.x)<19&&Math.abs(y-GY)<22){x=g.x-AT.dir*(19.5+Math.random()*3);}}
     if(m.state==='goalkick'&&m.taker&&pl.team!==m.taker.team){const [sx,sy]=m.gkSpot;const dd=hyp(x-sx,y-sy);const need=24;if(dd<need){const T=m.teams[m.taker.team];x=clamp(sx+T.dir*need,2,PL-2);y=clamp(y,2,PW-2);}}
-    moveTo(pl,x,y,0.8,dt);}
+    moveTo(pl,x,y,0.95,dt);}
    integrate(pl,dt);
    if(pl===m.taker&&m.cnPhase){pl.x=clamp(pl.x,-3.4,PL+3.4);pl.y=clamp(pl.y,-3.2,PW+3.2);}
   }
@@ -1949,6 +1984,7 @@ function step(m,dt){
   goalCollide(m);
   if(m.state==='goal')netPhysics(m,dt);
   if((m.state==='goalkick'&&m.gkPhase==='fetch')||(m.state==='corner'&&m.cnPhase==='fetch'))rollBehindGoal(m,dt);
+  if(m.state==='offside'&&typeof offsideTick==='function'&&offsideTick(m,dt))return;
   if(m.stateT<=0&&m.state==='dark'){const d=m.dark;m.dark=null;ev(m,'lights','The lights are back on',-1);restart(m,d.team,clamp(b.x,2,PL-2),clamp(b.y,2,PW-2),'free');return;}
   if(m.stateT<=0){
    if(m.state==='goal'){kickoff(m,m.pendingKick,false);return;}
@@ -1963,9 +1999,10 @@ function step(m,dt){
  const pt=b.owner?b.owner.team:b.last;m.stats.poss[pt]+=dt;
  computeRoles(m);
  {const late=m.t>m.dur*0.84;for(const T of m.teams){T.urgent=late&&m.score[T.idx]<=m.score[1-T.idx];const bs=T.boost&&m.t<T.boost.until?T.boost.type:null;for(const p of T.players){p.urg=T.urgent;p.bst=bs;p.late=m.t>m.dur*0.8;}}}
- for(const T of m.teams){if(T.tac.balanced)T.balT=(T.balT||0)+dt;else T.balT=0;const rd=T.balT>m.dur*0.22;for(const p of T.players)p.rd=rd;}
+ for(const T of m.teams){if(T.tac.balanced)T.balT=(T.balT||0)+dt;else T.balT=0;const rd=workedOut(m,T);for(const p of T.players)p.rd=rd;
+  if(rd&&!T.woAnn&&T.side.user){T.woAnn=true;const a=tacAdvice(m,T);ev(m,'rec',`They have worked out your ${(TACTICS[T.side.tactic]||{name:"style"}).name}.${a&&a.k!==T.side.tactic?` Switch to ${TACTICS[a.k].name}`:''}`,T.idx);}}
  hotStreaks(m,dt);aiSubs(m);aiTactics(m,dt);recStep(m);
- for(const T of m.teams){const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];const ex=clamp(1+(T.ovr-O.ovr)/25,0.35,1.7);const k=P?P.amp*ex:0;const mu=P?(P.weak.includes(T.side.tactic)?1+0.055*k:P.strong.includes(T.side.tactic)?1-0.045*k:1):1;for(const q of T.players)q.mu=mu;}
+ for(const T of m.teams){const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];const ex=clamp(1+(O.ovr-T.ovr)/25,0.6,1.6);const k=P?P.amp*ex:0;const wo=workedOut(m,T);let mu=P?(P.weak.includes(T.side.tactic)&&!wo?1+TAC_W*k:P.strong.includes(T.side.tactic)?1-TAC_S*k:1):1;for(const q of T.players)q.mu=mu;}
  {const c=m.cond;const pr=m.t/m.dur;b.k=c.rain?c.fric+pr*0.55:c.fric;if(c.rain){const a=c.acc*(0.85+0.1*pr);for(const p of m.players){p.acc=a;p.cs=c.spd*(1-0.07*pr);}}}
  if(m.twl)twlStep(m,dt);
  if(b.owner&&b.owner.team!==m.possTeam){m.possTeam=b.owner.team;const NT=m.teams[b.owner.team];if(NT.tac.counter&&progOf(NT,b.x)<0.55&&b.owner.role!=='GK'){NT.breakUntil=m.t+(NT.tac.breakT||4.5);for(const q of NT.players)if(q.role==='ST'||q.role==='WM'||q.slot==='AM')q.blitzT=m.t+3.5;}
@@ -1977,7 +2014,7 @@ function step(m,dt){
   else offBallAI(m,pl,dt);
   integrate(pl,dt);
   const sp=hyp(pl.vx,pl.vy);
-  pl.energy=Math.max(15,pl.energy-dt*(pl.pw==='machine'?0.04:1)*(pl.foePw==='bloodlust'?1.65:1)*(0.04+0.22*sp/8)*1.3*Math.max(0.35,1.7-pl.p.sta/100)*(240/m.dur)*(m.teams[pl.team].tac.sink?2:m.teams[pl.team].tac.press?1.25:1)*(m.cond.drain||1)*(pl.bst==='turbo'?0.6:1)*(pl.p.trait==='engine'?0.75:1)*(m.teams[pl.team].tac.cross&&(pl.role==='WM'||(pl.role==='FB'&&pl.slot.length===3))?1.2+Math.min(1.3,(m.teams[pl.team].wingT||0)/(m.dur*25/90)*0.75):1)*(pl.twD||1));
+  pl.energy=Math.max(pl.inj?1:15,pl.energy-dt*(pl.pw==='machine'?0.04:1)*(pl.foePw==='bloodlust'?1.65:1)*(0.04+0.22*sp/8)*1.3*Math.max(0.35,1.7-pl.p.sta/100)*(240/m.dur)*(m.teams[pl.team].tac.sink?2:m.teams[pl.team].tac.press?1.25:1)*(m.cond.drain||1)*(pl.bst==='turbo'?0.6:1)*(pl.p.trait==='engine'?0.75:1)*(m.teams[pl.team].tac.cross&&(pl.role==='WM'||(pl.role==='FB'&&pl.slot.length===3))?1.2+Math.min(1.3,(m.teams[pl.team].wingT||0)/(m.dur*25/90)*0.75):1)*(pl.twD||1));
  }
  separate(m,dt);
  unjam(m,dt);
@@ -2045,8 +2082,9 @@ function shapeTarget(m,pl){
   // ball out wide in the final third: forwards spread across the box into the free spots a cross can find
   if(bp>(T.tac.cross?0.46:0.6)&&Math.abs(by-0.5)>(T.tac.cross?0.14:0.17)&&pl.role!=='FB'&&pl.role!=='CB'){
    const plan=boxPlan(m,T,by);const sp=plan.get(pl);
-   if(sp){pl._box=m.t;const [ax,ay]=absPos(T,sp[0],sp[1]);let nd=7,nx=0,ny=0;for(const o of m.teams[1-pl.team].players){if(o.role==='GK')continue;const dd=hyp(o.x-ax,o.y-ay);if(dd<nd){nd=dd;nx=ax-o.x;ny=ay-o.y;}}
-    if(nd<7){const l=hyp(nx,ny)||1;return [clamp(ax+nx/l*(7-nd)*0.7,1,PL-1),clamp(ay+ny/l*(7-nd)*0.7,1,PW-1)];}return [ax,ay];}
+   if(sp){pl._box=m.t;const [ax,ay]=absPos(T,sp[0],sp[1]);const FS=T.tac.cross?9.5:8;let nd=FS,nx=0,ny=0;for(const o of m.teams[1-pl.team].players){if(o.role==='GK')continue;const dd=hyp(o.x-ax,o.y-ay);if(dd<nd){nd=dd;nx=ax-o.x;ny=ay-o.y;}}
+    {const lnx=absPos(T,Math.max(T.line,0.6),0.5)[0];const capX=v=>T.dir>0?Math.min(v,lnx-0.6):Math.max(v,lnx+0.6);
+    if(nd<FS){const l=hyp(nx,ny)||1;return [clamp(capX(ax+nx/l*(FS-nd)*0.85),1,PL-1),clamp(ay+ny/l*(FS-nd)*0.85,1,PW-1)];}return [clamp(capX(ax),1,PL-1),ay];}}
   }
   px=Math.min(px,Math.max(bp+0.03,T.line-0.005),0.93);
  }else{
@@ -2070,7 +2108,7 @@ function shapeTarget(m,pl){
 function boxPlan(m,T,by){
  if(T._bp&&T._bp.t===m.t)return T._bp.map;
  const near=by<0.5?0.44:0.56,far=1-near;
- const spots=[[0.945,near,'np'],[0.945,far,'fp'],[0.9,0.5,'ps'],[0.955,0.5,'six'],[0.85,0.5+(far-0.5)*0.4,'cut'],[0.88,far+(far-0.5)*0.5,'back']];
+ const dp=T.tac.cross?0.045:0.025;const spots=[[0.945-dp,near,'np'],[0.945-dp,far,'fp'],[0.9-dp,0.5,'ps'],[0.955-dp,0.5,'six'],[0.85-dp*0.5,0.5+(far-0.5)*0.4,'cut'],[0.88-dp,far+(far-0.5)*0.5,'back']];
  const att=T.players.filter(q=>q.role==='ST'||q.slot==='AM'||(q.role==='WM'&&((by<0.5)!==(q.sy<0.5)))||(T.tac.cross&&q.role==='CM'&&q.sx>0.33));
  att.sort((a,b)=>(b.role==='ST')-(a.role==='ST')||(hasT(b,'poacher')-hasT(a,'poacher'))||b.p.sho-a.p.sho);
  const O=m.teams[1-T.idx].players;const map=new Map();const used=new Set();
@@ -2099,6 +2137,7 @@ function offBallAI(m,pl,dt){
    const t=Math.min(1.5,dist(pl,b)/Math.max(4,maxSpeed(pl)));const [px,py]=predictBall(b,t);
    moveTo(pl,clamp(px,0,PL),clamp(py,0,PW),1,dt);return;
   }
+  if(b.last===pl.team&&pl.role!=='GK'&&pl.role!=='CB'&&(b.crossBall||b.cornerBall||(b.loft&&b.loft.prot===1))&&m.t-(b.kickT||0)<2.4){const att=attackCross(m,pl);if(att){moveTo(pl,att[0],att[1],1.15,dt,30,true);return;}}
   const [x,y]=shapeTarget(m,pl);moveTo(pl,x,y,pl._box===m.t&&T.tac.cross&&b.last===pl.team?1.05:0.75,dt);return;
  }
  const own=b.owner;
@@ -2128,6 +2167,12 @@ function offBallAI(m,pl,dt){
  if(pl.go&&m.t<pl.go.until){const g=goalOf(T);const tx=clamp(pl.x+pl.go.dir*9,2,PL-2),ty=pl.y+(g.y-pl.y)*0.25;moveTo(pl,tx,ty,1,dt);return;}
  const [x,y]=shapeTarget(m,pl);moveTo(pl,x,y,pl.run>0||(pl._box===m.t&&T.tac.cross)?1:0.8,dt);
 }
+// a cross is on its way: the forwards gamble on where it will land - near post, far post, and the cut-back
+function attackCross(m,pl){const b=m.ball;const T=m.teams[pl.team];const g=goalOf(T);const tl=b.loft?Math.max(0.2,b.loft.T-(m.t-b.loft.t0)):0.55;const [lx,ly]=predictBall(b,tl);
+ if(Math.abs(lx-g.x)>24||Math.abs(ly-GY)>20)return null;
+ if(!m._xr||m._xr.t!==b.kickT){const c=T.players.filter(q=>q!==b.intended&&q.role!=='GK'&&q.role!=='CB'&&q!==b.kicker&&dist(q,{x:lx,y:ly})<30).sort((a,c2)=>dist(a,{x:lx,y:ly})-dist(c2,{x:lx,y:ly})).slice(0,2);m._xr={t:b.kickT,list:c};for(const q of c)q.burst=m.t+1.2;}
+ const i=m._xr.list.indexOf(pl);if(i<0)return null;const far=ly<GY?1:-1;
+ return i===0?[clamp(lx+T.dir*0.5,1,PL-1),clamp(ly+far*4,2,PW-2)]:[clamp(g.x-T.dir*11,1,PL-1),clamp(GY-far*3,2,PW-2)];}
 function isChaser(m,pl){return m.chasers.has(pl);}
 function isPresser(m,pl){return m.pressers.has(pl);}
 function computeRoles(m){
@@ -2161,6 +2206,7 @@ function duelOdds(d,own,m){
  if(m&&d.burst>m.t)p+=0.15;
  if(m&&m.teams[d.team].tac.sink)p+=0.16; // the rush of speed catches him by surprise // robbing a keeper is hard, but strength helps
  if(hasT(own,'flair'))p-=0.1*tUse(own);if(hasT(own,'retainer'))p-=0.15;if(hasT(own,'target'))p-=0.06;
+ if(hasT(d,'fortress')&&eff(own,'str')<eff(d,'str')+8)p=Math.max(p,0.82);if(hasT(own,'fortress'))p-=0.12;
  if(hasT(d,'enforcer'))p+=0.08;if(hasT(d,'hothead'))p+=0.05;
  if(!LKOFF.tck&&m&&d.lk!=null){for(const q of m.teams[d.team].players)if(linked(d,q)&&dist(q,own)<6){p+=0.1;break;}}
  // a player who has only just got the ball is easier to knock off it, so an underdog can nick it
@@ -2233,7 +2279,7 @@ function foul(m,d,own){
  if(card==='yellow'){d.yellow=true;ev(m,'yellow',`Yellow card: ${d.p.name}`,d.team);m.flash={text:'YELLOW CARD',sub:d.p.name,t:1.8,team:-1,col:'#f2cf1d'};}
  else if(card){ev(m,'red',card==='red2'?`Second yellow! ${d.p.name} is sent off`:`Red card! ${d.p.name} is sent off`,d.team);m.flash={text:'RED CARD',sub:d.p.name+(card==='red2'?' (second yellow)':''),t:2.2,team:-1,col:'#d32f2f'};sendOff(m,d);}
  else{ev(m,'foul',`Foul by ${d.p.name}`,d.team);m.flash={text:'FREE KICK',t:1.2,team:own.team};}
- {const AT=m.teams[own.team],g=goalOf(AT);if(Math.abs(own.x-g.x)<16.5&&Math.abs(own.y-GY)<20.16&&!EXP.nopen){m.nPen=(m.nPen||0)+1;ev(m,'penalty',`Penalty! ${d.p.name} brings down ${surname(own.p.name)}`,own.team);m.flash={text:'PENALTY!',t:2,team:own.team};if(m.rng()<0.08)mgrProtest(m,d.team);restart(m,own.team,g.x-AT.dir*11,GY,'pen');return;}}
+ {const AT=m.teams[own.team],g=goalOf(AT);if(Math.abs(own.x-g.x)<16.5&&Math.abs(own.y-GY)<20.16&&!EXP.nopen){m.nPen=(m.nPen||0)+1;ev(m,'penalty',`Penalty! ${d.p.name} brings down ${surname(own.p.name)}`,own.team);m.flash={text:'PENALTY!',t:2,team:own.team};if(m.rng()<0.012)mgrProtest(m,d.team);restart(m,own.team,g.x-AT.dir*11,GY,'pen');return;}}
  const x=clamp(own.x,2,PL-2),y=clamp(own.y,2,PW-2);{const g=goalOf(m.teams[own.team]);const dg=hyp(g.x-x,GY-y);if(dg<35&&Math.abs(y-GY)<26){ev(m,'fkwon',`Free kick in a dangerous position`,own.team);restart(m,own.team,x,y,'fk');fkSetup(m,own.team,x,y);return;}}
  restart(m,own.team,x,y,'free');
 }
@@ -2272,7 +2318,7 @@ function carrierAI(m,pl,dt){
  let near=1e9;for(const o of O){const d=dist(o,pl);if(d<near)near=d;}
  pl.decideT-=dt;
  if(m.fkKick&&m.fkKick.taker===pl){pl.vx*=0.5;pl.vy*=0.5;if(pl.decideT<=0){m.fkKick=null;const g0=goalOf(T),dd=dist(pl,g0);
-   if(dd<31&&m.rng()<(dd<24?0.82:0.62)){ev(m,'fk',`${pl.p.name} goes for goal from the free kick`,pl.team);return doShot(m,pl,{fk:true,power:true});}
+   const spec=hasT(pl,'fkspec');if(dd<(spec?35:31)&&m.rng()<(spec?0.95:dd<24?0.82:0.62)){ev(m,'fk',spec?`${pl.p.name} lines up the free kick... he's a specialist`:`${pl.p.name} goes for goal from the free kick`,pl.team);return doShot(m,pl,{fk:true,power:true,curve:spec});}
    m.fkWall=null;const pb=bestPass(m,pl,true);ev(m,'fk',`${pl.p.name} plays the free kick short`,pl.team);if(pb)return doPass(m,pl,pb.r);return;}return;}
  if(m.penKick&&m.penKick.taker===pl){pl.vx*=0.5;pl.vy*=0.5;if(pl.decideT<=0){m.penKick=null;m.forcePass=false;ev(m,'pentake',`${pl.p.name} steps up...`,pl.team);return doShot(m,pl,{pen:true});}return;}
  if(pl.role==='GK'&&m.t>=endT(m)-m.dur*5/90&&m.state==='play'){// from 85 minutes the keeper just launches it upfield
@@ -2328,6 +2374,8 @@ function carrierAI(m,pl,dt){
  if(pl.decideT<=0||(settled&&pressured&&pl.decideT>0.12&&m.rng()<dt*6)){
   const breaking=(T.tac.counter||T.power==='blitz')&&m.t<(T.breakUntil||0);pl.decideT=(breaking?0.18+m.rng()*0.2:0.28+m.rng()*0.3)*(pl.bst==='onetouch'?0.5:1);
   const dG=dist(pl,g);
+  if(pl.cut&&m.t<pl.cut.until+0.6&&dG<30&&near>1.4){const side=pl.cut.side;pl.cut=null;pl.drib=null;m.nCut=(m.nCut||0)+1;return loadUp(()=>doShot(m,pl,{power:true,force:true,cut:true,aimY:GY+side*(GW/2-0.75)}),0.28,true);}
+  if(pl.cut&&m.t>pl.cut.until+0.6)pl.cut=null;
   // shooting
   const ang=Math.abs(pl.y-GY)/Math.max(1,Math.abs(g.x-pl.x));
   const rng_=(T.urgent?38:32)+(T.tac.longRange||0)+(pl.bst==='sniper'?6:0)+(hasT(pl,'longshot')?9:0)+(hasT(pl,'selfish')?4:0)+(pl.p.str>=82||pl.p.sho>=82?6:0);
@@ -2342,7 +2390,11 @@ function carrierAI(m,pl,dt){
    if(gk&&gOff>5.5&&dG>11&&dG<36&&ang<1.5&&near>2.6&&!pl.pend&&!(pl.lobCD>m.t)){const gkD=dist(gk,pl);
     if(gkD>5&&gkD<28&&segDist(gk.x,gk.y,pl.x,pl.y,g.x,GY)<3){const skill=(eff(pl,'sho')+eff(pl,'pas'))/2;pl.lobCD=m.t+4; // weighs it up once, not every touch
      const pc=clamp(0.07+(skill-62)/200+(gOff-5.5)*0.03,0.03,0.4);
-     if(m.rng()<pc){m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} tries to lob the keeper`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}}}
+     if(m.rng()<pc){m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} tries to lob the keeper`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}}
+   if(gk&&gOff>6&&ang<1.6&&!pl.pend&&!(pl.gkoCD>m.t)&&near>2.2){pl.gkoCD=m.t+3;let blk=0;for(const q of O){if(q.role!=='GK'&&segDist(q.x,q.y,pl.x,pl.y,g.x,GY)<1.6&&dist(q,g)<dG)blk++;}
+    if(dG<30&&dG>7&&!blk&&m.rng()<0.65){m.nGkOff=(m.nGkOff||0)+1;ev(m,'open',`${pl.p.name} sees the keeper off his line and shoots early`,pl.team);return act(()=>doShot(m,pl,{quick:true}));}
+    if(dG>=30&&dG<60&&gOff>9&&m.rng()<0.5){m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} spots the keeper off his line and tries to lob him from distance!`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}}
+  if(hasT(pl,'fkspec')&&dG>16&&dG<30&&ang<1.15&&near>1.6&&!(pl.curlCD>m.t)){pl.curlCD=m.t+4;if(m.rng()<0.4*tUse(pl)){m.nCurl=(m.nCurl||0)+1;return loadUp(()=>doShot(m,pl,{power:true,curve:true}),0.35+m.rng()*0.1,false);}}
   // kitchen sink: let fly from distance at every chance
   if(T.tac.sink&&dG<44&&dG>12&&ang<1.3&&m.rng()<0.7){const big=m.rng()<0.4;m.nSink=(m.nSink||0)+1;return loadUp(big?()=>doShot(m,pl,{power:true,force:true}):()=>doShot(m,pl,{}),near<SEP+0.4?0.3:0.45,big);}
   if(dG<rng_&&ang<(hasT(pl,'selfish')?1.9:1.6)){
@@ -2363,6 +2415,10 @@ function carrierAI(m,pl,dt){
   }
   // the very best strikers will occasionally have a go from right out wide, even by the touchline
   if((pl.p.str>=80||pl.p.sho>=80)&&progOf(T,pl.x)>0.8&&Math.abs(pl.y-GY)>GW/2&&dG<34&&ang>=1.6&&near>SEP&&m.rng()<0.07){m.nWide=(m.nWide||0)+1;return loadUp(()=>doShot(m,pl,{power:true,force:true}),0.45+m.rng()*0.1,true);}
+  if(hasT(pl,'cutinside')&&!pl.cut&&!(pl.cutCD>m.t)&&progOf(T,pl.x)>0.6&&progOf(T,pl.x)<0.9&&Math.abs(pl.y-GY)>9&&dG<38){let mk=null,md=7;for(const q of O){if(q.role==='GK')continue;const dq=dist(q,pl);if(dq<md){md=dq;mk=q;}}
+   if(mk&&m.rng()<0.55*tUse(pl)){pl.cutCD=m.t+6;const inw=GY>pl.y?1:-1;const dd=hyp(0.5,0.86);pl.drib=[T.dir*0.5/dd,inw*0.86/dd];pl.burst=m.t+0.9;mk.stun=Math.max(mk.stun,0.35);pl.cut={until:m.t+0.55,side:inw};pl.decideT=0.5;
+    const foot=/^L/.test(pl.p.pos)?'right':/^R/.test(pl.p.pos)?'left':'stronger';ev(m,'cut',`${pl.p.name} chops inside onto his ${foot} foot`,pl.team);tGood(pl,true);
+    moveTo(pl,pl.x+pl.drib[0]*6,pl.y+pl.drib[1]*6,1,dt);return;}}
   const nearLine=progOf(T,pl.x)>0.92&&Math.abs(pl.y-GY)>GW/2+1;
   // out wide by the touchline in their half: a winger with a big shot may just hit it from there
   const byZone=progOf(T,pl.x)>0.55&&Math.abs(pl.y-GY)>PW/2-10&&dG<46;
@@ -2393,6 +2449,9 @@ function carrierAI(m,pl,dt){
   if(pl.hot>0)ds+=0.25;
   if(hasT(pl,'flair'))ds+=0.15*tUse(pl);if(hasT(pl,'showboat'))ds+=0.3*tUse(pl);if(hasT(pl,'retainer')&&pressured)ds+=0.12;
   if(!ahead&&progOf(T,pl.x)<0.8)ds+=0.25+(breaking?0.25:0);
+  // open grass in front of him: no need to pass, run with it
+  {let room=99;for(const o of O){const dx=o.x-pl.x,dy=o.y-pl.y;const d=hyp(dx,dy);if((dx*dir[0]+dy*dir[1])/(d||1)>0.35&&d<room)room=d;}
+   if(room>14&&progOf(T,pl.x)<0.86&&pl.role!=='GK')ds+=0.55;else if(room>9&&progOf(T,pl.x)<0.86)ds+=0.3;}
   ds+=(m.rng()-0.5)*0.2;
   if(pb&&pb.s>ds){if(dist(pl,pb.r)>28&&near>SEP+1){m.nLong=(m.nLong||0)+1;return loadUp(()=>doPass(m,pl,pb.r),0.45+m.rng()*0.2);}return act(()=>doPass(m,pl,pb.r));}
   pl.drib=dir;
@@ -2430,7 +2489,7 @@ function bestPass(m,pl,force){
  const myP=progOf(T,pl.x);let best=null,bs=-1e9;
  for(const r of T.players){
   const tac=T.tac;
-  if(r===pl)continue;if(r.role!=='GK'&&typeof isOff==='function'&&isOff(m,T,r,0.8)&&m.rng()<0.55+eff(pl,'pas')/250)continue;const d=dist(r,pl);if(d<4||d>(pl.role==='GK'||tac.long?65:tac.through?50:42))continue;
+  if(r===pl)continue;if(r.role!=='GK'&&typeof isOff==='function'&&isOff(m,T,r,0.3)&&m.rng()<0.93+eff(pl,'pas')/2000)continue;const d=dist(r,pl);if(d<4||d>(pl.role==='GK'||tac.long?65:tac.through?50:42))continue;
   if(r.role==='GK'&&!force&&myP>0.3)continue;
   const prog=(progOf(T,r.x)-myP)*PL;
   const brk=tac.counter&&m.t<(T.breakUntil||0);
@@ -2492,7 +2551,7 @@ function doPass(m,pl,r,o){o=o||{};
  const dx=tx-b.x,dy=ty-b.y;const dd=hyp(dx,dy)||1;
  const k=b.k||0.8;const vArr=(o.cross&&!loft?8:space?2.2:5+eff(pl,'pas')/40)+(pl.role==='GK'&&!space?8:0);let v=dd*k+vArr;v=Math.min(v,34);
  const lkd=linked(pl,r);if(pl.role==='GK'){pl._lastD=d;let op=1e9;for(const q of m.teams[1-pl.team].players){const od=dist(q,r);if(od<op)op=od;}pl._lastOpen=op;}
- let a=Math.atan2(dy,dx)+gauss(m.rng)*(0.02+(1-eff(pl,'pas')/100)*0.11)*(pl.role==='GK'?0.55*clamp(1.25-pl.p.gk/100,0.3,0.8)/0.6:1)*(pl.bst==='onetouch'?0.55:1)*(lkd?0.6:1)*(T.tac.long&&d>28?1.35:1)*(m.cond.passErr||1)*(o.cross&&hasT(pl,'crosser')?0.6:1)*(tac.vision||1)*(m.twl?twPE(m,pl,d,loft||!!o.cross||space):1);
+ let a=Math.atan2(dy,dx)+gauss(m.rng)*(o.cross||b.cornerBall?0.006+Math.pow(Math.max(0,1-eff(pl,'pas')/100),1.3)*0.17:(0.02+(1-eff(pl,'pas')/100)*0.11))*(pl.role==='GK'?0.55*clamp(1.25-pl.p.gk/100,0.3,0.8)/0.6:1)*(pl.bst==='onetouch'?0.55:1)*(lkd?0.6:1)*(T.tac.long&&d>28?1.35:1)*(m.cond.passErr||1)*(o.cross&&hasT(pl,'crosser')?0.6:1)*(tac.vision||1)*(m.twl?twPE(m,pl,d,loft||!!o.cross||space):1);
  b.owner=null;b.vx=Math.cos(a)*v;b.vy=Math.sin(a)*v;b.kicker=pl;b.kickT=m.t;b.intended=r;b.last=pl.team;b.lastP=pl;b.shot=null;
  const isCross=m.cross||(Math.abs(pl.y-GY)>16&&progOf(T,pl.x)>0.7&&dist(r,goalOf(T))<20);if(isCross)r.crossT=m.t;
  b.crossBall=!!o.cross&&!loft;
@@ -2535,19 +2594,19 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  // how likely this chance is to go in: the situation sets the odds, then shooter against keeper.
  // ranking: open goal > one-on-one > tap-in from a cross > penalty > header or volley from a cross > close range > ... > long range
  let F=null;if(!EXP.nofin){const gk=O.gk;const gkr=gk?eff(gk,'gk'):60;const cross=m.t-(pl.crossT0||-9)<2.5;let base,cat;
-  if(o.pen){base=0.46;cat='pen';}else if(o.fk){base=0.085;cat='fk';}else if(o.open){base=0.9;cat='open';}else if(oneV1){base=0.7;cat='1v1';}
-  else if(cross&&dG<9){base=0.58;cat='tapX';}else if(cross){base=0.34;cat='cross';}else if(o.defl){base=0.35;cat='defl';}else if(o.turn){base=0.4;cat='turn';}
-  else if(o.byline){base=0.045;cat='wide';}else if(o.snap){base=0.12*G_FIN;cat='snap';}else if(o.oneT){base=(dG<12?0.32:0.2)*G_FIN;cat='oneT';}
+  if(o.pen){base=0.46;cat='pen';}else if(o.fk){base=o.curve?(dG<22?0.62:dG<28?0.52:0.38):0.085;cat='fk';}else if(o.curve){base=dG<20?0.36:dG<25?0.29:0.2;cat='curl';}else if(o.open){base=0.9;cat='open';}else if(oneV1){base=0.62;cat='1v1';}
+  else if(cross&&dG<9){base=0.58;cat='tapX';}else if(cross){base=o.flying?0.33:0.28;cat='cross';}else if(o.defl){base=0.35;cat='defl';}else if(o.turn){base=0.4;cat='turn';}
+  else if(o.cut){base=(dG<18?0.2:dG<24?0.15:0.09)*G_FIN;cat='cut';}else if(o.byline){base=0.045;cat='wide';}else if(o.snap){base=0.12*G_FIN;cat='snap';}else if(o.oneT){base=(dG<12?0.32:0.2)*G_FIN;cat='oneT';}
   else if(dG<11){base=0.3*G_FIN;cat='close';}else if(dG<17){base=0.15*G_FIN;cat='box';}else if(dG<23){base=(o.power?0.1:0.075)*G_FIN;cat='edge';}else{base=(o.power?0.06:0.035)*G_FIN;cat='long';}
-  const sk=clamp(1+(sho-72)/85-(gkr-72)/105+(o.header?(eff(pl,'str')-72)/200:0),0.5,1.5);let pg=clamp(base*(cat==='open'?Math.sqrt(sk):sk)*(T.tac.sink?1.1:1)*(O.tac.park&&cat!=='pen'?0.85:1),0.015,0.97);
-  const goal=m.rng()<pg;const sd=m.rng()<0.5?-1:1;let fs;
+  const sk=clamp(1+(sho-72)/85-(gkr-72)/105+(o.header?(eff(pl,'str')-72)/200:0),0.5,1.5);let pg=clamp(base*(cat==='open'?Math.sqrt(sk):sk)*(T.tac.sink?1.1:1)*(O.tac.park&&cat!=='pen'?0.85:1),0.015,0.97);if(gOff0>6&&cat!=='pen'&&cat!=='open'&&cat!=='fk')pg+=(1-pg)*clamp((gOff0-6)/14,0,0.5);
+  const goal=m.rng()<pg;const sd=o.cut&&o.aimY!=null?Math.sign(o.aimY-GY):m.rng()<0.5?-1:1;let fs;
   if(goal){fs=false;ty=GY+sd*(GW/2-0.55-m.rng()*(cat==='pen'?2.2:2.6));}
   else{const missSh=cat==='open'?0.85:cat==='pen'?0.22:clamp(0.3-(sho-72)/150+(dG>20?0.1:0)+(cat==='wide'?0.25:0),0.08,0.6);
    if(m.rng()<missSh){fs=null;ty=GY+sd*(GW/2+0.5+m.rng()*(dG>20?3.5:2));}else{fs=true;ty=GY+(gk?clamp(gk.y-GY,-2.5,2.5):0)+sd*m.rng()*1.4;}}
   F={save:fs,cat,pg};
   // the woodwork, a clearance off the line, a free kick into the wall, or one that goes in off the post
   if(!goal&&fs===null&&cat!=='open'&&m.rng()<0.3){F.wood=m.rng()<0.55?'post':'bar';ty=F.wood==='post'?GY+sd*(GW/2):GY+sd*m.rng()*2.6;}
-  if(!goal&&cat==='fk'&&m.fkWall&&m.fkWall.length&&m.rng()<0.45){F.wall=m.fkWall[Math.floor(m.rng()*m.fkWall.length)].q;F.save=false;}
+  if(!goal&&cat==='fk'&&m.fkWall&&m.fkWall.length&&m.rng()<(o.curve?0.08:0.45)){F.wall=m.fkWall[Math.floor(m.rng()*m.fkWall.length)].q;F.save=false;}
   if(goal&&m.rng()<0.07)F.inOff=true;
   if(goal&&cat!=='pen'&&cat!=='open'&&m.rng()<0.12){const g0=g;let best=null,bd=8;for(const q of O.players){if(q.role==='GK')continue;const dq=hyp(q.x-g0.x,q.y-GY);if(dq<bd){bd=dq;best=q;}}if(best)F.glc=best;}
   if(goal&&cat==='fk')F.curl=true;(m.fin=m.fin||{})[cat]=(m.fin[cat]||[0,0]);m.fin[cat][0]++;if(goal)m.fin[cat][1]++;}
@@ -2581,7 +2640,9 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   sp=clamp(sp-0.08*clin-(oneV1?0.04:0)-(o.byline?clamp(((sho+eff(pl,'str'))/2-68)/45,0,0.5):0),0.04,0.92);
   save=m.rng()<sp;o._near=off<1.7;if(F&&F.save!=null)save=F.save;}
  (m.sk2=m.sk2||{})[o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']=((m.sk2||{})[o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']||0)+1;
- b.shot={kind:o.fk?'fk':o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(F){b.shot.wood=F.wood;b.shot.glc=F.glc;b.shot.inOff=F.inOff;b.shot.curl=F.curl;if(F.wall){b.shot.blockBy=F.wall;b.shot.on=false;}}if(o.fk)m.fkWall=null;if(big)m.lastPower=m.t;
+ // a bender: the ball swerves out round the blockers and back in, by up to 4m (usually 1.5-3m)
+ const curve=o.curve&&!o.chip?(()=>{const dev=m.rng()<0.12?3.2+m.rng()*0.8:1.4+m.rng()*1.7;const sc=sd0=>{let mn=99;for(const q of O.players){if(q.role==='GK')continue;for(let f=0.2;f<0.95;f+=0.15){const x=b.x+(g.x-b.x)*f,y=b.y+(ty-b.y)*f+sd0*dev*4*f*(1-f);const dd=hyp(q.x-x,q.y-y);if(dd<mn)mn=dd;}}return mn;};const side=sc(1)>=sc(-1)?1:-1;m.nBend=(m.nBend||0)+1;return {x0:b.x,y0:b.y,gx:g.x,ty,dev,side};})():null;
+ b.shot={kind:o.fk?'fk':o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(curve){b.shot.curve=curve;b.shot.curl=true;}if(F){b.shot.wood=F.wood;b.shot.glc=F.glc;b.shot.inOff=F.inOff;b.shot.curl=F.curl||!!curve;if(F.wall){b.shot.blockBy=F.wall;b.shot.on=false;}}if(o.fk)m.fkWall=null;if(big)m.lastPower=m.t;
  // a parked bus: bodies in the shooting lane get in the way, and better attackers find a way through
  if(O.tac.park){const e=clamp(1+(O.ovr-T.ovr)/20,0.3,1.4);let n=0;for(const q of O.players){if(q.role==='GK')continue;if(segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1)n++;}
   if(n&&m.rng()<1-Math.pow(1-0.42*e,n)){b.shot.blockBy=O.players.find(q=>q.role!=='GK'&&segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1);}}
@@ -2631,6 +2692,7 @@ function updateBall(m,dt){
   if(c.bobble&&!b.loft&&m.rng()<dt*1.6*c.bobble){const sp0=hyp(b.vx,b.vy);if(sp0>2){const a=Math.atan2(b.vy,b.vx)+gauss(m.rng)*0.22;b.vx=Math.cos(a)*sp0;b.vy=Math.sin(a)*sp0;}}
   const s=hyp(b.vx,b.vy);if(s<0.6){b.vx*=0.9;b.vy*=0.9;}
   b.x+=b.vx*dt;b.y+=b.vy*dt;
+  if(b.shot&&b.shot.curve){const C=b.shot.curve;const L=C.gx-C.x0;const f=clamp((b.x-C.x0)/(L||1),0,1.2);b.y=C.y0+(C.ty-C.y0)*f+C.side*C.dev*4*f*(1-f);b.vy=((C.ty-C.y0)+C.side*C.dev*4*(1-2*f))*b.vx/(L||1);}
   // keeper handling a shot
   if(b.shot&&!b.shot.defl&&!b.shot.chip){
    // the shot flies through a team-mate in the box: he can flick it in, like getting on the end of a cross
@@ -2668,18 +2730,18 @@ function updateBall(m,dt){
     if(b.kicker===pl&&m.t-b.kickT<(pl.role==='GK'?0.7:0.3))continue;
     const r=pl.role==='GK'&&progOf(m.teams[pl.team],b.x)<0.16?2.0:1.5;
     if(b.loft&&pl.role!=='GK'&&pl!==b.intended&&m.t-b.loft.t0<b.loft.T*(b.loft.prot??1))continue;
-    const wnip=m.teams[pl.team].tac.cross&&pl.team===b.last&&pl.role!=='GK'&&(b.crossBall||(b.loft&&b.loft.prot===1));const rr=b.loft&&pl===b.intended?(wnip?2.9:2.4):(b.crossBall&&pl.team===b.last&&pl.role!=='GK'&&progOf(m.teams[pl.team],b.x)>0.8)?(wnip?3.1:2.5):r;
+    const wnip=m.teams[pl.team].tac.cross&&pl.team===b.last&&pl.role!=='GK'&&(b.crossBall||(b.loft&&b.loft.prot===1));const arr=pl.team===b.last&&(b.crossBall||b.cornerBall||(b.loft&&b.loft.prot===1))?Math.min(0.7,hyp(pl.vx,pl.vy)/10):0;const rr=arr+(b.loft&&pl===b.intended?(wnip?2.9:2.4):(b.crossBall&&pl.team===b.last&&pl.role!=='GK'&&progOf(m.teams[pl.team],b.x)>0.8)?(wnip?3.1:2.5):r);
     const d=dist(pl,b);if(d>rr||d>cd)continue;
     let ok;
     if(pl.team===b.last)ok=pl===b.intended||s<17||m.rng()<0.5;
-    else ok=(s<9&&!b.crossBall)||m.rng()<(0.06+(eff(pl,'tck')+eff(pl,'spd'))/200*0.12)*(b.crossBall?(m.teams[pl.team].tac.park?1.1:0.3)*(m.teams[b.last].tac.cross?0.7:1)*(b.passBy?clamp(1.45-eff(b.passBy,'pas')/100,0.4,1):1):1)||(pl.role==='GK'&&(!b.crossBall||m.rng()<0.07));
+    else ok=(s<9&&!b.crossBall)||m.rng()<(hasT(pl,'fortress')&&b.crossBall?2.2:1)*(0.06+(eff(pl,'tck')+eff(pl,'spd'))/200*0.12)*(b.crossBall?(m.teams[pl.team].tac.park?1.1:0.3)*(m.teams[b.last].tac.cross?0.7:1)*(b.passBy?clamp(1.45-eff(b.passBy,'pas')/100,0.4,1):1):1)||(pl.role==='GK'&&(!b.crossBall||m.rng()<0.07));
     if(ok){cand=pl;cd=d;}
    }
    // keepers don't catch: a ball fizzed in by the opposition is punched or parried clear
    if(cand&&cand.role==='GK'&&b.last!==cand.team&&s>9){const D=m.teams[cand.team];b.vx=D.dir*(8+m.rng()*6);b.vy=(b.y<GY?-1:1)*(4+m.rng()*7);b.kicker=cand;b.kickT=m.t;b.last=cand.team;b.lastP=cand;b.intended=null;b.loft=null;b.crossBall=false;b.passBy=null;ev(m,'save',`${cand.p.name} punches it clear`,cand.team);cand=null;}
    if(cand){
     if(b.loft&&cand===b.intended){let opp=null,od=2.6;for(const q of m.players){if(q.team===cand.team||q.role==='GK')continue;const dd=dist(q,b);if(dd<od){od=dd;opp=q;}}
-     if(opp&&eff(opp,'str')+m.rng()*35>eff(cand,'str')+(hasT(cand,'target')?12:0)+m.rng()*35+6){b.loft=null;b.passBy=null;const a=Math.atan2(b.y-GY,b.x-goalOf(m.teams[cand.team]).x);b.vx=Math.cos(a)*9;b.vy=Math.sin(a)*9;b.last=opp.team;b.lastP=opp;b.kicker=opp;b.kickT=m.t;b.intended=null;opp.st.ic++;ev(m,'header',`${opp.p.name} wins the header`,opp.team);return;}}
+     if(opp&&eff(opp,'str')+(hasT(opp,'fortress')&&eff(cand,'str')<eff(opp,'str')+8?30:0)+m.rng()*35>eff(cand,'str')+(hasT(cand,'target')?12:0)+m.rng()*35+6){b.loft=null;b.passBy=null;const a=Math.atan2(b.y-GY,b.x-goalOf(m.teams[cand.team]).x);b.vx=Math.cos(a)*9;b.vy=Math.sin(a)*9;b.last=opp.team;b.lastP=opp;b.kicker=opp;b.kickT=m.t;b.intended=null;opp.st.ic++;ev(m,'header',`${opp.p.name} wins the header`,opp.team);return;}}
     const pb=b.passBy;const wasCross=!!b.crossBall||!!b.cornerBall;const wasLoft=!!b.loft;const wasCorner=!!b.cornerBall;b.cornerBall=false;if((b.crossBall||(b.loft&&b.loft.prot===1))&&pb&&cand.team===pb.team){cand.crossT=m.t;cand.crossT0=m.t;}b.passBy=null;b.loft=null;b.crossBall=false;
     if(pb&&hasT(pb,'playmaker'))tGood(pb,cand.team===pb.team);
     if(pb&&pb.role==='GK'){m.gkPass=(m.gkPass||0)+1;if(cand.team!==pb.team){m.gkLost=(m.gkLost||0)+1;(m.gkLog=m.gkLog||[]).push([pb.p.gk,Math.round(dist(pb,cand)),Math.round(pb._lastD||0),Math.round(pb._lastOpen||0),pb._late?1:0,Math.round(hyp(b.vx,b.vy))]);}}
@@ -2688,9 +2750,9 @@ function updateBall(m,dt){
     if(cand.role==='GK'){cand.decideT=0.8+m.rng()*0.5;m.forcePass=true;cand.feet=!!(pb&&pb.team===cand.team);if(cand.feet)m.nFeet=(m.nFeet||0)+1;}
     // one touch: a ball played in to a forward in front of goal is hit (or headed) first time
     else if(pb&&pb.team===cand.team&&pb!==cand&&m.state==='play'&&!EXP.no1t){const CT=m.teams[cand.team];const g=goalOf(CT);const dG=dist(cand,g);const ang=Math.abs(cand.y-GY)/Math.max(1,Math.abs(g.x-cand.x));
-     if(dG<(wasCross?17:24)&&ang<1.4){let near=99;for(const o of m.teams[1-cand.team].players){if(o.role==='GK')continue;const dd=dist(o,cand);if(dd<near)near=dd;}
-      const p=(wasCross?0.8:wasCorner?0.72:0.55)*(dG<12?1.2:dG<17?1:0.75)*clamp(0.75+eff(cand,'sho')/300,0.8,1.1)*(hasT(cand,'poacher')?1.15:1);
-      if(m.rng()<p){m.nOneTouch=(m.nOneTouch||0)+1;const head=wasLoft;ev(m,'onetouch',head?`${cand.p.name} rises to head it first time`:`${cand.p.name} hits it first time`,cand.team);cand.fromPass=pb;cand.fromT=m.t;doShot(m,cand,{quick:true,oneT:true,header:head,marked:near});}}}
+     if(dG<(wasCross?19:24)&&ang<1.4){let near=99;for(const o of m.teams[1-cand.team].players){if(o.role==='GK')continue;const dd=dist(o,cand);if(dd<near)near=dd;}
+      const csp=hyp(cand.vx,cand.vy);const flying=wasLoft&&csp>5;const p=(wasCross?0.88:wasCorner?0.82:near<3?0.8:0.68)*(dG<12?1.2:dG<17?1:0.8)*clamp(0.75+eff(cand,'sho')/300,0.8,1.1)*(hasT(cand,'poacher')?1.15:1);
+      if(m.rng()<p){m.nOneTouch=(m.nOneTouch||0)+1;const head=wasLoft;ev(m,'onetouch',head?(flying?`${cand.p.name} comes flying in with a header`:`${cand.p.name} rises to head it first time`):`${cand.p.name} hits it first time`,cand.team);cand.fromPass=pb;cand.fromT=m.t;doShot(m,cand,{quick:true,oneT:true,header:head,flying,marked:near});}}}
    }
   }
  }
@@ -2778,7 +2840,7 @@ function unjam(m,dt){
 
 function crossSpot(m,pl){const T=m.teams[pl.team];const g=goalOf(T);const side=pl.y<GY?1:-1;
  if(!T.tac.long){let best=null,bs=-1e9;for(const r of T.players){if(r===pl||r.role==='GK'||r.role==='CB')continue;const gx=Math.abs(r.x-g.x);if(gx>13||Math.abs(r.y-GY)>12)continue;let open=9;for(const o of m.teams[1-pl.team].players){const od=dist(o,r);if(od<open)open=od;}const sc=open-gx*0.15+(hasT(r,'poacher')?2:0);if(sc>bs){bs=sc;best=r;}}
-  if(best){best.run=Math.max(best.run,1.2);let tx=best.x+best.vx*0.5;const dx=Math.abs(tx-g.x);if(dx<5.5)tx=g.x-T.dir*5.5;return [clamp(tx,1,PL-1),clamp(best.y+best.vy*0.5,GY-10,GY+10)];}}
+  if(best){best.run=Math.max(best.run,1.2);best.burst=m.t+1.4;let tx=best.x+best.vx*0.5+T.dir*(T.tac.cross?3.5:2);const dx=Math.abs(tx-g.x);if(dx<5.5)tx=g.x-T.dir*5.5;return [clamp(tx,1,PL-1),clamp(best.y+best.vy*0.5,GY-10,GY+10)];}}
  if(T.tac.long)return [g.x-T.dir*(5.5+m.rng()*6.5),GY+side*(m.rng()*7-1.5)];
  // low ball across the six-yard box for a tap-in
  return [g.x-T.dir*(4.5+m.rng()*4),GY+side*(1+m.rng()*5)];}
@@ -2819,7 +2881,7 @@ function subPlayer(m,ti,idx,np){
  ev(m,'sub',undo?`${np.name} goes back on`:`${np.name} replaces ${out.name}`,ti);return true;
 }
 // the computer changes its approach as the game unfolds, and reacts to yours
-function setTac(m,T,k,announce){if(!TACTICS[k]||T.side.tactic===k)return;T.tac=TACTICS[k];T.ment=T.tac.ment||0;T.side.tactic=k;
+function setTac(m,T,k,announce){if(!TACTICS[k]||T.side.tactic===k)return;T.tac=TACTICS[k];T.ment=T.tac.ment||0;T.side.tactic=k;T.tacT0=m.t;T.woAnn=false;
  if(announce){ev(m,'tac',`${T.side.name} switch to ${TACTICS[k].name}`,T.idx);const U=m.teams[1-T.idx];if(U.side.user)recCounter(m,U,T);if(!m.flash||m.flash.t<=0)m.flash={text:'CHANGE OF PLAN',sub:`${T.side.short||T.side.name}: ${TACTICS[k].name}`,t:1.6,team:T.idx};}}
 function aiTactics(m,dt){
  for(const T of m.teams){if(T.side.user)continue;if(T.tac0==null)T.tac0=T.side.tactic||'balanced';
@@ -2937,29 +2999,40 @@ function gkParry(m,gk,def,sh){const b=m.ball;const gr=eff(gk,'gk');const pOwn=cl
  b.kicker=gk;b.kickT=m.t;b.last=gk.team;b.lastP=gk;b.passBy=null;b.loft=null;b.crossBall=false;gk.st.sv++;m.flash={text:'SAVE',t:1.0,team:gk.team};}
 // every pass and shot leaves from the front of the player, in the direction it is struck
 function kickFrom(m,pl,tx,ty){const b=m.ball;const dx=tx-pl.x,dy=ty-pl.y,d=hyp(dx,dy)||1;const ux=dx/d,uy=dy/d;if(m.cnBall&&m.cnBall.tk===pl){b.x=m.cnBall.x;b.y=m.cnBall.y;m.cnBall=null;}else{b.x=pl.x+ux*0.7;b.y=pl.y+uy*0.7;}pl.face=[ux,uy];b.kickDir=[ux,uy];b.kickFromP=pl;}
-// a suggested counter when the opposition change plan: it is never the same pairing twice, and it may only work for a short while
-function recCounter(m,U,O){if(U.side.auto)return;const ks=Object.keys(TACTICS).filter(k=>k!=='sink');let k;
- if(m.rng()<0.3)k=U.side.tactic;else{const pool=ks.filter(x=>x!==O.side.tactic);k=pool[Math.floor(m.rng()*pool.length)];}
- const dur=m.dur*(m.rng()<0.5?0.05+m.rng()*0.07:0.15+m.rng()*0.22);m.rec={team:U.idx,k,until:m.t+dur,vs:O.side.tactic,t0:m.t,on:false};
- ev(m,'rec',k===U.side.tactic?`Recommended: stay on ${TACTICS[k].name} against their ${TACTICS[O.side.tactic].name}`:`Recommended counter to their ${TACTICS[O.side.tactic].name}: switch to ${TACTICS[k].name}`,U.idx);}
-function recStep(m){const R=m.rec;if(!R)return;const U=m.teams[R.team];const on=U.side.tactic===R.k&&m.t<R.until;
- if(on&&!R.on){R.on=true;ev(m,'rec',`The counter is working: ${TACTICS[R.k].name} is causing them problems`,R.team);}
- for(const p of U.players)p.cnt=on;
- if(m.t>=R.until){if(U.side.tactic===R.k)ev(m,'rec',`They have worked out your ${TACTICS[R.k].name}. The counter has worn off`,R.team);for(const p of U.players)p.cnt=false;m.rec=null;}}
+// ONE tactical read, used by the live recommendation, the commentary and the assistant at half-time:
+// it comes from how the opposition (in their current style) cope with each of yours, and whether yours has been worked out
+function workedOut(m,T){const k=T.side.tactic;if(k==='sink')return false;return m.t-(T.tacT0||0)>m.dur*(k==='balanced'?0.22:0.3);}
+function tacAdvice(m,U){const O=m.teams[1-U.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];if(!P)return null;const cur=U.side.tactic;const wo=workedOut(m,U);
+ const nm=k=>TACTICS[k].name;const weak=P.weak.filter(k=>k!=='sink');const alt=weak.find(k=>k!==cur)||TAC_ORDER.find(k=>k!==cur&&!P.strong.includes(k)&&k!=='sink');
+ if(cur==='sink')return null;
+ if(weak.includes(cur)&&!wo)return {k:cur,stay:true,text:`${nm(cur)} is working against their ${nm(O.side.tactic)}: stay on it`};
+ if(wo)return {k:alt,wo:true,text:`They have worked out your ${nm(cur)}: switch to ${nm(alt)}`};
+ if(P.strong.includes(cur))return {k:alt,text:`They are comfortable against ${nm(cur)}: switch to ${nm(alt)}`};
+ return {k:alt,text:`Their ${nm(O.side.tactic)} looks vulnerable to ${nm(alt)}: switch to it`};}
+const TAC_ORDER=['balanced','counter','through','wings','press','long','attacking','defensive','park'];
+function recCounter(m,U,O){if(U.side.auto)return;const a=tacAdvice(m,U);m.recT=m.t;if(a)ev(m,'rec',a.stay?`They have changed to ${TACTICS[O.side.tactic].name}, but ${TACTICS[a.k].name} still works: stay on it`:`They have changed to ${TACTICS[O.side.tactic].name}. ${a.text.replace(/^./,c=>c.toUpperCase())}`,U.idx);}
+function recStep(m){}
 
 // a corner: swung in for a header, played short, or laid back to the edge of the box for someone to blast first time
 function takeCorner(m,pl){const T=m.teams[pl.team];const O=m.teams[1-pl.team].players;const g=goalOf(T);const late=m.t>=endT(m);const r=late?0:m.rng(); // after 90 minutes it always goes long into the box
  const mates=T.players.filter(q=>q!==pl&&q.role!=='GK');if(!mates.length)return false;
- if(r<0.62){
-  let best=null,bs=-1e9;for(const q of mates){const dg=dist(q,g);if(dg>16)continue;let mk=99;for(const o of O){if(o.role==='GK')continue;const dd=dist(o,q);if(dd<mk)mk=dd;}const sc=-dg*0.08+Math.min(mk,5)*0.35+(eff(q,'str')+eff(q,'sho'))/200+m.rng()*0.6;if(sc>bs){bs=sc;best=q;}}
-  if(!best&&late)best=mates.slice().sort((a,c)=>dist(a,g)-dist(c,g))[0];
-  if(!best)return false;let tx=clamp(best.x+(m.rng()-0.5)*2,2,PL-2),ty=clamp(best.y+(m.rng()-0.5)*2,2,PW-2);
+ const openOf=q=>{let mk=99;for(const o of O){if(o.role==='GK')continue;const dd=dist(o,q);if(dd<mk)mk=dd;}return mk;};
+ const laneOK=(tx,ty)=>O.every(o=>segDist(o.x,o.y,pl.x,pl.y,tx,ty)>2.6);
+ // into the box: only to someone who has a yard on his marker
+ const boxBall=(force)=>{let best=null,bs=-1e9;for(const q of mates){const dg=dist(q,g);if(dg>16)continue;const mk=openOf(q);if(!force&&mk<1.4)continue;const sc=-dg*0.08+Math.min(mk,5)*0.35+(eff(q,'str')+eff(q,'sho'))/200+(hasT(q,'fortress')?0.4:0)+m.rng()*0.4;if(sc>bs){bs=sc;best=q;}}
+  if(!best&&force)best=mates.slice().sort((a,c)=>dist(a,g)-dist(c,g))[0];
+  if(!best)return false;let tx=clamp(best.x+(m.rng()-0.5)*1.4,2,PL-2),ty=clamp(best.y+(m.rng()-0.5)*1.4,2,PW-2);
   if(late&&dist({x:tx,y:ty},g)>14){const [px,py]=absPos(T,0.9,0.5+(m.rng()-0.5)*0.15);tx=px;ty=py;}
-  ev(m,'corner',`${pl.p.name} swings the corner in`,pl.team);doPass(m,pl,best,{tx,ty,loft:true,clear:true});m.ball.cornerBall=true;m.ball.crossBall=false;return true;}
- if(r<0.8){
-  const q=mates.slice().sort((a,c)=>dist(a,pl)-dist(c,pl))[0];if(!q||dist(q,pl)>18)return false;ev(m,'corner',`${pl.p.name} plays the corner short`,pl.team);doPass(m,pl,q);return true;}
- const [ex,ey]=absPos(T,0.8,0.5+(m.rng()-0.5)*0.2);const q=mates.slice().sort((a,c)=>hyp(a.x-ex,a.y-ey)-hyp(c.x-ex,c.y-ey))[0];if(!q)return false;
- ev(m,'corner',`${pl.p.name} cuts the corner back to the edge of the box`,pl.team);q.run=Math.max(q.run||0,1.5);doPass(m,pl,q,{tx:ex,ty:ey});m.ball.cornerBall=true;return true;}
+  ev(m,'corner',`${pl.p.name} swings the corner in`,pl.team);doPass(m,pl,best,{tx,ty,loft:true,clear:true});m.ball.cornerBall=true;m.ball.crossBall=false;return true;};
+ // short: only to a free man with a clear lane
+ const shortBall=()=>{const q=mates.filter(q=>dist(q,pl)<20&&dist(q,pl)>3&&openOf(q)>4&&laneOK(q.x,q.y)).sort((a,c)=>dist(a,pl)-dist(c,pl))[0];if(!q)return false;ev(m,'corner',`${pl.p.name} plays the corner short`,pl.team);doPass(m,pl,q);return true;};
+ const edgeBall=()=>{const [ex,ey]=absPos(T,0.8,0.5+(m.rng()-0.5)*0.2);const q=mates.slice().sort((a,c)=>hyp(a.x-ex,a.y-ey)-hyp(c.x-ex,c.y-ey))[0];if(!q||!laneOK(ex,ey)||O.some(o=>hyp(o.x-ex,o.y-ey)<4))return false;
+  ev(m,'corner',`${pl.p.name} cuts the corner back to the edge of the box`,pl.team);q.run=Math.max(q.run||0,1.5);doPass(m,pl,q,{tx:ex,ty:ey});m.ball.cornerBall=true;return true;};
+ if(late)return boxBall(true);
+ const order=r<0.62?[boxBall,shortBall,edgeBall]:r<0.8?[shortBall,boxBall,edgeBall]:[edgeBall,boxBall,shortBall];
+ for(const f of order)if(f())return true;
+ // nothing is on: a short one to the nearest team-mate who is free, or else the safest ball into the box
+ return boxBall(true);}
 
 // a long, high kick from the keeper deep into the opposition half
 function gkBoot(m,pl){const T=m.teams[pl.team];const b=m.ball;const [tx0,ty0]=absPos(T,0.72+m.rng()*0.12,0.25+m.rng()*0.5);
@@ -2980,6 +3053,7 @@ function evSetup(m,opts){
 }
 function evTick(m,dt){
  if(m.state!=='play')return;
+ offsideWatch(m);if(m.state!=='play')return;
  // weather turning
  if(m.wxPlan&&m.t>=m.wxPlan.t){const k=m.wxPlan.k;m.wxPlan=null;m.wxNow=k;
   if(k==='rain'){Object.assign(m.cond,{rain:true,fric:0.62,passErr:Math.max(m.cond.passErr||1,1.1),acc:7.5});ev(m,'weather','The heavens open: heavy rain is slowing the game down',-1);m.flash={text:'RAIN',t:1.6,team:-1};}
@@ -3016,7 +3090,8 @@ const CLUE_WEAK={
  defensive:['THEY forwards are getting frustrated against your shape','THEY just cannot find a way through','Your organisation is frustrating THEY'],
  balanced:['Your mix of styles is keeping THEY guessing','THEY do not know what is coming next'],
  sink:['THEY are panicking under the bombardment','THEY are hanging on for dear life']};
-function injure(m,pl,why){if(pl.inj||EXP.noinj)return;pl.inj=true;pl.p._inj=true;
+function injure(m,pl,why){if(pl.inj||EXP.noinj)return;pl.inj=true;const x=m.rng();const sv=why==='tackle'?(x<0.4?1:x<0.75?2:3):(x<0.55?1:x<0.85?2:3);pl.injSev=sv;pl.p._inj=sv;
+ pl.energy=Math.min(pl.energy,sv===1?22+m.rng()*12:sv===2?10+m.rng()*9:2+m.rng()*6);
  ev(m,'injury',why==='tackle'?`${pl.p.name} is hurt after a heavy challenge`:why==='tired'?`${pl.p.name} pulls up: a tired muscle has gone`:`${pl.p.name} is injured and needs treatment`,pl.team);
  m.flash={text:'INJURY',sub:pl.p.name,t:1.6,team:-1,col:'#e45b5b'};
  const T=m.teams[pl.team];
@@ -3026,9 +3101,23 @@ function injure(m,pl,why){if(pl.inj||EXP.noinj)return;pl.inj=true;pl.p._inj=true
 // is the receiver clearly offside when the pass is played?
 function isOff(m,T,r,margin){const O=m.teams[1-T.idx];const rp=progOf(T,r.x);if(rp<=0.5)return false;const ps=O.players.map(q=>progOf(T,q.x)).sort((a,b)=>b-a);const line=ps[1]??1;const bp=progOf(T,m.ball.x);return rp*PL>Math.max(line,bp)*PL+margin;}
 function offsideCheck(m,pl,r){if(EXP.nooff||m.state!=='play'||r.team!==pl.team||r.role==='GK')return false;const T=m.teams[pl.team],O=m.teams[1-pl.team];
- if(isOff(m,T,r,2.2)){m.nOff=(m.nOff||0)+1;ev(m,'offside',`Offside! ${r.p.name} was caught behind the line`,O.idx);m.flash={text:'OFFSIDE',t:1.2,team:O.idx};
-  if(!T.side.auto&&m.rng()<0.05)mgrProtest(m,pl.team);restart(m,O.idx,clamp(r.x,2,PL-2),clamp(r.y,2,PW-2),'free');return true;}
+ // only clear offsides are given; the flag goes up once he actually plays the ball, not when it is kicked
+ if(isOff(m,T,r,1.6)){const ds=O.players.slice().sort((a,b)=>progOf(T,b.x)-progOf(T,a.x));
+  // the second-last man: normally the last outfield defender, with the keeper behind him
+  const d=ds[1]||ds[0];
+  m.offPend={r,team:O.idx,lx:d.x,ly:d.y,dq:d,ax:r.x,ay:r.y,dir:T.dir,t:m.t};}
  return false;}
+// watch the pass: if the offside man gets to it (or shoots first time), the linesman's flag goes up
+function offsideWatch(m){const P=m.offPend;if(!P)return;const b=m.ball;const r=P.r;
+ const shot=b.shot&&b.shot.shooter===r;
+ if(b.owner===r||shot){m.offPend=null;m.nOff=(m.nOff||0)+1;const O=m.teams[P.team];
+  ev(m,'offside',`Offside! ${r.p.name} was caught beyond the last defender`,P.team);m.flash={text:'OFFSIDE',t:3.4,team:P.team};
+  if(!m.teams[r.team].side.auto&&m.rng()<0.006)mgrProtest(m,r.team);
+  b.owner=null;b.shot=null;b.loft=null;b.intended=null;b.crossBall=false;b.vx*=0.15;b.vy*=0.15;b.last=P.team;
+  m.offLines={lx:P.lx,ly:P.ly,ax:P.ax,ay:P.ay,dir:P.dir,team:r.team,dteam:P.team,age:0,bx:b.x,by:b.y};m.state='offside';m.stateT=4;m.taker=null;m.forcePass=false;return;}
+ if((b.owner&&b.owner!==r)||(b.shot&&!shot)||m.t-P.t>m.dur*4/90)m.offPend=null;}
+function offsideTick(m,dt){const L=m.offLines;const b=m.ball;if(L){L.age+=dt;b.vx*=0.9;b.vy*=0.9;b.x+=b.vx*dt;b.y+=b.vy*dt;}
+ if(m.stateT<=0){m.offLines=null;restart(m,1-(L?L.team:0),clamp(b.x,2,PL-2),clamp(b.y,2,PW-2),'free');return true;}return false;}
 function mgrProtest(m,ti){if(m.mgrOff[ti])return;m.mgrOff[ti]=true;const sd=m.teams[ti].side;ev(m,'mgr',`The ${sd.short||sd.name} manager is sent to the stands for protesting`,ti);m.flash={text:'MANAGER SENT OFF',t:1.8,team:-1,col:'#d32f2f'};}
 // a direct free kick: the defending side builds a wall, the best shooter lines it up
 function fkSetup(m,team,x,y){const T=m.teams[team],O=m.teams[1-team],g=goalOf(T);const dx=g.x-x,dy=GY-y,d=hyp(dx,dy)||1;const ux=dx/d,uy=dy/d;
@@ -4272,13 +4361,13 @@ function twlView(el){
  wireNotes(el);wireCupBtns(el,c,mf);
 }
 function twlDoneView(el){
- const c=S.cup;const me=myTeam();const iWon=c.winner===myCid();const tb=groupTable(c.teams);const pos=tb.findIndex(r=>r.cid===myCid())+1;
+ cupRewardCheck();const c=S.cup;const me=myTeam();const iWon=c.winner===myCid();const tb=groupTable(c.teams);const pos=tb.findIndex(r=>r.cid===myCid())+1;
  if(iWon&&!c.phew){c.phew=true;save();twlStory(['Phew… that was close.'],null,{solo:true});}
  const signed=c.legend;
  const head=iWon?`<section class="panel cuphead empwin twlwin"><span class="eyebrow">The Temporal War League · Champions</span><h2 style="font-size:40px;margin:2px 0">Masters of time</h2><p class="note" style="margin:0">Seven armies, ${c.gfx.length} battles, and ${esc(me.name)} came through every one of them. The mechanism loosens its grip.</p>
   <div class="prizerow"><div class="prize"><span class="eyebrow">Winnings</span><b class="num">${fmt(c.earn)}</b><span class="note">added to your wallet</span></div>
   <div class="prize troph">${twlMedal(150)}</div>
-  ${signed?`<div class="prize"><span class="eyebrow">Player signed</span><b>${esc(signed)}</b><span class="note">has joined your squad</span></div>`:`<button class="prize legbtn" id="legendbtn" aria-label="Sign a player from the beaten armies"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="30" r="15"/><path d="M20 92 C20 62 32 50 50 50 C68 50 80 62 80 92 Z"/></svg><b>Sign a player</b></button>`}</div>
+  ${legendPrizeHTML(c)}</div>
   <div class="actions"><button class="btn primary" id="twlback">Go back to domestic football</button></div></section>`
   :`<section class="panel cuphead"><span class="eyebrow">The Temporal War League · Final table</span><h2 style="font-size:34px;margin:2px 0">History holds on</h2><p class="note" style="margin:0">You finished ${ord(pos)}. ${esc(tb[0].t.name)} won the league. The mechanism falters anyway and starts to pull you home, but without the prize.</p><p class="note" style="margin:6px 0 0">Prize money earned: ${fmt(c.earn)}.</p>
   <div class="actions"><button class="btn primary" id="twlback">Go back to domestic football</button></div></section>`;
@@ -5118,7 +5207,7 @@ function load(){try{const s=localStorage.getItem(saveKey());if(s){const o=JSON.p
 function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600);}
 
 // rating tiers
-const TIERS=[[39,'#7a1414','#fff'],[49,'#d32f2f','#fff'],[59,'#f07c1a','#1b1205'],[69,'#f2cf1d','#1b1605'],[79,'#9be15d','#10210a'],[89,'#1f9d45','#fff'],[999,'#7b3fc4','#fff']];
+const TIERS=[[39,'#7a1414','#fff'],[49,'#d32f2f','#fff'],[59,'#f07c1a','#1b1205'],[69,'#f2cf1d','#1b1605'],[79,'#9be15d','#10210a'],[89,'#1f9d45','#fff'],[99,'#7b3fc4','#fff'],[999,'#1d2f9c','#fff']];
 function tier(v){for(const t of TIERS)if(v<=t[0])return {bg:t[1],fg:t[2]};}
 const GOLD='#e3b341';
 function chip(v,cls=''){const t=tier(v);return `<span class="rchip ${cls} ${v>=75?'gold':''}" style="background:${t.bg};color:${t.fg}">${v}</span>`;}
@@ -5182,7 +5271,7 @@ function newGame(teamIdx,o,orig){
  const w=newWorld(20261011);
  if(o){const t=w.teams[teamIdx];if(o.name)t.name=o.name;if(o.short&&o.short.length>=2)t.short=o.short;if(o.c1&&o.c2&&(o.c1!==t.c1||o.c2!==t.c2)){t.c1=o.c1;t.c2=o.c2;t.kitSet=true;}}
  w.teams[teamIdx].budget=1e6;
- S={v:2,me:teamIdx,season:1,round:0,world:w,fx:[],last:null,done:false,news:[],nextId:100000,balls:['white','orange'],ball:'white',trait2:1,real2:1,ret2:1,lgCap:1,capFix:1};
+ S={v:2,me:teamIdx,season:1,round:0,world:w,fx:[],last:null,done:false,news:[],nextId:100000,balls:['white','orange'],ball:'white',trait2:1,trait3:1,trait4:1,real2:1,ret2:1,lgCap:1,capFix:1};
  makeFixtures();save();UI.tab='match';render();
 }
 function makeFixtures(){S.fx=[...Array(NL).keys()].map(l=>{const ids=leagueTeams(l);return fixtures(ids.length).map(rd=>rd.map(f=>({h:ids[f.h],a:ids[f.a],hs:null,as:null})));});}
@@ -5227,7 +5316,7 @@ function pickScorer(t){
 const TAC_KEYS=()=>Object.keys(TACTICS).filter(k=>k!=='sink');
 function tacProfile(t,own){const ks=TAC_KEYS();own=own||t.tactic||'balanced';const r=mkRng(hashStr((t.id||t.name)+'|tp|'+own+'|'+((typeof S!=='undefined'&&S)?S.season:1)));const o=ks.slice().sort(()=>r()-0.5);
  // how readable the pattern is: some sides have a glaring weakness, some a subtle one, some barely any (go with your gut)
- const x=r();const amp=x<0.3?1.25+r()*0.35:x<0.7?0.7+r()*0.35:0.2+r()*0.3;
+ const x=r();const amp=x<0.3?1.25+r()*0.35:x<0.7?0.75+r()*0.35:0.45+r()*0.25;
  return {weak:o.slice(0,r()<0.5?1:2),strong:o.slice(4,4+(r()<0.5?1:2)),amp};}
 // how much a side concedes against a given opposing style (1 = normal)
 // exec: how well the side using the style can carry it out (their quality against the opposition's)
@@ -5392,7 +5481,7 @@ function linkHTML(p){
  return `<div class="tlinks"><span class="eyebrow">Connections</span><div class="lkchips">${chips}</div></div>`;
 }
 // between rounds everyone gets some legs back; stamina decides how quickly
-function recoverAll(teams){for(const t of teams)for(const p of t.squad){if(p._pl){delete p._pl;continue;}if(p.fit!=null&&p.fit<100)p.fit=Math.min(100,Math.round(p.fit+15+p.sta/10));}}
+function recoverAll(teams){for(const t of teams)for(const p of t.squad){if(p._pl){delete p._pl;continue;}if(p.fit!=null&&p.fit<100)p.fit=Math.min(100,Math.round(p.fit+15+p.sta/10));if(p.injG>0){p.injG--;if(p.injG>0)p.fit=Math.min(p.fit,55);else delete p.injG;}}}
 function fitCol(f){return f>=85?'#5fcf8a':f>=65?'#d8c25a':'#ef6a5b';}
 // ---------- notifications: a broadcast-style feed, newest first ----------
 function addNote(k,h,d,pp){S.notes=S.notes||[];if(S.notes[0]&&S.notes[0].k===k&&k==='TRANSFER WIRE'&&S.notes[0].s===S.season){S.notes.shift();}const n={k,h,d:d||'',s:S.season,r:S.round,id:(S.noteId=(S.noteId||0)+1)};if(pp){pp.s=S.season;pp.r=S.round;pp.seed=n.id*7919+S.season;n.pp=pp;}S.notes.unshift(n);if(S.notes.length>40)S.notes.length=40;}
@@ -5492,7 +5581,7 @@ function allPlayers(){
  const out=[];T_().forEach((t,ti)=>{for(const p of t.squad)out.push({p,club:ti});});
  for(const p of S.world.free)out.push({p,club:-1});return out;
 }
-function priceOf(e){return e.club<0?Math.round(e.p.value*0.5/5000)*5000:Math.round(e.p.value*1.3/5000)*5000;}
+function priceOf(e){if(e.lg)return legendPrice(e.p);return e.club<0?Math.round(e.p.value*0.5/5000)*5000:Math.round(e.p.value*1.3/5000)*5000;}
 // keep every club realistic for its level: anyone too good for their league earns a move up (a swap),
 // and free agents stay below the level of established professionals
 // real players belong to the club they were at in their prime: every real player not at your club goes back there
@@ -5530,11 +5619,12 @@ function aiRestock(t){
  t.xi=autoPick(t.squad,t.formation);
 }
 function buy(pid){if(twlLocked())return false;
- const me=myTeam();const e=allPlayers().find(x=>x.p.id===pid);if(!e||e.club===S.me)return false;
+ const me=myTeam();const e=findEntry(pid);if(!e||e.club===S.me)return false;
  const price=negPrice(e);
  if(me.squad.length>=25){toast('Your squad is full (25 players). Sell someone first.');return false;}
  if(price>me.budget){toast(`Not enough budget. You need ${fmt(price)}.`);return false;}
  me.budget-=price;
+ if(e.lg){e.et.squad=e.et.squad.filter(p=>p.id!==pid);if(S.neg)delete S.neg[pid];legendJoin(e.p);S.news=(S.news||[]).concat(`Legend signed! ${e.p.name} (${e.p.pos}, rated ${e.p.ovr}) joins ${me.name} from ${LEG_NAME[e.lg]}.`);save();toast(`${e.p.name} signed for ${fmt(price)}`);return true;}
  if(e.club<0)S.world.free=S.world.free.filter(p=>p.id!==pid);
  else{const t=T_()[e.club];t.squad=t.squad.filter(p=>p.id!==pid);t.budget+=price;aiRestock(t);}
  e.p.num=0;e.p.goals=e.p.goals||0;me.squad.push(e.p);if(S.neg)delete S.neg[pid];numberSquad(me);save();toast(`${e.p.name} signed for ${fmt(price)}`);return true;
@@ -5564,15 +5654,31 @@ function cupEligible(){return wonPL()||qualifiedForCup();}
 // ---------- squad XP: +1 overall for a player of your own (not a real one), once per player per season ----------
 const XP_ORDER=['GK','CB','LB','RB','LWB','RWB','DM','CM','AM','LM','RM','LW','RW','CF'];
 // every made-up player has a ceiling: young players have room to grow, older ones little or none
-function xpPot(p){const cap=p.mystery?85:FAKE_CAP;if(p.pot==null){const r=mkRng(hashStr('pot|'+p.id+'|'+p.name));const a=p.age||25;const room=a<=21?6+r()*9:a<=25?3+r()*7:a<=29?1+r()*4:r()*2.5;p.pot=Math.round(p.ovr+room);}return Math.min(cap,p.pot);}
+function xpPot(p){const cap=POT_CAP;if(p.pot==null){const r=mkRng(hashStr('pot|'+p.id+'|'+p.name));const a=p.age||25;const room=a<=21?6+r()*9:a<=25?3+r()*7:a<=29?1+r()*4:r()*2.5;p.pot=Math.round(p.ovr+room);}return Math.min(cap,p.pot);}
+// potential as the market shows it (real players and legends have none)
+function potOf(p){return p.real||p.legend||p.superstar?-1:Math.max(p.ovr,xpPot(p));}
 function xpRoom(p){return !p.real&&!p.legend&&p.ovr<xpPot(p);}
-function xpCan(p){return xpRoom(p)&&p.xpS!==S.season;}
+function xpCan(p){return xpRoom(p);}
+// the XP tile: pick it up and drop it on a player. While it is held, anyone it can't go to is greyed out
+function xpDrag(box){const top=box.querySelector('.xptile.top');if(!top)return;
+ top.onpointerdown=e=>{e.preventDefault();e.stopPropagation();const r0=top.getBoundingClientRect();const sx=e.clientX,sy=e.clientY;let fly=null,moved=false;
+  const tiles=[...document.querySelectorAll('#tabbody .ptile[data-pid]')];
+  const start=()=>{moved=true;fly=top.cloneNode(true);fly.classList.add('xpfloat');fly.querySelector('b').textContent='1';fly.style.width=r0.width+'px';fly.style.height=r0.height+'px';document.body.appendChild(fly);top.classList.add('lifted');box.classList.add('lift');
+   tiles.forEach(t=>{const p=playerById(+t.dataset.pid);t.classList.add(p&&xpCan(p)?'xpyes':'xpno');});};
+  const pos=(x,y)=>{fly.style.left=(x-r0.width/2)+'px';fly.style.top=(y-r0.height/2)+'px';};
+  const mv=ev=>{if(!moved&&Math.hypot(ev.clientX-sx,ev.clientY-sy)>5)start();if(fly){pos(ev.clientX,ev.clientY);const el=document.elementFromPoint(ev.clientX,ev.clientY);tiles.forEach(t=>t.classList.toggle('xphover',!!el&&t.contains(el)&&t.classList.contains('xpyes')));}};
+  const end=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',end);removeEventListener('pointercancel',end);
+   if(!moved){xpPanel();return;}
+   fly.style.display='none';const el=document.elementFromPoint(ev.clientX,ev.clientY);fly.remove();top.classList.remove('lifted');box.classList.remove('lift');
+   const t=el&&el.closest('.ptile[data-pid]');tiles.forEach(x=>x.classList.remove('xpyes','xpno','xphover'));
+   if(t){const p=playerById(+t.dataset.pid);if(p&&xpCan(p)&&S.xpPool>0){xpBoost(p);return;}if(p)toast(p.real?'Real players can\'t be given XP':p.legend||p.superstar?'Legends can\'t be given XP':`${p.name} is already at his potential`);}};
+  addEventListener('pointermove',mv);addEventListener('pointerup',end);addEventListener('pointercancel',end);};}
 function xpPanel(){document.querySelectorAll('.xpover').forEach(x=>x.remove());const me=myTeam();
  const list=me.squad.filter(xpRoom).sort((a,b)=>XP_ORDER.indexOf(a.pos)-XP_ORDER.indexOf(b.pos)||b.ovr-a.ovr);
  const o=document.createElement('div');o.className='xpover';
  o.innerHTML=`<div class="xppanel" role="dialog" aria-label="Award XP"><div class="xphead"><span class="eyebrow">Squad XP</span><b>${S.xpPool||0} XP to award</b><button class="btn sm ghost" id="xpclose">Close</button></div>
-  <p class="note" style="margin:0 0 8px">Tap a player to give him +1 overall, up to his potential. Each player can be boosted once a season. Real players, and players already at their potential, aren't listed.</p>
-  <ul class="xplist">${list.map(p=>{const ok=xpCan(p);return `<li><button class="xprow" data-xp="${p.id}" ${ok&&S.xpPool>0?'':'disabled'}><span class="pos ${CAT[p.pos]||''}">${p.pos}</span><span class="xn">${esc(p.name)}</span>${chip(p.ovr,'sm')}<span class="xs">${p.xpS===S.season?'Boosted this season':`Potential ${xpPot(p)}`}</span></button></li>`;}).join('')}</ul></div>`;
+  <p class="note" style="margin:0 0 8px">Tap a player (or drag the XP tile onto him) to give him +1 overall, as many times as you like, up to his potential. Real players, and players already at their potential, aren't listed.</p>
+  <ul class="xplist">${list.map(p=>{const ok=xpCan(p);return `<li><button class="xprow" data-xp="${p.id}" ${ok&&S.xpPool>0?'':'disabled'}><span class="pos ${CAT[p.pos]||''}">${p.pos}</span><span class="xn">${esc(p.name)}</span>${chip(p.ovr,'sm')}<span class="xs">Potential ${xpPot(p)}</span></button></li>`;}).join('')}</ul></div>`;
  document.body.appendChild(o);o.onclick=e=>{if(e.target===o)o.remove();};o.querySelector('#xpclose').onclick=()=>o.remove();
  o.querySelectorAll('[data-xp]').forEach(b=>b.onclick=()=>{const p=playerById(+b.dataset.xp);if(!p||!xpCan(p)||!(S.xpPool>0))return;o.remove();xpBoost(p);});}
 // raise his attributes at random, as many points as it takes for the overall to go up by one
@@ -5658,7 +5764,7 @@ function nextSeason(){
   for(let k=0;k<n&&me.squad.length<28;k++){const pos=FREE_POS[Math.floor(r0()*FREE_POS.length)];const target=Math.round(avg-2-r0()*4);
    const np=makePlayer(r0,pos,target,used0);np.id=S.nextId++;np.age=16+Math.floor(r0()*2);np.ageM=0;np.academy=true;
    let g=0;while(overall(np)>target&&g++<40){capTo(np,target);}while(overall(np)<target-1&&g++<80){for(const a of Object.keys(WEIGHTS[pos]))np[a]=Math.min(97,np[a]+1);}
-   refresh(np);np.pot=Math.min(FAKE_CAP,np.ovr+12+Math.floor(r0()*12));np.retAge=retAgeFor(np,r0);np.num=0;me.squad.push(np);
+   refresh(np);np.pot=Math.min(POT_CAP,np.ovr+12+Math.floor(r0()*14));np.retAge=retAgeFor(np,r0);np.num=0;me.squad.push(np);
    news.push(`${np.name} (${np.pos}, ${np.age}) graduates from the academy, rated ${np.ovr} with potential to reach ${np.pot}.`);}}
  const r=Math.random,used=new Set(allPlayers().map(e=>e.p.name));
  for(let i=0;i<40;i++){const pos=FREE_POS[Math.floor(r()*FREE_POS.length)];const np=makePlayer(r,pos,50+r()*18+(r()<.1?8:0),used);np.age=17+Math.floor(r()*4);np.id=S.nextId++;refresh(np);np.num=0;S.world.free.push(np);}
@@ -5757,16 +5863,16 @@ function upLg(l){return l-1;}
 function downLg(l){return l+1;}
 function theLg(l){return (l<=1||l===4?'the ':'')+LEAGUES[l].name;}
 function ord(n){return n+(['th','st','nd','rd'][(n%100-20)%10]||['th','st','nd','rd'][n%100]||'th');}
-function renderHub(){twlThemeSync();setTimeout(()=>{if(typeof showInstallPill==="function")showInstallPill();},0);
+function renderHub(){if(S&&S.cup&&typeof cupRewardCheck==='function'){try{cupRewardCheck();}catch(e){}}if(typeof legendsMigrate==='function'&&S&&!S.leg1)legendsMigrate();twlThemeSync();setTimeout(()=>{if(typeof showInstallPill==="function")showInstallPill();},0);
  const me=myTeam();const tb=table(myLg());const pos=tb.findIndex(r=>r.i===S.me)+1;const n=S.fx[myLg()].length;UI.wasPhone=PHONE();
  app.innerHTML=`<div class="wrap">
  <header class="hubhead">${badge(me,56)}<div class="grow"><span class="eyebrow">${LEAGUES[myLg()].name} · Season ${S.season} · ${S.cup?cupName():S.done?'Season complete':'Round '+(S.round+1)+' of '+n}</span><h1>${esc(me.name)}</h1></div>
  <div class="kpis"><div class="kpi"><span class="eyebrow">Position</span><b>${S.round||S.done?ord(pos):'–'}</b></div><div class="kpi"><span class="eyebrow">Wallet</span><b>${fmt(me.budget)}</b></div><div class="kpi"><span class="eyebrow">XI rating</span>${chip(teamOvr(me),'sm')}</div></div></header>
- <nav class="tabs" role="tablist">${[['match','Matchday'],['squad','Squad'],['market',twlLocked()?'Transfers 🔒':PHONE()?'Transfers':'Transfers ↗'],['league','League'],...(Object.keys(S.cupsWon||{}).length?[['cups','Cups']]:[]),['settings','Settings']].map(([k,l])=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-tab="${k}">${l}</button>`).join('')}</nav>
+ <nav class="tabs" role="tablist">${[['match','Matchday'],['squad','Squad'],['market',twlLocked()?'Transfers 🔒':PHONE()?'Transfers':'Transfers ↗'],...((S.legends||[]).length?[['legends',twlLocked()?'Legends 🔒':PHONE()?'Legends':'Legends ↗']]:[]),['league','League'],...(Object.keys(S.cupsWon||{}).length?[['cups','Cups']]:[]),['settings','Settings']].map(([k,l])=>`<button class="tab ${UI.tab===k?'on':''}" role="tab" aria-selected="${UI.tab===k}" data-tab="${k}">${l}</button>`).join('')}</nav>
  <main id="tabbody"></main>
  <div style="margin-top:28px;display:flex;justify-content:flex-end;gap:8px">${USER?`<button class="btn sm ghost" id="switchuser">Switch player (${esc(USER.name)})</button>`:''}<button class="btn sm ghost" id="newgame">${UI.confirmNew?'Click again to abandon this save':'New game'}</button></div>
  </div>`;
- app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(UI.prep&&b.dataset.tab!=='squad')prepRestore();if(b.dataset.tab==='market'){if(twlLocked()){UI.tab='market';UI.confirmNew=false;renderHub();return;}openMarket();return;}UI.tab=b.dataset.tab;UI.confirmNew=false;UI.swap=null;renderHub();});
+ app.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{if(UI.prep&&b.dataset.tab!=='squad')prepRestore();if(b.dataset.tab==='market'||b.dataset.tab==='legends'){if(twlLocked()){UI.tab='market';UI.confirmNew=false;renderHub();return;}openMarket(b.dataset.tab==='legends');return;}UI.tab=b.dataset.tab;UI.confirmNew=false;UI.swap=null;renderHub();});
  const su=$('#switchuser');if(su)su.onclick=signOut;
  $('#newgame').onclick=()=>{if(UI.confirmNew){try{localStorage.removeItem(saveKey());}catch(e){}S=null;UI.confirmNew=false;UI.sel=null;render();}else{UI.confirmNew=true;renderHub();}};
  const body=$('#tabbody');body.dataset.t=UI.tab;app.querySelector('.wrap').classList.add('hub');
@@ -5823,7 +5929,7 @@ function tabMatch(el){
 }
 function applyForm(m){
  tacAfterMatch();formPlayers(m);
- {const me=myTeam();const ps=[...m.players.map(q=>q.p),...(m.off||[]).map(o=>o.p)];for(const p of ps){if(!p._inj)continue;delete p._inj;p.fit=Math.min(p.fit??100,30);if(me.squad.includes(p))S.news=(S.news||[]).concat(`Injury: ${p.name} picked up a knock and needs time to recover.`);}}
+ {const me=myTeam();const ps=[...m.players.map(q=>q.p),...(m.off||[]).map(o=>o.p)];for(const p of ps){if(!p._inj)continue;const sv=+p._inj||1;delete p._inj;p.fit=Math.min(p.fit??100,[0,32,18,6][sv]);p.injG=Math.max(p.injG||0,sv===1?1:sv===2?2+Math.floor(Math.random()*2):4+Math.floor(Math.random()*3));if(me.squad.includes(p))S.news=(S.news||[]).concat(`Injury: ${p.name} ${sv===1?'picked up a knock':sv===2?'has a muscle strain':'is badly hurt'} and is out for about ${p.injG} game${p.injG>1?'s':''}.`);}}
  {const played=new Set();
   const minsFrac=pl=>1;
   for(const x of matchRatings(m)){const p=x.pl.p;played.add(p.id);if(x.pl.off){formValue(p,x.r);continue;}afterGame(p,(p._startE??(p.fit??100))-x.pl.energy,x.pl.role==='GK',(m.subIn||{})[p.id]);formValue(p,x.r);}
@@ -5868,9 +5974,11 @@ function traitTag(p,big){const k=traitOf(p);if(!k)return big?`<div class="ttrait
  const c=p.tconf??0.5;const conf=c>0.7?'Confident':c<0.35?'Low on confidence':'';
  return big?`<div class="ttrait ${T.bad?'bad':''}"><b>${esc(T.name)}${conf?` <i>· ${conf}</i>`:''}</b><span>${esc(T.desc)}</span></div>`:`<span class="trait ${T.bad?'bad':''}" title="${esc(T.desc)}">${esc(T.name)}</span>`;}
 function retireNote(p,card){if(p.retiring)return `<span class="retn">Retiring at the end of this season</span>`;const n=seasonsLeft(p);if(n<=6)return `<span class="retn soft">${card?'Nearing retirement: ':'Retires in '}${card?n+' seasons left':n+' seasons'}</span>`;return '';}
+const MED_SVG='<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="0.5" y="0.5" width="15" height="15" rx="3" fill="#fff" stroke="#b71c1c"/><path d="M6.3 3h3.4v3.3H13v3.4H9.7V13H6.3V9.7H3V6.3h3.3z" fill="#d32f2f"/></svg>';
 function tileHTML(p,opts){
  const t=tier(p.ovr);const role=opts.role;const off=role&&!posOK(p,role,opts.sy);
- return `<button class="ptile ${p.ovr>=75?'gold':''} ${p.inForm?'informed':''} ${UI.swap===p.id?'swapping':''}" draggable="true" data-pid="${p.id}" ${opts.slot!=null?`data-slot="${opts.slot}"`:'data-bench="1"'} style="background:${t.bg};color:${t.fg}" aria-label="${esc(p.name)}, ${p.pos}, rated ${p.ovr}">
+ const hurt=p.injG>0;
+ return `<button class="ptile ${p.ovr>=75&&!hurt?'gold':''} ${p.inForm?'informed':''} ${hurt?'hurt':''} ${UI.swap===p.id?'swapping':''}" draggable="true" data-pid="${p.id}" ${opts.slot!=null?`data-slot="${opts.slot}"`:'data-bench="1"'} style="background:${hurt?'#59615f':t.bg};color:${hurt?'#c9d0cf':t.fg}" aria-label="${esc(p.name)}, ${p.pos}, rated ${p.ovr}${hurt?`, injured: out for ${p.injG} more game${p.injG>1?'s':''}`:''}">${hurt&&!opts.bare?`<span class="tinj" title="Injured: in recovery for ${p.injG} more game${p.injG>1?'s':''}">${MED_SVG}</span>`:''}
  ${opts.bare?'':`<span class="cstar ${myTeam().captain===p.id?'on':''}" data-cap="${p.id}" role="button" title="${myTeam().captain===p.id?'Captain - click to remove':'Make captain'}" aria-label="Captain">★</span>`}<span class="tp ${off?'off':''}">${p.pos}</span>${p.retiring?'<span class="tret" title="Retiring at the end of this season">RET</span>':''}${p.inForm&&!opts.bare?`<span class="tform" title="In form: ${esc(FORM_LABEL[p.inForm.a]||'all-round')}" aria-label="In form">${CHEV_SVG}</span>`:''}<span class="tr">${myTeam().captain===p.id&&!opts.bare?p.ovr+5:p.ovr}</span><span class="tfit" title="Fitness ${Math.round(p.fit??100)}%"><i style="width:${Math.round(p.fit??100)}%;background:${fitCol(p.fit??100)}"></i></span><span class="tn">${esc(surname(p.name))}</span></button>`;
 }
 // ---------- match tactics: line-up and play style changes made here apply to the next match only ----------
@@ -5891,15 +5999,15 @@ function tabSquad(el){
  ${UI.prep?`${UI.tacInfo?`<div class="tacpop tapdesc" role="dialog"><b>${esc(tac.name)}</b><p>${esc(tac.desc)}</p><span class="note">Tap to close</span></div>`:''}${oppFormHTML(UI.prep.opp)}`:`<p class="note tacdesc">${esc(tac.desc)}</p>`}${(()=>{const n=tacRun();return n===0?`<p class="tacfam new">New set-up: opponents won't have seen this coming.</p>`:n<=8?`<p class="tacfam">Settled: ${n} game${n>1?'s':''} in a row with this formation and play style.</p>`:`<p class="tacfam stale">Rivals are reading this set-up (${n} games in a row). A change of formation or play style could catch them out.</p>`;})()}
  ${UI.swap?`<div class="swapbar">Choose a player to swap with <b>${esc(playerById(UI.swap)?.name||'')}</b> <button class="btn sm ghost" id="cancelswap">Cancel</button></div>`:''}
  <div class="squadfield"><aside class="bench" aria-label="Substitutes bench"><span class="eyebrow">Bench</span>${bench.length?(UI.prep?`<div class="benchgrid prepbench ${UI.benchOpen?'open':''}">${bench.map(p=>tileHTML(p,{})).join('')}</div>${me.squad.length>25?`<button class="benchmore" id="benchmore" aria-label="${UI.benchOpen?'Collapse the bench':'Show the rest of the bench'}">${UI.benchOpen?'▲':'▼'}</button>`:''}`:`<div class="benchgrid${PHONE()?' phbench':''}" style="${PHONE()?`grid-template-columns:repeat(${Math.min(bench.length,Math.max(3,Math.ceil(bench.length/4)))},auto);--rows:${Math.ceil(bench.length/Math.max(3,Math.ceil(bench.length/4)))}`:`grid-template-rows:repeat(${Math.min(5,bench.length)},auto)`}">${bench.map(p=>tileHTML(p,{})).join('')}</div>`):'<span class="note">Empty</span>'}</aside>
- <div class="bigpitch ${hz?'horiz':''}"><div class="box t"></div><div class="box b"></div><div class="six t"></div><div class="six b"></div><div class="mid"></div><div class="circ"></div>${spots}${!UI.prep&&(S.xpPool||0)>0?`<button class="xpbox" id="xpbox" aria-label="Award XP to a player"><b>${S.xpPool}</b><span>XP</span></button>`:''}</div></div>
- <div class="legend">${TIERS.map((t,i)=>`<span><i style="background:${t[1]}"></i>${i===0?'≤39':i===6?'90+':(TIERS[i-1][0]+1)+'–'+t[0]}</span>`).join('')}<span><i class="g"></i>75+ gold ring</span></div>
+ <div class="bigpitch ${hz?'horiz':''}"><div class="box t"></div><div class="box b"></div><div class="six t"></div><div class="six b"></div><div class="mid"></div><div class="circ"></div>${spots}${!UI.prep&&(S.xpPool||0)>0?`<div class="xpstack" id="xpbox" title="Drag onto a player to give him +1">${S.xpPool>1?`<div class="xptile under" aria-hidden="true"><b>${S.xpPool-1}</b><span>XP</span></div>`:''}<button class="xptile top" aria-label="${S.xpPool} XP to award: drag onto a player"><b>${S.xpPool}</b><span>XP</span></button></div>`:''}</div></div>
+ <div class="legend">${TIERS.map((t,i)=>`<span><i style="background:${t[1]}"></i>${i===0?'≤39':i===TIERS.length-1?'100+':i===6?'90–99':(TIERS[i-1][0]+1)+'–'+t[0]}</span>`).join('')}<span><i class="g"></i>75+ gold ring</span></div>
  <p class="note" style="margin:6px 0 0">Tap a tile for the player card. Drag one tile onto another, or use Swap on the card, to change the line-up.</p></section>`;
  $('#form').onchange=e=>{me.formation=e.target.value;me.xi=autoPick(me.squad,me.formation);save();renderHub();};
  wireCycler(el,'sq',k=>{me.tactic=k;save();renderHub();});
  if(UI.prep){const g=el.querySelector('.prepbench');if(g){benchFit(el);const bm=el.querySelector('#benchmore');if(bm)bm.onclick=()=>{UI.benchOpen=!UI.benchOpen;renderHub();};}}
  if(UI.prep){const nm=el.querySelector('[data-cyc="sq"] .cycname');if(nm){nm.classList.add('tapme');nm.title='Tap for what this style does';nm.onclick=()=>{UI.tacInfo=!UI.tacInfo;renderHub();};}const td=el.querySelector('.tapdesc');if(td)td.onclick=()=>{UI.tacInfo=false;renderHub();};}
  $('#auto').onclick=()=>{me.xi=autoPick(me.squad,me.formation,true);UI.swap=null;save();renderHub();};
- {const xb=$('#xpbox');if(xb)xb.onclick=e=>{e.stopPropagation();xpPanel();};}
+ {const xb=$('#xpbox');if(xb)xpDrag(xb);}
  if(UI.swap)$('#cancelswap').onclick=()=>{UI.swap=null;renderHub();};
  if(UI.prep){$('#prepx').onclick=()=>{prepRestore();UI.tab='match';renderHub();};$('#prepgo').onclick=()=>{const P=UI.prep;fixXI(me);save();P.go();UI.prep=P;prepRestore();};}
  el.querySelectorAll('.ptile').forEach(b=>{
@@ -5974,7 +6082,7 @@ function openMarket(legend){
  document.querySelectorAll('.portal').forEach(x=>x.remove());
  const d=document.createElement('div');d.className='portal';
  d.innerHTML=`<div class="pwin" role="dialog" aria-modal="true" aria-label="Transfer market">
- <div class="pbar"><span class="dots"><i></i><i></i><i></i></span><span class="ptitle">${legend?'Legendary Transfer Market':'Transfer Market'}</span><span class="plive"><i></i>Live link</span><button class="btn sm ghost" id="pclose" aria-label="Close transfer market">Close ✕</button></div>
+ <div class="pbar"><span class="dots"><i></i><i></i><i></i></span><span class="ptitle">${legend?'Legends Transfer Market':'Transfer Market'}</span><span class="plive"><i></i>Live link</span><button class="btn sm ghost" id="pclose" aria-label="Close transfer market">Close ✕</button></div>
  <div class="pconnect"><span class="spin"></span>Connecting to the market…</div>
  <div class="pbody" hidden></div></div>`;
  document.body.appendChild(d);document.body.style.overflow='hidden';
@@ -5988,10 +6096,10 @@ function openMarket(legend){
 function renderMarket(){
  const body=document.querySelector('.portal .pbody');if(!body)return;
  const F=UI.m;const me=myTeam();const T=T_();
- const LG=UI.legendMode&&S.cup&&(S.cup.kind==='emperor'||S.cup.kind==='temporal');const ET=LG?S.cup.euro:[];
- const priceOf_=e=>LG?0:negPrice(e);
- let list=LG?ET.flatMap((t,ti)=>t.squad.map(p=>({p,club:-100-ti,et:t}))):allPlayers().filter(e=>e.club!==S.me&&!negBanned(e.p.id));
- if(LG&&!String(F.club).startsWith('-1')&&F.club!=='ALL')F.club='ALL';
+ const LG=!!UI.legendMode;const LE=LG?legendEntries():[];const ET=LG?(S.legends||[]).flatMap(L=>L.teams.map(t=>({t,k:L.kind}))):[];
+ const priceOf_=e=>negPrice(e);
+ let list=(LG?LE:allPlayers().filter(e=>e.club!==S.me)).filter(e=>!negBanned(e.p.id));
+ if(LG&&!String(F.club).startsWith('-10')&&F.club!=='ALL')F.club='ALL';if(!LG&&String(F.club).startsWith('-10'))F.club='ALL';
  if(F.club!=='ALL')list=list.filter(e=>String(e.club)===F.club);
  if(!LG&&F.lg!=='ALL')list=list.filter(e=>F.lg==='FA'?e.club<0:e.club>=0&&String(T[e.club].league)===F.lg);
  if(!Array.isArray(F.pos))F.pos=[];if(F.pos.length)list=list.filter(e=>F.pos.includes(e.p.pos));
@@ -5999,32 +6107,32 @@ function renderMarket(){
  if(F.amin)list=list.filter(e=>e.p.age>=+F.amin);if(F.amax)list=list.filter(e=>e.p.age<=+F.amax);
  if(F.omin)list=list.filter(e=>e.p.ovr>=+F.omin);
  if(!LG&&F.price!=='ANY')list=list.filter(e=>priceOf(e)<=+F.price);
- if(!LG&&F.afford)list=list.filter(e=>priceOf(e)<=me.budget);
- const key={ovr:e=>e.p.ovr,name:e=>e.p.name,pos:e=>POSITIONS.indexOf(e.p.pos),age:e=>e.p.age,trait:e=>{const k=traitOf(e.p);return k?TRAITS[k].name:'~';},spd:e=>e.p.spd,sho:e=>e.p.sho,pas:e=>e.p.pas,dri:e=>e.p.dri,tck:e=>e.p.tck,str:e=>e.p.str,gk:e=>e.p.gk,sta:e=>e.p.sta,club:e=>e.et?e.et.name:e.club<0?'~':T[e.club].name,price:e=>priceOf_(e)}[F.sort];
+ if(F.afford)list=list.filter(e=>priceOf(e)<=me.budget);
+ const key={ovr:e=>e.p.ovr,name:e=>e.p.name,pos:e=>POSITIONS.indexOf(e.p.pos),age:e=>e.p.age,trait:e=>{const k=traitOf(e.p);return k?TRAITS[k].name:'~';},spd:e=>e.p.spd,sho:e=>e.p.sho,pas:e=>e.p.pas,dri:e=>e.p.dri,tck:e=>e.p.tck,str:e=>e.p.str,gk:e=>e.p.gk,sta:e=>e.p.sta,pot:e=>potOf(e.p),club:e=>e.et?e.et.name:e.club<0?'~':T[e.club].name,price:e=>priceOf_(e)}[F.sort];
  list.sort((a,b)=>{const x=key(a),y=key(b);return (x<y?-1:x>y?1:0)*F.dir||b.p.ovr-a.p.ovr;});
  const total=list.length;const shown=list.slice(0,F.limit);
  const th=(k,l,cls='')=>`<th class="sort ${cls} ${F.sort===k?'on':''}" data-msort="${k}" aria-sort="${F.sort===k?(F.dir<0?'descending':'ascending'):'none'}">${l}${F.sort===k?(F.dir<0?' ▼':' ▲'):''}</th>`;
- const ticker=(LG?list.slice():allPlayers().filter(e=>e.club!==S.me)).sort((a,b)=>b.p.ovr-a.p.ovr).slice(0,14).map(e=>`<span>${esc(e.p.name)} <b>${e.p.ovr}</b> ${LG?'Free':fmt(priceOf(e))}</span>`).join('');
+ const ticker=(LG?LE.slice():allPlayers().filter(e=>e.club!==S.me)).sort((a,b)=>b.p.ovr-a.p.ovr).slice(0,14).map(e=>`<span>${esc(e.p.name)} <b>${e.p.ovr}</b> ${fmt(negPrice(e))}</span>`).join('');
  body.innerHTML=`<div class="ticker" aria-hidden="true"><div class="tk">${ticker}${ticker}</div></div>
  <div class="mfilters">
   <input id="mq" type="search" placeholder="Search name" value="${esc(F.q)}" aria-label="Search by name">
-  ${LG?`<select id="mclub" aria-label="Team"><option value="ALL">All teams</option>${ET.map((t,ti)=>`<option value="${-100-ti}" ${F.club===String(-100-ti)?'selected':''}>${esc(t.name)}</option>`).join('')}</select>`:`<select id="mclub" aria-label="Club"><option value="ALL">All clubs</option><option value="-1" ${F.club==='-1'?'selected':''}>Free agents</option>${[...Array(NL).keys()].map(l=>`<optgroup label="${LEAGUES[l].name}">${T.map((t,i)=>[t,i]).filter(([t,i])=>t.league===l&&i!==S.me).map(([t,i])=>`<option value="${i}" ${F.club===String(i)?'selected':''}>${esc(t.name)}</option>`).join('')}</optgroup>`).join('')}</select>`}
+  ${LG?`<select id="mclub" aria-label="Team"><option value="ALL">All teams</option>${(S.legends||[]).map((L,li)=>`<optgroup label="${LEG_NAME[L.kind].replace(/^the /,'The ')}">${L.teams.map((t,ti)=>`<option value="${-1000-li*20-ti}" ${F.club===String(-1000-li*20-ti)?'selected':''}>${esc(t.name)}</option>`).join('')}</optgroup>`).join('')}</select>`:`<select id="mclub" aria-label="Club"><option value="ALL">All clubs</option><option value="-1" ${F.club==='-1'?'selected':''}>Free agents</option>${[...Array(NL).keys()].map(l=>`<optgroup label="${LEAGUES[l].name}">${T.map((t,i)=>[t,i]).filter(([t,i])=>t.league===l&&i!==S.me).map(([t,i])=>`<option value="${i}" ${F.club===String(i)?'selected':''}>${esc(t.name)}</option>`).join('')}</optgroup>`).join('')}</select>`}
   ${LG?'':`<select id="mlg" aria-label="League"><option value="ALL">All leagues</option>${[...Array(NL).keys()].map(l=>`<option value="${l}" ${F.lg===String(l)?'selected':''}>${LEAGUES[l].name}</option>`).join('')}<option value="FA" ${F.lg==='FA'?'selected':''}>Free agents</option></select>
   <select id="mprice" aria-label="Maximum price"><option value="ANY">Any price</option>${[250e3,500e3,1e6,2e6,5e6,10e6,20e6].map(v=>`<option value="${v}" ${F.price===String(v)?'selected':''}>Up to ${fmt(v)}</option>`).join('')}</select>`}
   <span class="mrange"><label for="mamin">Age</label><input id="mamin" type="number" min="16" max="40" placeholder="min" value="${F.amin}"><input id="mamax" type="number" min="16" max="40" placeholder="max" value="${F.amax}" aria-label="Maximum age"></span>
   <span class="mrange"><label for="momin">Min rating</label><input id="momin" type="number" min="1" max="99" placeholder="any" value="${F.omin}"></span>
-  ${LG?'':`<label class="chk"><input type="checkbox" id="maff" ${F.afford?'checked':''}> I can afford</label>`}
+  ${`<label class="chk"><input type="checkbox" id="maff" ${F.afford?'checked':''}> I can afford</label>`}
   <div class="pospills" role="group" aria-label="Positions (choose any)"><button data-mpos="ALL" class="${F.pos.length?'':'on'}" aria-pressed="${!F.pos.length}">All</button>${['GK','LB','CB','RB','LWB','RWB','CM','AM','LM','RM','LW','RW','CF'].map(p=>`<button data-mpos="${p}" class="${F.pos.includes(p)?'on':''}" aria-pressed="${F.pos.includes(p)}">${p}</button>`).join('')}</div>
   <button class="btn sm ghost" id="mreset">Reset filters</button>
  </div>
  <div class="mhead"><span class="eyebrow">${total} players match</span><span class="note">Your wallet <b class="num">${fmt(me.budget)}</b> · Squad ${me.squad.length}/25</span></div>
- <div class="tblwrap mtable"><table><thead><tr>${th('ovr','Rating','ovrcol')}${th('name','Player')}${th('pos','Pos')}${th('age','Age','n')}${th('trait','Trait')}${th('spd','SPD','n')}${th('sho','SHO','n')}${th('pas','PAS','n')}${th('dri','DRI','n')}${th('tck','TCK','n')}${th('str','STR','n')}${th('gk','GK','n')}${th('sta','STA','n')}${th('club','Club')}${th('price','Price','n')}<th></th></tr></thead><tbody>
- ${shown.map(e=>{const p=e.p;const pr=priceOf_(e);const c=e.et||(e.club<0?null:T[e.club]);const att=k=>`<td class="n" style="color:${tier(p[k]).bg==='#7a1414'?'#e07070':tier(p[k]).bg}">${p[k]}</td>`;
-  return `<tr><td class="ovrcol">${chip(p.ovr,'lg')}</td><td><button class="linkbtn" data-card="${p.id}">${esc(PHONE()?shortName(p.name):p.name)}</button>${retireNote(p)}</td><td><span class="pos ${CAT[p.pos]}">${p.pos}</span></td><td class="n">${p.age}</td><td class="trcol">${traitTag(p)||'<span class="note">–</span>'}</td>${['spd','sho','pas','dri','tck','str','gk','sta'].map(att).join('')}
-  <td>${c?`<span class="clubcell">${badge(c,20)}<span>${esc(PHONE()?c.short:c.name)}<small>${e.et?'EMP':LEAGUES[c.league].short}</small></span></span>`:'<span class="note">Free agent</span>'}</td><td class="n">${LG?'Free':negDisc(p.id)?`<s class="note">${fmt(priceOf(e))}</s> <b class="good">${fmt(pr)}</b>`:fmt(pr)}</td><td>${LG?`<button class="btn sm primary" data-buy="${p.id}">Sign</button>`:`<button class="btn sm ${pr<=me.budget?'primary':''}" data-contact="${p.id}">Contact</button>`}</td></tr>`;}).join('')}
+ <div class="tblwrap mtable"><table><thead><tr>${th('ovr','Rating','ovrcol')}${th('name','Player')}${th('pos','Pos')}${th('age','Age','n')}${th('trait','Trait')}${th('spd','SPD','n')}${th('sho','SHO','n')}${th('pas','PAS','n')}${th('dri','DRI','n')}${th('tck','TCK','n')}${th('str','STR','n')}${th('gk','GK','n')}${th('sta','STA','n')}${th('pot','POT','n')}${th('club','Club','clubcol')}${th('price','Price','n')}<th></th></tr></thead><tbody>
+ ${shown.map(e=>{const p=e.p;const pr=priceOf_(e);const c=e.et||(e.club<0?null:T[e.club]);const att=k=>`<td class="n" style="color:${tier(p[k]).bg==='#7a1414'?'#e07070':p[k]>=100?'#8fa2ff':tier(p[k]).bg}">${p[k]}</td>`;
+  return `<tr><td class="ovrcol">${chip(p.ovr,'lg')}</td><td><button class="linkbtn" data-card="${p.id}">${esc(PHONE()?shortName(p.name):p.name)}</button>${retireNote(p)}</td><td><span class="pos ${CAT[p.pos]}">${p.pos}</span></td><td class="n">${p.age}</td><td class="trcol">${traitTag(p)||'<span class="note">–</span>'}</td>${['spd','sho','pas','dri','tck','str','gk','sta'].map(att).join('')}<td class="n potcol">${p.real||p.legend||p.superstar?'–':potOf(p)}</td>
+  <td class="clubcol">${c?`<span class="clubcell">${badge(c,20)}<span>${esc(PHONE()?c.short:c.name)}<small>${e.lg?LEG_TAG[e.lg]:LEAGUES[c.league].short}</small></span></span>`:'<span class="note">Free agent</span>'}</td><td class="n">${negDisc(p.id)?`<s class="note">${fmt(priceOf(e))}</s> <b class="good">${fmt(pr)}</b>`:fmt(pr)}</td><td><button class="btn sm ${pr<=me.budget?'primary':''}" data-contact="${p.id}">Contact</button></td></tr>`;}).join('')}
  </tbody></table></div>
  ${total>shown.length?`<div style="text-align:center;margin-top:12px"><button class="btn" id="mmore">Show more (${total-shown.length} left)</button></div>`:''}
- <p class="note">${LG?'Your reward for winning the Emperor\'s Cup: sign any one player from the teams in the competition, free.':'Free agents cost half their value. Players at other clubs cost 30% over value.'}</p>`;
+ <p class="note">${LG?'Players from the competitions you have won. Prices follow their rating, and you can negotiate just as in the normal market. Players rated 100+ (dark blue) are the rarest of all.':'Free agents cost half their value. Players at other clubs cost 30% over value.'}</p>`;
  const re=()=>{UI.m.limit=60;renderMarket();};
  const q=$('#mq');q.oninput=()=>{F.q=q.value;const pos=q.selectionStart;re();const n=$('#mq');n.focus();n.setSelectionRange(pos,pos);};
  $('#mclub').onchange=e=>{F.club=e.target.value;re();};
@@ -6036,7 +6144,7 @@ function renderMarket(){
  body.querySelectorAll('[data-mpos]').forEach(b=>b.onclick=()=>{const k=b.dataset.mpos;if(k==='ALL')F.pos=[];else F.pos=F.pos.includes(k)?F.pos.filter(x=>x!==k):[...F.pos,k];re();});
  body.querySelectorAll('[data-msort]').forEach(b=>b.onclick=()=>{const k=b.dataset.msort;if(F.sort===k)F.dir*=-1;else{F.sort=k;F.dir=['name','club','pos','price','age'].includes(k)?1:-1;}renderMarket();});
  body.querySelectorAll('[data-contact]').forEach(b=>b.onclick=()=>negOpen(+b.dataset.contact,()=>{if(document.querySelector('.portal'))renderMarket();}));
- body.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{if(LG){signEmperorLegend(b.dataset.buy);toast(`${S.cup.legend} has joined your squad`);const pc=$('#pclose');if(pc)pc.click();return;}if(buy(+b.dataset.buy))renderMarket();});
+ body.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{if(buy(+b.dataset.buy))renderMarket();});
  if(LG)body.querySelectorAll('[data-card]').forEach(b=>{b.replaceWith(Object.assign(document.createElement('span'),{textContent:b.textContent}));});
  body.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>openCard(+b.dataset.card,b));
  const mm=$('#mmore');if(mm)mm.onclick=()=>{F.limit+=60;renderMarket();};
@@ -6134,7 +6242,7 @@ function startMatch(H,A,ctx){twlThemeSync();document.querySelectorAll(".installp
  LIVE={m,H,A,mine,cnd,fx:{drops:[],flakes:[]},ko:ctx.ko,label:ctx.label,onDone:ctx.onDone,pitch:ctx.pitch,speed:2,paused:false,acc:0,lastT:performance.now(),evN:0,done:false,raf:0};LIVE.lastTacLog=myTeam().tactic;
  app.innerHTML=`<div class="match">
  <div class="board"><div class="tm">${badge(H,40)}<h3><span class="full">${esc(H.name)}</span><span class="abbr">${esc(H.short)}</span></h3></div><div class="score"><b class="num" id="sc">0 – 0</b><span class="clock" id="clk">1′</span></div><div class="tm r"><h3><span class="full">${esc(A.name)}</span><span class="abbr">${esc(A.short)}</span></h3>${badge(A,40)}</div></div>
- <div class="pitchwrap" id="pw"><canvas id="cv" aria-label="Aerial view of the match at ${esc(H.ground)}"></canvas><div class="momo" id="momo" aria-label="Momentum"><span>Momentum</span><div class="mbar"><i class="mh" style="background:${hs.fill}"></i><i class="ma" style="background:${as.fill}"></i><b id="momk"></b></div></div><div class="blackout"><span>Floodlight failure</span></div></div>
+ <div class="pitchwrap" id="pw"><canvas id="cv" aria-label="Aerial view of the match at ${esc(H.ground)}"></canvas><div class="momo" id="momo" aria-label="Momentum: ${esc(H.short||H.name)} on the left, ${esc(A.short||A.name)} on the right"><span>Momentum</span><div class="mrow"><em class="mt" style="--tc:${hs.fill}">${esc(H.short||H.name.slice(0,3).toUpperCase())}</em><div class="mbar"><i class="mh" style="background:${hs.fill}"></i><i class="ma" style="background:${as.fill}"></i><u></u><b id="momk"></b></div><em class="mt" style="--tc:${as.fill}">${esc(A.short||A.name.slice(0,3).toUpperCase())}</em></div></div><div class="blackout"><span>Floodlight failure</span></div></div>
  <div class="mside"><div class="ctrl"><div class="g"><button class="btn" id="pause">Pause</button><button class="btn" id="subsbtn">Subs 0/5</button><div class="seg" role="group" aria-label="Speed">${[[2,1],[4,2],[8,4]].map(([s,l])=>`<button data-spd="${s}" class="${s===2?'on':''}">${l}×</button>`).join('')}</div></div>
  <div class="g"><span class="eyebrow">Game plan</span>${tacCycler(myTeam().tactic,"live")}<button class="recchip" id="recchip" hidden></button><label class="eyebrow" for="ballsel">Ball</label><select id="ballsel">${ownedBalls().map(k=>[k,BALLS[k]]).map(([k,v])=>`<option value="${k}" ${(curBall())===k?'selected':''}>${v}</option>`).join('')}</select><button class="btn ghost" id="skip">Skip to full-time</button></div></div>
  ${liveScoresHTML(ctx)}<div class="mgrid"><section class="panel"><div class="venuebar"><span class="eyebrow">${m.derby?'Derby day · ':''}${ctx.label?esc(ctx.label)+' · ':''}${esc(groundName(H,cnd))}</span>${wxIcon(cnd)}</div>${twlLiveIntel(hs,as)}<div class="feed" id="feed"><p class="note">Kick-off at ${esc(groundName(H,cnd))}.</p></div></section><section class="panel" id="stats"></section></div></div>
@@ -6254,7 +6362,7 @@ function loop(now){
  let dt=Math.min(0.1,(now-L.lastT)/1000);L.lastT=now;
  if(L.pensCtl)L.pensCtl.tick(Math.min(0.05,dt)*1.6);
  if(L.mq&&L.mq.length){const due=L.mq.filter(q=>m.t>=q.at);if(due.length){L.mq=L.mq.filter(q=>m.t<q.at);L.fromQ=true;due.forEach(q=>{try{q.fn();}catch(e){}});L.fromQ=false;toast('Your instructions have reached the bench');}}
- if(!L.paused&&!m.finished){L.acc+=dt*L.speed*(['corner','pen','fk','free','dark'].includes(m.state)?0.55:1);let n=0;while(L.acc>=1/60&&n<600){step(m,1/60);L.acc-=1/60;n++;}}
+ if(!L.paused&&!m.finished){L.acc+=dt*L.speed;let n=0;while(L.acc>=1/60&&n<600){step(m,1/60);L.acc-=1/60;n++;}}
  draw(m);hud(m);sndTick();
  if(m.capPick===L.mine&&!L.capOpen){L.capOpen=true;showCapPick();}
  if(!L.paused&&!m.finished&&!L.skipping)subTip(L,m);
@@ -6272,9 +6380,9 @@ function hud(m){
  if(m.events.length!==L.evN){for(let k=L.evN;k<m.events.length;k++)if(!L.skipping)sndEvent(m.events[k],L.mine);L.evN=m.events.length;const feed=$('#feed');
   const sides=[m.teams[0].side,m.teams[1].side];
   feed.innerHTML=m.events.slice().reverse().map(e=>`<div class="${e.type==='clue'?'clue':e.type==='injury'?'injury':''}"><span class="m">${e.type==='pen'?'Pen':(e.lab||e.min)+'′'}</span><span class="dot" style="background:${e.team<0?'var(--dim)':sides[e.team].fill};box-shadow:0 0 0 1px ${e.team<0?'transparent':sides[e.team].ring}"></span><span class="${e.type==='goal'?'goal':''}">${esc(e.text)}</span></div>`).join('');}
- {const rc=$('#recchip');if(rc){const R=m.rec;const show=R&&R.team===L.mine&&!m.finished;rc.hidden=!show;
-   if(show){const cur=m.teams[L.mine].side.tactic;const same=cur===R.k;const txt=same?(R.on?`✓ ${TACTICS[R.k].name} is working against their ${TACTICS[R.vs].name}`:`Recommended: stay on ${TACTICS[R.k].name}`):`Counter their ${TACTICS[R.vs].name}: switch to ${TACTICS[R.k].name}`;
-    if(rc.textContent!==txt)rc.textContent=txt;rc.classList.toggle('on',same);rc.onclick=same?null:()=>{L.setTac(R.k);const box=app.querySelector('[data-cyc="live"] .cycname');if(box){const ks=Object.keys(TACTICS);box.innerHTML=`<b>${TACTICS[R.k].name}</b><small>${ks.indexOf(R.k)+1} / ${ks.length}</small>`;}};}}}
+ {const rc=$('#recchip');if(rc){const U=m.teams[L.mine];const A=!m.finished&&m.t>m.dur*8/90&&U.side.tactic!=='sink'?tacAdvice(m,U):null;rc.hidden=!A;
+   if(A){const same=A.stay;const txt=same?`✓ ${A.text}`:A.text;
+    if(rc.textContent!==txt)rc.textContent=txt;rc.classList.toggle('on',same);rc.classList.toggle('fresh',!same&&m.t-(m.recT||-99)<m.dur*4/90);rc.onclick=same?null:()=>{L.setTac(A.k);const box=app.querySelector('[data-cyc="live"] .cycname');if(box){const ks=Object.keys(TACTICS);box.innerHTML=`<b>${TACTICS[A.k].name}</b><small>${ks.indexOf(A.k)+1} / ${ks.length}</small>`;}};}}}
  liveScoresTick(m);
  if(!L.statT||performance.now()-L.statT>400){L.statT=performance.now();
   const s=m.stats;const pt=s.poss[0]+s.poss[1]||1;const p0=Math.round(s.poss[0]/pt*100);
@@ -6305,8 +6413,8 @@ function subsHTML(){
  const bar=e=>{const v=clamp(e,0,100);return `<span class="ebar"><i style="width:${v}%;background:${v>60?'#5fcf8a':v>35?'#f3b23a':'#ef6a5b'}"></i></span><span class="num ev">${Math.round(v)}%</span>`;};
  const bench=(T.side.bench||[]);
  return `<div class="subhead"><span class="eyebrow">Your team · ${used} of ${MAXSUB} substitutions used</span><span class="note">${used>=MAXSUB?'No substitutions left.':UI.subOut!=null?'Now pick a substitute from the bench.':'Pick a player to take off.'}</span></div>
- <div class="subcols"><div><h4>On the pitch</h4><ul class="rlist subl">${T.players.map((pl,i)=>`<li class="${UI.subOut===i?'sel':''}"><button class="subrow" data-out="${i}"><span class="pos ${pl.role}">${pl.slot}</span><span class="rn">${esc(pl.p.name)}<small>Rated ${pl.p.ovr} · now ${Math.round(pl.p.ovr*(1-(100-pl.energy)/500))} · match ${rate(pl).toFixed(1)}</small></span>${bar(pl.energy)}</button></li>`).join('')}</ul></div>
- <div><h4>Bench</h4><ul class="rlist subl">${bench.map(p=>`<li><button class="subrow" data-in="${p.id}" ${UI.subOut==null?'disabled':''}><span class="pos ${CAT[p.pos]}">${p.pos}</span><span class="rn">${esc(p.name)}<small>Rated ${p.ovr}${p._endE!=null?' · came off, can go back on':''}</small></span>${bar(p._endE??p.fit??100)}</button></li>`).join('')||'<li class="note">No substitutes available.</li>'}</ul></div></div>`;
+ <div class="subcols"><div><h4>On the pitch</h4><ul class="rlist subl">${T.players.map((pl,i)=>`<li class="${UI.subOut===i?'sel':''}"><button class="subrow" data-out="${i}"><span class="pos ${pl.role}">${pl.slot}</span><span class="rn">${esc(pl.p.name)}${pl.inj?`<i class="subinj" title="Injured">${MED_SVG}</i>`:''}<small>${pl.inj?`<b class="injtxt">Injured${['',': a knock',': needs treatment',': badly hurt'][pl.injSev||1]}</b> · `:''}Rated ${pl.p.ovr} · now ${Math.round(pl.p.ovr*(1-(100-pl.energy)/500))} · match ${rate(pl).toFixed(1)}</small></span>${bar(pl.energy)}</button></li>`).join('')}</ul></div>
+ <div><h4>Bench</h4><ul class="rlist subl">${bench.map(p=>`<li><button class="subrow" data-in="${p.id}" ${UI.subOut==null?'disabled':''}><span class="pos ${CAT[p.pos]}">${p.pos}</span><span class="rn">${esc(p.name)}${p.injG>0?`<i class="subinj" title="Injured">${MED_SVG}</i>`:''}<small>${p.injG>0?'<b class="injtxt">Injured</b> · ':''}Rated ${p.ovr}${p._endE!=null?' · came off, can go back on':''}</small></span>${bar(p._endE??p.fit??100)}</button></li>`).join('')||'<li class="note">No substitutes available.</li>'}</ul></div></div>`;
 }
 function wireSubs(box){
  const L=LIVE,m=L.m;
@@ -6847,6 +6955,14 @@ function draw(m){
  if(cnd.w==='rain'){c.fillStyle='rgba(30,45,60,.16)';c.fillRect(0,0,w,h);}}
  const b=m.ball;const sides=[m.teams[0].side,m.teams[1].side];
  drawGoalBack(c,m,0);drawGoalBack(c,m,1);
+ // offside: where they were when the pass was played. Faint outlines mark the attacker and the last defender at that moment;
+ // the red line runs along the attacker's leading edge, the blue line along the defender's, so the gap is the offside
+ if(m.offLines&&m.state==='offside'){const L=m.offLines;const k=Math.min(1,Math.max(0,(L.age-0.3)/0.6));if(k>0){
+  const [sx0,sy0]=P(0,0),[sx1,sy1]=P(1,0);let ux=sx1-sx0,uy=sy1-sy0;const ul=Math.hypot(ux,uy)||1;ux=ux/ul*L.dir;uy=uy/ul*L.dir;
+  const line=(x,y,col)=>{const [X,Y]=P(x,y);const ex=X+ux*R,ey=Y+uy*R;const [ax0,ay0]=P(x,0),[ax1,ay1]=P(x,PW);const ox=ex-X,oy=ey-Y;c.strokeStyle=col;c.lineWidth=Math.max(2,R*0.2);c.beginPath();c.moveTo(ax0+ox,ay0+oy);c.lineTo(ax1+ox,ay1+oy);c.stroke();};
+  const ghost=(x,y,side,col)=>{const [X,Y]=P(x,y);c.fillStyle=side.fill;c.globalAlpha=k*0.45;c.beginPath();c.arc(X,Y,R,0,7);c.fill();c.globalAlpha=k*0.95;c.setLineDash([R*0.35,R*0.25]);c.strokeStyle=col;c.lineWidth=Math.max(1.5,R*0.16);c.beginPath();c.arc(X,Y,R,0,7);c.stroke();c.setLineDash([]);};
+  c.save();ghost(L.lx,L.ly,m.teams[L.dteam].side,'#3d8bff');ghost(L.ax,L.ay,m.teams[L.team].side,'#ff3b3b');
+  c.globalAlpha=k*0.9;c.shadowColor='rgba(0,0,0,.45)';c.shadowBlur=4;line(L.lx,L.ly,'#3d8bff');line(L.ax,L.ay,'#ff3b3b');c.restore();}}
  if(IMG)anim('sh');
  // light: on a pictured venue the shadows follow its sun and its four corner floodlights
  const sdir=v=>port?[-v[1],-v[0]]:v;const ex0=7,ey0=6;
@@ -6867,7 +6983,8 @@ function draw(m){
   const camo=(m.twl?twlCamo(m,pl):1)*(pl.inj?0.42:1);if(camo<1)c.globalAlpha=camo;
   if(sd.roundel==='raf')rafTile(c,X,Y,R);else if(sd.emblem)emblemTile(c,X,Y,R,sd);else tile3d(c,X,Y,R,sd.ring,sd.fill);
   if(LT)litTile(c,X,Y,R,LT,port);
-  if(pl.p.ovr>=75){c.strokeStyle=GOLD;c.lineWidth=1.2;c.beginPath();c.arc(X,Y,R+0.6,0,7);c.stroke();}
+  if(pl.p.ovr>=100){c.strokeStyle='#2a44d6';c.lineWidth=2.4;c.beginPath();c.arc(X,Y,R+1.2,0,7);c.stroke();c.strokeStyle='#0d1a66';c.lineWidth=1;c.beginPath();c.arc(X,Y,R+2.8,0,7);c.stroke();}
+  else if(pl.p.ovr>=75){c.strokeStyle=GOLD;c.lineWidth=1.2;c.beginPath();c.arc(X,Y,R+0.6,0,7);c.stroke();}
   if(sd.hat)hatQ.push([X,Y,sd.hat==='irq'?'irqc':sd.hat,hatFace(m,pl),camo,pl]);
   c.globalAlpha=1;
   if(pl.hot>0)drawFire(c,X,Y,R,m.t,pl.id,Math.min(1,pl.hot/2));
@@ -7032,8 +7149,17 @@ function createCup(kind){
   const myth=makeMythic();S.cup={kind,euro:myth,earn:0,stage:'qf',md:0,ko:{},out:false,venue:'elysium',groups:[],gfx:[]};
   const all=shuffle(['w'+S.me,...myth.map((t,i)=>'e'+i)]);S.cup.ko.qf=[];for(let i=0;i<8;i+=2)S.cup.ko.qf.push({h:all[i],a:all[i+1],hs:null,as:null});
  }
+ if(['mystery','emperor','temporal'].includes(kind)){makeSuperstars(S.cup.euro,kind);S.cup.supers=1;}
  save();
 }
+// the otherworldly sides each carry a few players beyond the human scale (100-110): always a minority,
+// a little more common in each competition along the way (Eternal Cup, then the Emperor's Cup, then the Temporal War)
+function makeSuperstars(teams,kind){const r=mkRng(hashStr('sup|'+kind+'|'+(S.season||1)+'|'+teams.map(t=>t.id).join(',')));
+ const cfg={mystery:{n:[0,1,1],lo:100,hi:104},emperor:{n:[1,1,2],lo:101,hi:107},temporal:{n:[1,2,3],lo:103,hi:110}}[kind];if(!cfg)return;
+ for(const t of teams){const n=cfg.n[Math.floor(r()*cfg.n.length)];const xi=new Set(t.xi||[]);const pool=t.squad.filter(p=>p.pos!=='GK'&&!p.superstar).sort((a,b)=>(xi.has(b.id)-xi.has(a.id))||b.ovr-a.ovr);
+  for(const p of pool.slice(0,n)){const target=cfg.lo+Math.floor(r()*(cfg.hi-cfg.lo+1));let guard=0;while(overall(p)<target&&guard++<60){const w=WEIGHTS[p.pos];for(const k in w)p[k]=Math.min(118,p[k]+1);}p.ovr=overall(p);p.superstar=true;if(p.value)p.value=Math.round(p.value*1.6);}}}
+// a cup already under way when superstars arrived
+function cupSupersFix(){if(S&&S.cup&&S.cup.stage!=='done'&&['mystery','emperor','temporal'].includes(S.cup.kind)&&!S.cup.supers){makeSuperstars(S.cup.euro,S.cup.kind);S.cup.supers=1;save();}}
 function cupFixtures(){const c=S.cup;return c.stage==='groups'||c.stage==='league'?c.gfx[c.md]:c.ko[c.stage];}
 function cupMyFix(){const fx=cupFixtures();if(!fx)return null;const i=fx.findIndex(f=>f.h===myCid()||f.a===myCid());return i<0?null:{i,f:fx[i]};}
 function groupTable(gr){
@@ -7129,7 +7255,7 @@ function cupAdvance(userRes){
  if(c.stage==='final'){c.winner=winners[0];payCup(c.winner,P.champ);c.stage='done';if(c.winner===myCid()&&c.kind==='world')awardBall('diamond','A reward for winning the World Cup.');
   if(c.winner===myCid()){S.news=(S.news||[]).concat(`${CUP_KIND[c.kind||'euro'].champs}! ${fmt(P.champ)} prize money.`);
    if(c.kind==='world'){S.eternalOpen=S.season;}
-   if(c.kind==='mystery'){grantLegend();S.eliteOpen=true;}
+   if(c.kind==='mystery'){S.eliteOpen=true;}
    cupWonMark(c.kind||'euro');}
   save();return;}
  const next=STAGES[STAGES.indexOf(c.stage)+1];
@@ -7199,20 +7325,17 @@ function cupView(el){
  if(S.cup.kind==='temporal'){twlView(el);return;}
  // knocked out: the rest of the competition is played out and you see who won
  if(S.cup.out&&S.cup.stage!=='done'){while(S.cup.stage!=='done')cupAdvance(null);save();}
- const c=S.cup;const kind=c.kind||'euro';const nm=cupName();const P=cupPrize();const mf=c.stage!=='done'&&!c.out?cupMyFix():null;
+ cupRewardCheck();const c=S.cup;const kind=c.kind||'euro';const nm=cupName();const P=cupPrize();const mf=c.stage!=='done'&&!c.out?cupMyFix():null;
  const myG=(c.groups||[]).findIndex(g=>g.includes(myCid()));
  let head;
  if(c.stage==='done'&&kind==='emperor'&&c.winner===myCid()){
   const opp=c.euro;const signed=c.legend;
-  if(UI.legendMkt&&!signed){const all=opp.flatMap(t=>t.squad.map(p=>({p,t}))).sort((a,b)=>b.p.ovr-a.p.ovr);
-   el.innerHTML=`<section class="panel"><span class="eyebrow">The Emperor's Cup · Legendary transfer</span><h2 style="font-size:30px;margin:4px 0">Sign a legendary player</h2><p class="note" style="margin:0 0 12px">Pick any one player from the teams you beat. He joins your club for free.</p>
-   <div class="legmkt">${all.map(({p,t})=>`<div class="legrow">${badge(t,30)}<div class="grow"><b>${esc(p.name)}</b><span class="note">${esc(t.name)} · <span class="pos ${CAT[p.pos]}">${p.pos}</span></span></div>${chip(p.ovr,'sm')}<button class="btn sm primary" data-legsign="${p.id}">Sign</button></div>`).join('')}</div>
-   <div class="actions" style="justify-content:flex-start;margin-top:12px"><button class="btn ghost" id="legclose">Back</button></div></section>`;wireCupBtns(el,c);return;}
+
   const h=`<section class="panel cuphead empwin"><span class="eyebrow">The Emperor's Cup · Champions</span><h2 style="font-size:40px;margin:2px 0">Emperors of football</h2><p class="note" style="margin:0">You have conquered the highest cup there is. ${esc(myTeam().name)} beat the champions of every age.</p>
    <div class="prizerow"><div class="prize"><span class="eyebrow">Winnings</span><b class="num">${fmt(c.earn)}</b><span class="note">added to your wallet</span></div>
    <div class="prize troph">${trophyImg('emperor',150)}</div>
    <div class="prize empground"><span class="eyebrow">Your new home ground</span><img src="${EMP_GROUND}" alt="${esc(VENUES.empfinal.name)}"><b>${esc(VENUES.empfinal.name)}</b><span class="note">Every home game is played here from now on</span></div>
-   ${signed?`<div class="prize"><span class="eyebrow">Legend signed</span><b>${esc(signed)}</b><span class="note">has joined your squad</span></div>`:`<button class="prize legbtn" id="legendbtn" aria-label="Sign a legendary player"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="30" r="15"/><path d="M20 92 C20 62 32 50 50 50 C68 50 80 62 80 92 Z"/></svg><b>Sign legendary player</b></button>`}</div>
+   ${legendPrizeHTML(c)}</div>
    <div class="actions"><button class="btn primary" id="retdom">Return to domestic football</button></div></section>`;
   el.innerHTML=`<div class="stack">${h}</div>`;wireCupBtns(el,c);return;}
  if(c.stage==='done'){const w=cupT(c.winner);const iWon=c.winner===myCid();
@@ -7222,7 +7345,8 @@ function cupView(el){
    :iWon&&kind==='mystery'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Elite League</span><p style="margin:0">There is a league above the Premier League, and only Eternal champions are invited. Seven of Europe's greatest clubs, at their all-time best: Real Madrid, Barcelona, Bayern Munich, Juventus, AC Milan, Paris Saint-Germain and Ajax. Plus you. Everyone plays everyone home and away.</p><p class="note" style="margin:0">${fmt(ELITE_PRIZE.win)} for every win · champions ${fmt(ELITE_PRIZE.champ)} and an invitation to the Emperor's Cup.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goelite">Collect your winnings</button>${backBtn}</div></div>`
    :iWon&&kind==='elite'?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Emperor's Cup</span><p style="margin:0">Eight reigning champions from across time and space, every one with a power of its own: Germany 1940s, the Knights, Zeta Reticuli, Robo United, the Presidents, the Vampires, the Romans, and you. Straight knockout from the quarter-finals.</p><p class="note" style="margin:0">Semi-final ${fmt(EMPEROR_PRIZE.sf)} · winner ${fmt(EMPEROR_PRIZE.champ)}.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="goemp">Collect your winnings</button>${backBtn}</div></div>`:'';
   head=`<section class="panel cuphead"><span class="eyebrow">${nm} · Final whistle</span><div style="display:flex;gap:14px;align-items:center">${badge(w,72)}<div><h2 style="font-size:38px">${esc(w.name)}</h2><div class="note">${CUP_KIND[kind].champs}</div></div></div>
-  <p style="margin:0">Your prize money from the ${kind==="mystery"?"Eternal Cup":nm}: <b>${fmt(c.earn)}</b>.${kind==='mystery'&&c.legend?` <b>${esc(c.legend)}</b> has joined your squad.`:''}</p>
+  <p style="margin:0">Your prize money from the ${kind==="mystery"?"Eternal Cup":nm}: <b>${fmt(c.earn)}</b>.</p>
+  ${kind==='mystery'&&iWon&&c.legend&&c.legend!=='-'?`<div class="prizerow">${legendPrizeHTML(c)}</div>`:''}
   ${eternal?`<div class="cupoffer mystery"><span class="eyebrow">Unlocked · The Eternal Cup</span><p style="margin:0">A golden invitation arrives. Above the clouds, at <b>Elysium</b>, seven sides that aren't of this world are waiting: Olympus, Asgard, Camelot, the Pharaohs, the Dragon Kings, Sherwood's outlaws, and the Immortals, the greatest footballers who ever lived. Eight teams, straight knockout.</p><p class="note" style="margin:0">Semi-final ${fmt(ETERNAL_PRIZE.sf)} · winner ${fmt(ETERNAL_PRIZE.champ)} and one of the Immortals joins your club.</p><div class="actions" style="justify-content:flex-start"><button class="btn primary" id="eternal">Collect your winnings</button>${backBtn}</div></div>`:
   nextOffer||backBtn}</section>`;
  }else if(mf){const f=mf.f;const h=cupT(f.h),a=cupT(f.a);
@@ -7302,7 +7426,7 @@ function cupPreview(kind,onEnter,onReject){
 // winning the Emperor's Cup: sign any one player from the beaten teams
 function signEmperorLegend(pid){const c=S.cup;let src=null;for(const t of c.euro)for(const p of t.squad)if(String(p.id)===String(pid))src=p;if(!src||c.legend)return;
  const me=myTeam();const p=JSON.parse(JSON.stringify(src));p.id=S.nextId++;p.age=Math.min(30,Math.max(24,p.age>60?28:p.age));p.num=0;p.form=[];p.xp=0;p.goals=0;p.apps=0;p.legend=true;p.retiring=false;refresh(p);
- me.squad.push(p);numberSquad(me);c.legend=p.name;S.news=(S.news||[]).concat(`Legend signed! ${p.name} (${p.pos}, rated ${p.ovr}) joins ${me.name} from ${c.kind==='temporal'?'the Temporal War League':'the Emperor\'s Cup'}.`);save();}
+ me.squad.push(p);numberSquad(me);c.legend=p.name;S.news=(S.news||[]).concat(`Legend signed! ${p.name} (${p.pos}, rated ${p.ovr}) joins ${me.name} from ${c.kind==='temporal'?'the Temporal War League':c.kind==='mystery'?'the Eternal Cup':'the Emperor\'s Cup'}.`);save();}
 // ---------- the Cups tab: every competition you have won can be played again at any time ----------
 const CUP_ORDER=[['euro','European Cup','16 elite clubs: groups, then knockouts'],['world','World Cup','32 all-time national sides at a themed venue'],['mystery','The Eternal Cup','Eight teams of gods and legends at Elysium'],['elite','The Elite League','Europe\'s greatest clubs, home and away'],['emperor',"The Emperor's Cup",'Eight champions across time and space, straight knockout'],['temporal','The Temporal War League','Seven armies from the twentieth century, home and away']];
 function tabCups(el){
@@ -7459,6 +7583,13 @@ if(S&&S.fx.length===7){
 }
 if(S&&!S.cupsWon){const w={};if((S.balls||[]).includes('diamond')||S.eternalOpen)w.world=1;if(S.world.teams[S.me].squad.some(p=>p.legend))w.mystery=1;if(S.titlesEuro)w.euro=S.titlesEuro;S.cupsWon=w;save();}
 if(S&&!S.capFix){S.world.teams.forEach(t=>t.squad.forEach(refresh));S.world.free.forEach(refresh);S.world.teams.forEach(fixXI);S.capFix=1;save();}
+// two new traits (Cuts inside, Fortress): real players get theirs, and a fair share of other wingers and centre-backs with a trait switch to them
+if(typeof cupSupersFix==='function')cupSupersFix();
+if(S&&!S.trait3){const wOf=c=>Object.keys(TRAITS).filter(k=>TRAITS[k].cats.includes(c)).reduce((a,k)=>a+(TRAITS[k].bad?0.35:1),0);const share={WM:1/wOf('WM'),CB:1/wOf('CB')};const nk={WM:'cutinside',CB:'fortress'};
+ [...S.world.teams.flatMap(t=>t.squad),...S.world.free].forEach(p=>{if(TRAIT_OF[p.name]!==undefined){p.trait=TRAIT_OF[p.name];return;}const c=CAT[p.pos];if(!p.trait||!nk[c])return;let h=2166136261;for(const ch of p.name+'#t3'){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}if(((h>>>0)%1000)/1000<share[c])p.trait=nk[c];});S.trait3=1;save();}
+// the free-kick specialist joins the trait list: real ones get it, and a fair share of other players with a trait switch to it
+if(S&&!S.trait4){const wOf=c=>Object.keys(TRAITS).filter(k=>TRAITS[k].cats.includes(c)).reduce((a,k)=>a+(TRAITS[k].bad?0.35:1),0);
+ [...S.world.teams.flatMap(t=>t.squad),...S.world.free].forEach(p=>{if(TRAIT_OF[p.name]!==undefined){p.trait=TRAIT_OF[p.name];return;}const c=CAT[p.pos];if(!p.trait||!TRAITS.fkspec.cats.includes(c))return;let h=2166136261;for(const ch of p.name+'#t4'){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}if(((h>>>0)%1000)/1000<1/wOf(c))p.trait='fkspec';});S.trait4=1;save();}
 if(S&&!S.trait2){[...S.world.teams.flatMap(t=>t.squad),...S.world.free].forEach(p=>{if(!TRAIT_OF[p.name]){delete p.trait;}});S.trait2=1;save();}
 if(S&&!S.balls){const ml=S.world.teams[S.me].league;S.balls=['white','orange'];for(let l=4;l>=0;l--)if(l>=ml)S.balls.push(BALL_FOR_LG[l]);save();}
 if(S&&!S.real2){
@@ -7474,7 +7605,9 @@ if(S&&!S.real2){
 if(S&&!S.ret2){const all=[...S.world.teams.flatMap(t=>t.squad),...S.world.free];for(const p of all){p.ageM=p.ageM||0;p.retAge=Math.max(retAgeFor(p),p.age+1);p.retiring=false;}S.ret2=1;save();}
 if(S&&!S.lgCap){relocateStars();S.lgCap=1;save();}
 if(S&&realHomeFix())save();
-if(S&&!S.potFix){for(const t of S.world.teams)for(const p of t.squad)if(!p.real&&p.pot!=null)p.pot=Math.min(p.pot,p.mystery?85:FAKE_CAP);S.potFix=1;save();}
+// potential now peaks at 90: anyone whose ceiling was held at the old 80 (or 85) gets his natural one back, up to 90
+if(S&&!S.pot90){for(const t of S.world.teams)for(const p of t.squad)if(!p.real&&p.pot!=null&&p.pot>=(p.mystery?85:FAKE_CAP)){const r=mkRng(hashStr('pot90|'+p.id));p.pot=Math.min(POT_CAP,p.pot+Math.round(r()*(p.age<=21?10:p.age<=25?6:2)));}S.pot90=1;S.potFix=1;save();}
+if(S&&!S.potFix){for(const t of S.world.teams)for(const p of t.squad)if(!p.real&&p.pot!=null)p.pot=Math.min(p.pot,POT_CAP);S.potFix=1;save();}
 if(S){S.world.teams.forEach(t=>t.squad.forEach(p=>{if(p.pos==='DM'){p.pos='CM';refresh(p);}}));S.world.free.forEach(p=>{if(p.pos==='DM'){p.pos='CM';refresh(p);}});}
 if(S){const mig=p=>{const r=Math.random();
   if(p.pos==='FB')p.pos=r<0.5?'LB':'RB';else if(p.pos==='WM')p.pos=['LM','RM','LW','RW'][Math.floor(r*4)];else if(p.pos==='ST')p.pos='CF';
@@ -7550,15 +7683,15 @@ function liveScoresTick(m){if(!LIVE_OTHERS.length)return;const min=Math.min(90,M
   document.querySelectorAll(`[data-ls="${i}"],[data-lsx="${i}"]`).forEach(e=>{if(e.textContent!==txt){e.textContent=txt;e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash');}});
   document.querySelectorAll(`[data-lsm="${i}"],[data-lsmx="${i}"]`).forEach(e=>{e.textContent=end?'FT':recent&&last.p?`⚽ ${surname(last.p.name)} ${last.min}′`:'';});});}
 // half-time: one thing the assistant has noticed
-function htTipHTML(m,L){if(!m)return '';const s={name:'Your assistant'};const T={acc:0.8};const me=m.teams[L.mine],O=m.teams[1-L.mine];const P=O.side.profs&&O.side.profs[O.side.tactic];const nm=k=>TACTICS[k]?TACTICS[k].name:k;const r=mkRng(hashStr(`ht|${m.t}|${s.name}`));
- let tip;const cur=me.side.tactic;
- if(P&&P.weak.includes(cur))tip=`It's working, boss. They can't cope with ${nm(cur)}. Keep at it.`;
- else if(P&&r()<T.acc){const k=P.weak[0];tip=P.strong.includes(cur)?`They look comfortable against ${nm(cur)}. I'd switch to ${nm(k)}: they've looked shaky against it.`:`I think ${nm(k)} could open them up. Their back line looks vulnerable to it.`;}
- else{const ks=Object.keys(TACTICS).filter(k=>k!=='sink'&&k!==cur);tip=`Hard to read them. Maybe try ${nm(ks[Math.floor(r()*ks.length)])}?`;}
+function htTipHTML(m,L){if(!m)return '';const me=m.teams[L.mine];const A=tacAdvice(m,me);const nm=k=>TACTICS[k]?TACTICS[k].name:k;
+ // the same read as the live recommendation: it never says one thing while the touchline box says another
+ let tip=!A?'Keep going, boss.':A.stay?`It's working, boss. ${nm(A.k)} is causing them real problems: stay on it.`:A.wo?`They've worked out our ${nm(me.side.tactic)}. Switch to ${nm(A.k)} for the second half.`:/comfortable/.test(A.text)?`They look comfortable against ${nm(me.side.tactic)}. I'd switch to ${nm(A.k)}: it's what hurts them.`:`I'd go with ${nm(A.k)}. Against their ${nm(m.teams[1-L.mine].side.tactic)} it's the one that hurts them.`;
+ // if we keep the same style into the second half it will be worked out soon after
+ if(A&&A.stay){const left=m.dur*(me.side.tactic==='balanced'?0.22:0.3)-(m.t-(me.tacT0||0));if(left<m.dur*0.12)tip+=` They'll work it out early in the second half though, so be ready to change.`;}
  const tired=me.players.filter(q=>q.role!=='GK').sort((a,b)=>a.energy-b.energy)[0];
  const inj=me.players.find(q=>q.inj);
  const extra=inj?` And ${inj.p.name} is struggling with that knock: get him off.`:tired&&tired.energy<55?` ${tired.p.name} is tiring (${Math.round(tired.energy)}% energy).`:'';
- return `<div class="htasst"><span class="eyebrow">${esc(s.name)} says</span><p>${esc(tip+extra)}</p></div>`;}
+ return `<div class="htasst"><span class="eyebrow">Your assistant says</span><p>${esc(tip+extra)}</p></div>`;}
 // ===================== TRANSFER TALKS =====================
 // "Contact" a player instead of signing him at the asking price. A run of numbers from 1 to 10 comes down a
 // conveyor: guess whether each next number is higher or lower. Every right guess knocks a bit more off the
@@ -7572,17 +7705,17 @@ function negGames(){return S.gameNo||0;}
 function negBanned(pid){const b=(S.negBan||{})[pid];return b!=null&&b>negGames()?b-negGames():0;}
 // after each league game: count it, and tell the wire about anyone who is talking again
 function negAfterGame(){S.gameNo=(S.gameNo||0)+1;const B=S.negBan||{};
- for(const id in B){if(B[id]<=S.gameNo){delete B[id];const p=playerById(+id);if(p&&clubOf(p.id)!==S.me){const ci=clubOf(p.id);const club=ci>=0?T_()[ci].name:'free agent';
-   addNote('TRANSFER NEWS',`${p.name} is back on the market`,`His agent is taking calls again. ${p.pos}, rated ${p.ovr}${ci>=0?', at '+club:', free agent'}.`);}}}}
+ for(const id in B){if(B[id]<=S.gameNo){delete B[id];const en=findEntry(+id);const p=en&&en.p;if(p&&en.club!==S.me){const ci=en.club;const club=en.et?en.et.name:ci>=0?T_()[ci].name:'free agent';
+   addNote('TRANSFER NEWS',`${p.name} is back on the market`,`His agent is taking calls again. ${p.pos}, rated ${p.ovr}${en.et||ci>=0?', at '+club:', free agent'}.`);}}}}
 function negOpen(pid,after){
- const p=playerById(pid);if(!p)return;const ci=clubOf(pid);if(ci===S.me)return;const e={p,club:ci};
+ const e=findEntry(pid);if(!e||e.club===S.me)return;const p=e.p;const ci=e.club;
  if(negBanned(pid)){toast(`${p.name}'s agent isn't taking your calls (${negBanned(pid)} more game${negBanned(pid)>1?'s':''}).`);return;}
  S.neg=S.neg||{};let N=S.neg[pid];if(!N){N=S.neg[pid]={max:negMax(pid),step:0,hist:[1+Math.floor(Math.random()*10)]};save();}
  document.querySelectorAll('.ngwrap').forEach(x=>x.remove());
- const o=document.createElement('div');o.className='ngwrap';const club=ci>=0?T_()[ci]:null;
+ const o=document.createElement('div');o.className='ngwrap';const club=e.et||(ci>=0?T_()[ci]:null);
  o.innerHTML=`<div class="ngbox" role="dialog" aria-modal="true" aria-label="Transfer talks with ${esc(p.name)}">
   <div class="nghead">${chip(p.ovr)}<div class="ngwho"><b>${esc(p.name)}</b><span>${p.pos} · ${club?esc(club.name):'Free agent'}</span></div><button class="ngx" data-ng="close" aria-label="Close">✕</button></div>
-  <p class="ngtip">Higher or lower? Each right guess cuts the fee. One wrong guess ends the talks.</p>
+  <p class="ngtip">Higher or lower? No number comes up twice. Each right guess cuts the fee; one wrong guess ends the talks.</p>
   <div class="ngmain">
    <div class="ngtile"><b></b></div>
    <div class="ngarrows"><button class="ngup" data-ng="up">▲ Higher</button><button class="ngdn" data-ng="down">▼ Lower</button></div>
@@ -7605,8 +7738,8 @@ function negOpen(pid,after){
  const close=()=>{o.remove();document.removeEventListener('keydown',kd);if(after)after();};
  const kd=ev=>{if(ev.key==='Escape')close();if(!busy&&!over&&N.step<5){if(ev.key==='ArrowUp')guess(1);if(ev.key==='ArrowDown')guess(-1);}};document.addEventListener('keydown',kd);
  function guess(dir){if(busy||over||N.step>=5)return;busy=true;info();
-  const cur=N.hist[N.hist.length-1];let nx;do{nx=1+Math.floor(Math.random()*10);}while(nx===cur);
-  const ok=dir>0?nx>cur:nx<cur;N.hist.push(nx);if(N.hist.length>8)N.hist=N.hist.slice(-8);
+  const cur=N.hist[N.hist.length-1];const pool=[1,2,3,4,5,6,7,8,9,10].filter(v=>!N.hist.includes(v));const nx=pool[Math.floor(Math.random()*pool.length)];// a number that has come up can't come up again
+  const ok=dir>0?nx>cur:nx<cur;N.hist.push(nx);
   if(ok)N.step++;else{delete S.neg[pid];const g=2+Math.floor(Math.random()*5);S.negBan=S.negBan||{};S.negBan[pid]=negGames()+g;over=g;}
   save();
   // the card flips over to show the next number
@@ -7621,5 +7754,34 @@ function negOpen(pid,after){
   if(k==='sign'){if(buy(pid))close();}});
  o.onclick=ev=>{if(ev.target===o)close();};
 }
+// ===================== LEGENDS =====================
+// Win the Eternal Cup, the Emperor's Cup or the Temporal War League and two things happen:
+// a random player from that competition joins you as part of the winnings, and its players go on sale in the
+// LEGENDS market. Each further win adds that competition's players. Prices follow rating; you can negotiate.
+var LEG_KINDS=['mystery','emperor','temporal'];
+var LEG_TAG={mystery:'ETERNAL',emperor:'EMPEROR',temporal:'TEMPORAL'};
+var LEG_NAME={mystery:'the Eternal Cup',emperor:'the Emperor\'s Cup',temporal:'the Temporal War League'};
+function legendPrice(p){return Math.max(1e6,Math.round(2.5e6*Math.pow(1.13,p.ovr-75)/5e5)*5e5);}
+function legendEntries(){const out=[];(S.legends||[]).forEach((L,li)=>L.teams.forEach((t,ti)=>t.squad.forEach(p=>out.push({p,club:-1000-li*20-ti,et:t,lg:L.kind}))));return out;}
+function findEntry(pid){return allPlayers().find(x=>x.p.id===pid)||legendEntries().find(x=>x.p.id===pid)||null;}
+// a won competition's sides are copied into the legends pool (fresh ids, so they never clash with anyone else)
+function legendPoolAdd(c){S.legends=S.legends||[];if(S.legends.some(L=>L.kind===c.kind)){c.pooled=1;return;}
+ const have=new Set(allPlayers().map(e=>e.p.name));
+ const teams=c.euro.map(t=>{const x=JSON.parse(JSON.stringify(t));x.squad=x.squad.filter(p=>!have.has(p.name)).map(p=>{p.id=S.nextId++;p.num=0;return p;});x.xi=[];return x;});
+ S.legends.push({kind:c.kind,teams});c.pooled=1;}
+// the winnings: one player from the competition, picked at random (so it can't always be the best one)
+function cupRewardCheck(){const c=S.cup;if(!c||c.stage!=='done'||c.winner!==myCid()||!LEG_KINDS.includes(c.kind)||c.replay&&c.legend)return;
+ if(!c.pooled)legendPoolAdd(c);if(c.legend)return;
+ const L=S.legends.find(x=>x.kind===c.kind);const pool=L?L.teams.flatMap(t=>t.squad.map(p=>({p,t}))):[];if(!pool.length){c.legend='-';save();return;}
+ const me=myTeam();const {p,t}=pool[Math.floor(Math.random()*pool.length)];t.squad=t.squad.filter(q=>q!==p);legendJoin(p);
+ c.legend=p.name;c.legendInfo={pos:p.pos,ovr:p.ovr,from:t.name};
+ S.news=(S.news||[]).concat(`Legend signed! ${p.name} (${p.pos}, rated ${p.ovr}) joins ${me.name} from ${LEG_NAME[c.kind]}.`);save();}
+function legendJoin(p){const me=myTeam();p.age=Math.min(30,Math.max(24,p.age>60?28:p.age||27));p.num=0;p.form=[];p.xp=0;p.goals=0;p.apps=0;p.legend=true;p.retiring=false;delete p.pot;refresh(p);me.squad.push(p);numberSquad(me);}
+function legendPrizeHTML(c){if(!c.legend||c.legend==='-')return '';const i=c.legendInfo||{};return `<div class="prize"><span class="eyebrow">Joins your squad</span>${i.ovr?chip(i.ovr):''}<b>${esc(c.legend)}</b><span class="note">${i.pos?esc(i.pos)+' · ':''}${i.from?'from '+esc(i.from):'a gift from the winnings'}</span></div>`;}
+// careers that had already won these competitions before the LEGENDS market existed get their pools too
+function legendsMigrate(){if(!LEG_KINDS||typeof S==='undefined'||!S||S.leg1)return;const W=S.cupsWon||{};const mk={mystery:()=>makeMythic(),emperor:()=>makeEmperor(),temporal:()=>makeTemporal()};
+ for(const k of LEG_KINDS){if(!W[k]||(S.legends||[]).some(L=>L.kind===k))continue;try{const teams=mk[k]();makeSuperstars(teams,k);legendPoolAdd({kind:k,euro:teams});}catch(e){}}
+ S.leg1=1;save();}
+legendsMigrate();
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}</script>
