@@ -1739,7 +1739,7 @@ function makeTemporal(){const out=makeIntl(TWL_DEF.map(d=>({...d,bp:{shape:1,pat
  out.forEach((t,i)=>{const d=TWL_DEF[i];t.twl=d.twl;t.hat=d.hat;t.roundel=d.roundel||null;t.twVenue=d.venue;t.twField=d.field;t.twWhere=d.where;t.badge={shape:1,pat:0,c1:d.c1,c2:d.c2};});return out;}
 // ===== MATCH ENGINE =====
 var SEP=3.0,TACK=3.35,SEP_RAF=3.2; // RAF roundels: nobody closer than halfway across the white ring (0.6 of the tile radius)
-var EXP={};var TAC_W=0.11,TAC_S=0.07;const SP_CLOCK={corner:0.4,pen:0.3,fk:0.35,free:0.5,dark:0.25,offside:0.4};var G_FIN=1.45;var SAVE_BASE=1.4;var SHOOT_K=2.2;
+var EXP={};var TAC_W=0.12,TAC_S=0.07;const SP_CLOCK={corner:0.4,pen:0.3,fk:0.35,free:0.5,dark:0.25,offside:0.4};var G_FIN=1.45;var SAVE_BASE=1.4;var SHOOT_K=2.2;
 const PL=105,PW=68,GW=14.64,GY=34,ND=3.2;
 const BOOSTERS={
  power:{name:'Power shot',desc:'Every shot is struck with full power for 10 minutes.'},
@@ -2013,7 +2013,7 @@ function step(m,dt){
  computeRoles(m);
  {const late=m.t>m.dur*0.84;for(const T of m.teams){T.urgent=late&&m.score[T.idx]<=m.score[1-T.idx];const bs=T.boost&&m.t<T.boost.until?T.boost.type:null;for(const p of T.players){p.urg=T.urgent;p.bst=bs;p.late=m.t>m.dur*0.8;}}}
  for(const T of m.teams){if(T.tac.balanced)T.balT=(T.balT||0)+dt;else T.balT=0;const rd=workedOut(m,T);for(const p of T.players)p.rd=rd;
-  if(rd&&!T.woAnn&&T.side.user){T.woAnn=true;const a=tacAdvice(m,T);ev(m,'rec',`They have worked out your ${(TACTICS[T.side.tactic]||{name:"style"}).name}.${a&&a.k!==T.side.tactic?` Switch to ${TACTICS[a.k].name}`:''}`,T.idx);}}
+  if(rd&&!T.woAnn&&T.side.user){T.woAnn=true;ev(m,'rec',`They seem to have worked out your ${(TACTICS[T.side.tactic]||{name:"style"}).name}`,T.idx);}}
  hotStreaks(m,dt);aiSubs(m);aiTactics(m,dt);recStep(m);
  for(const T of m.teams){const mu=styleMu(m,T,T.side.tactic,workedOut(m,T));for(const q of T.players)q.mu=mu;}
  {const c=m.cond;const pr=m.t/m.dur;b.k=c.rain?c.fric+pr*0.55:c.fric;if(c.rain){const a=c.acc*(0.85+0.1*pr);for(const p of m.players){p.acc=a;p.cs=c.spd*(1-0.07*pr);}}}
@@ -3033,7 +3033,7 @@ function kickFrom(m,pl,tx,ty){const b=m.ball;const dx=tx-pl.x,dy=ty-pl.y,d=hyp(d
 // it comes from how the opposition (in their current style) cope with each of yours, and whether yours has been worked out
 // how long a style lasts before the opposition read it varies from match to match and style to style:
 // Balanced roughly 15-30 minutes, the others roughly 20-45. Once read, a style stays known to them for a while
-function woLimit(m,T,k){if(m.woSeed==null)m.woSeed=Math.floor(m.rng()*1e6);const h=(hashStr(m.woSeed+'|'+T.idx+'|'+k)%1000)/1000;return m.dur*(k==='balanced'?0.17+h*0.17:0.22+h*0.28);}
+function woLimit(m,T,k){if(m.woSeed==null)m.woSeed=Math.floor(m.rng()*1e6);const h=(hashStr(m.woSeed+'|'+T.idx+'|'+k)%1000)/1000;return m.dur*(k==='balanced'?0.33+h*0.3:0.45+h*0.55);}
 function tacKnown(m,T,k){const w=T.woT&&T.woT[k];return w!=null&&m.t-w<m.dur*0.4;}
 // a corner won just before half-time is still taken: the whistle waits for the taker's ball and the next touch
 // (a header, a shot, a clearance), so a goal can come from it seconds before the break
@@ -3046,7 +3046,7 @@ function workedOut(m,T){const k=T.side.tactic;if(k==='sink')return false;if(tacK
 // how well a style suits this match: the opposition's hidden weak/strong spots (bigger for the underdog), plus plain football
 // sense from the players on the pitch: wingers against their full-backs, forwards against their centre-backs, and so on
 function styleMu(m,T,k,wo){const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];const ex=clamp(1+(O.ovr-T.ovr)/25,0.6,1.6);const a=P?P.amp*ex:0;
- let mu=P?(P.weak.includes(k)&&!wo?1+TAC_W*a:P.strong.includes(k)?1-TAC_S*a:1):1;if(wo)mu=Math.min(mu,1);return mu*(1+(wo?0:styleEdge(m,T,k)));}
+ const gr=P?(P.g?P.g[k]||0:P.weak.includes(k)?1:P.strong.includes(k)?-0.7:0):0;let mu=gr>0&&!wo?1+TAC_W*a*gr:gr<0?1+TAC_S*a*gr*1.4:1;if(wo)mu=Math.min(mu,1);return mu*(1+(wo?0:styleEdge(m,T,k)));}
 function styleEdge(m,T,k){const c=(m._se=m._se||{});const key=T.idx+k+Math.floor(m.t/(m.dur/90*3));if(c[key]!=null)return c[key];const O=m.teams[1-T.idx];const ok=O.side.tactic;
  const av=(ps,f)=>ps.length?ps.reduce((s,q)=>s+f(q.p),0)/ps.length:65;const rl=(X,r)=>X.players.filter(q=>q.role===r);let e=0;
  if(k==='wings')e=clamp((av(T.players.filter(q=>q.role==='WM'||q.role==='FB'),p=>(p.spd+p.dri)/2)-av(rl(O,'FB'),p=>(p.tck+p.spd)/2))/120,-0.04,0.04);
@@ -3076,7 +3076,7 @@ function tacAdvice(m,U){const O=m.teams[1-U.idx];const P=O.side.profs&&O.side.pr
  if(P.strong.includes(cur))return {k:best,text:`They are comfortable against ${nm(cur)}: switch to ${nm(best)}, ${styleWhy(m,U,best)}`};
  return {k:best,text:`Switch to ${nm(best)}: ${styleWhy(m,U,best)}`};}
 const TAC_ORDER=['balanced','counter','through','wings','press','long','attacking','defensive','park'];
-function recCounter(m,U,O){if(U.side.auto)return;const a=tacAdvice(m,U);m.recT=m.t;if(a)ev(m,'rec',a.stay?`They have changed to ${TACTICS[O.side.tactic].name}, but ${TACTICS[a.k].name} still works: stay on it`:`They have changed to ${TACTICS[O.side.tactic].name}. ${a.text.replace(/^./,c=>c.toUpperCase())}`,U.idx);}
+function recCounter(m,U,O){return;const a=tacAdvice(m,U);m.recT=m.t;if(a)ev(m,'rec',a.stay?`They have changed to ${TACTICS[O.side.tactic].name}, but ${TACTICS[a.k].name} still works: stay on it`:`They have changed to ${TACTICS[O.side.tactic].name}. ${a.text.replace(/^./,c=>c.toUpperCase())}`,U.idx);}
 function recStep(m){}
 
 // a corner: swung in for a header, played short, or laid back to the edge of the box for someone to blast first time
@@ -3139,6 +3139,8 @@ function evTick(m,dt){
  m.clueT-=dt;if(m.clueT<=0){m.clueT=m.dur*(0.07+m.rng()*0.06);for(const T of m.teams){if(T.side.auto)continue;const O=m.teams[1-T.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];if(!P)continue;const k=T.side.tactic;
    if(P.weak.includes(k)&&m.rng()<0.75){const L=CLUE_WEAK[k]||CLUE_WEAK.balanced;ev(m,'clue',L[Math.floor(m.rng()*L.length)].replace('THEY',O.side.short||O.side.name),T.idx);}
    else if(P.strong.includes(k)&&m.rng()<0.6){ev(m,'clue',`${O.side.short||O.side.name} look very comfortable against your ${TACTICS[k].name.toLowerCase()}`,O.idx);}}}
+ // the bench only speaks up when something is going wrong
+ advStep(m,dt);
  // momentum: who is on top right now
  {const b=m.ball;let tgt=0;const o=b.owner;if(o){const pr=progOf(m.teams[o.team],o.x);tgt=(o.team===0?1:-1)*(0.15+0.85*Math.max(0,pr-0.35)/0.65);}
   else if(b.shot)tgt=b.shot.team===0?1:-1;
@@ -3189,6 +3191,28 @@ function mgrProtest(m,ti){if(m.mgrOff[ti])return;m.mgrOff[ti]=true;const sd=m.te
 function fkSetup(m,team,x,y){const T=m.teams[team],O=m.teams[1-team],g=goalOf(T);const dx=g.x-x,dy=GY-y,d=hyp(dx,dy)||1;const ux=dx/d,uy=dy/d;
  const n=d<22?4:d<27?3:2;const wall=O.players.filter(q=>q.role!=='GK').sort((a,b)=>hyp(a.x-x,a.y-y)-hyp(b.x-x,b.y-y)).slice(0,n);
  m.fkWall=wall.map((q,k)=>({q,x:x+ux*9.15+(-uy)*(k-(n-1)/2)*1.3,y:y+uy*9.15+ux*(k-(n-1)/2)*1.3}));}
+
+// ---------- the touchline: watch how the match is going, and only offer a tactical idea when we're struggling ----------
+// (being pinned back, losing the ball, attacks coming to nothing, or the style worked out). At most four times a game,
+// never more than once every twelve minutes, and you decide whether to take it
+function advStep(m,dt){const U=m.teams.find(t=>t.side.user);if(!U)return;const O=m.teams[1-U.idx];const b=m.ball;
+ m.swT=(m.swT||0)+dt;if(m.swT>=0.5){m.swT=0;(m.stw=m.stw||[]).push({poss:(b.owner?b.owner.team:b.last)===U.idx?1:0,own:progOf(U,b.x)<0.33?1:0,fin:progOf(U,b.x)>0.67?1:0,shF:m.stats.shots[U.idx],shA:m.stats.shots[O.idx]});const N=Math.round(m.dur*8/90/0.5);if(m.stw.length>N)m.stw.shift();}
+ if(m.advOn&&(m.t>m.advOn.until||U.side.tactic===m.advOn.k)){if(U.side.tactic===m.advOn.k)m.advDone={k:m.advOn.k,t:m.t};m.advOn=null;}
+ if(m.advOn||m.t<m.dur*12/90||(m.advN||0)>=3||m.t-(m.advLast??-1e9)<m.dur*16/90||U.side.tactic==='sink')return;
+ const why=struggle(m,U);const wo=workedOut(m,U);if(!why&&!wo)return;const A=tacAdvice(m,U);if(!A||A.stay)return;
+ // already on a style that suits this match: the problem isn't tactical, so say nothing
+ {const P=O.side.profs&&O.side.profs[O.side.tactic];if(!wo&&P&&P.g&&(P.g[U.side.tactic]||0)>=0.6)return;}
+ const reason=why||`They have worked out your ${TACTICS[U.side.tactic].name}`;
+ m.advOn={k:A.k,text:A.text,why:reason,t0:m.t,until:m.t+m.dur*8/90};m.advN=(m.advN||0)+1;m.advLast=m.t;
+ m.advOn.msg=why?`${why}. ${A.text.replace(/^./,c=>c.toUpperCase())}`:A.text.replace(/^./,c=>c.toUpperCase());ev(m,'rec',m.advOn.msg,U.idx);}
+function struggle(m,U){const w=m.stw||[];const n=w.length;if(n<Math.round(m.dur*5/90/0.5))return null;const O=m.teams[1-U.idx];
+ const avg=k=>w.reduce((a,x)=>a+x[k],0)/n;const poss=avg('poss'),own=avg('own'),fin=avg('fin');const shF=w[n-1].shF-w[0].shF,shA=w[n-1].shA-w[0].shA;
+ if(own>0.45&&shA>=4)return 'We are under sustained pressure and can\'t clear our lines';
+ if(shA-shF>=5)return 'They are getting far more shots away than us';
+ if(poss<0.33)return 'We keep giving the ball away';
+ if((fin>0.25||poss>0.58)&&shF===0)return 'Our attacks keep coming to nothing';
+ const sd=m.score[U.idx]-m.score[O.idx];if(sd<0&&m.t>m.dur*0.6&&shF<=1)return 'We are behind and not creating anything';
+ return null;}
 // ===== PROCEDURAL PITCHES (based on the six reference grounds) =====
 let MX=13,MY=10; // metres of surroundings drawn around the touchlines (a phone widens MX to fill the screen)
 const PITCH_STYLES=[
@@ -5390,10 +5414,13 @@ function tacProfile(t,own){const ks=TAC_KEYS();own=own||t.tactic||'balanced';con
  const YES={press:['counter','long','through'],attacking:['counter','long'],sink:['counter','long'],park:['wings','long'],defensive:['wings','long']};
  const no=NO[own]||[];weak=weak.filter(k=>!no.includes(k));const yes=YES[own];if(yes&&!weak.some(k=>yes.includes(k)))weak.unshift(yes[Math.floor(r()*yes.length)]);
  weak=weak.slice(0,2);for(const k of no)if(!strong.includes(k)&&k!=='park'&&k!=='defensive')strong.push(k);strong=strong.filter(k=>!weak.includes(k));
- return {weak,strong,amp};}
+ // graded: one style works extremely well, two very well, most are fine, one or two don't work at all
+ const g={};ks.forEach(k=>g[k]=0);g[weak[0]]=1;if(weak[1])g[weak[1]]=0.6;const rest=o.filter(k=>!weak.includes(k)&&!strong.includes(k)&&!no.includes(k));while(Object.values(g).filter(v=>v===0.6).length<2&&rest.length){const k=rest.splice(Math.floor(r()*rest.length),1)[0];g[k]=0.6;}
+ strong.forEach(k=>g[k]=-0.7);weak=ks.filter(k=>g[k]>=0.6).sort((a,b)=>g[b]-g[a]);
+ return {weak,strong,amp,g};}
 // how much a side concedes against a given opposing style (1 = normal)
 // exec: how well the side using the style can carry it out (their quality against the opposition's)
-function tacMatchup(t,oppTac,exec){if(!t||!oppTac)return 1;const P=tacProfile(t);const e=exec??1;const k=P.amp*e;return P.weak.includes(oppTac)?1+0.32*k:P.strong.includes(oppTac)?1/(1+0.26*k):1;}
+function tacMatchup(t,oppTac,exec){if(!t||!oppTac)return 1;const P=tacProfile(t);const e=exec??1;const k=P.amp*e;const gr=(P.g||{})[oppTac]||0;return gr>0?1+0.32*k*gr:gr<0?1/(1+0.37*k*-gr):1;}
 function tacExec(a,b){return clamp(1+(teamOvr(a)-teamOvr(b))/25,0.35,1.7);}
 // computer sides vary their approach from game to game, mostly sticking to what they know
 function aiPickStyle(t){if(t.tac0==null){const ks=TAC_KEYS();t.tac0=t.tactic&&t.tactic!=='balanced'?t.tactic:ks[hashStr(t.id||t.name)%ks.length];}const r=Math.random();const ks=TAC_KEYS();t.tactic=r<0.45?t.tac0:ks[Math.floor(Math.random()*ks.length)];}
@@ -6453,9 +6480,10 @@ function hud(m){
  if(m.events.length!==L.evN){for(let k=L.evN;k<m.events.length;k++)if(!L.skipping)sndEvent(m.events[k],L.mine);L.evN=m.events.length;const feed=$('#feed');
   const sides=[m.teams[0].side,m.teams[1].side];
   feed.innerHTML=m.events.slice().reverse().map(e=>`<div class="${e.type==='clue'?'clue':e.type==='injury'?'injury':''}"><span class="m">${e.type==='pen'?'Pen':(e.lab||e.min)+'′'}</span><span class="dot" style="background:${e.team<0?'var(--dim)':sides[e.team].fill};box-shadow:0 0 0 1px ${e.team<0?'transparent':sides[e.team].ring}"></span><span class="${e.type==='goal'?'goal':''}">${esc(e.text)}</span></div>`).join('');}
- {const rc=$('#recchip');if(rc){const U=m.teams[L.mine];const A=!m.finished&&m.t>m.dur*8/90&&U.side.tactic!=='sink'?tacAdvice(m,U):null;rc.hidden=!A;
-   if(A){const same=A.stay;const txt=same?`✓ ${A.text}`:A.text;
-    if(rc.dataset.t!==txt){rc.dataset.t=txt;rc.innerHTML=`<span class="rct">${esc(txt)}</span>${same?'':`<b class="rcgo">Switch to ${esc(TACTICS[A.k].name)} ›</b>`}`;}rc.classList.toggle('on',same);rc.classList.toggle('fresh',!same&&m.t-(m.recT||-99)<m.dur*4/90);rc.onclick=same?null:()=>{L.setTac(A.k);const box=app.querySelector('[data-cyc="live"] .cycname');if(box){const ks=Object.keys(TACTICS);box.innerHTML=`<b>${TACTICS[A.k].name}</b><small>${ks.indexOf(A.k)+1} / ${ks.length}</small>`;}};}}}
+ {const rc=$('#recchip');if(rc){const U=m.teams[L.mine];const A=m.advOn;const D=m.advDone&&m.t-m.advDone.t<m.dur*3/90?m.advDone:null;rc.hidden=!(A||D)||m.finished;
+   if(A||D){const same=!A;const txt=A?A.msg:`✓ Switched to ${TACTICS[D.k].name}`;
+    if(rc.dataset.t!==txt){rc.dataset.t=txt;rc.innerHTML=`<span class="rct">${esc(txt)}</span>${same?'':`<b class="rcgo">Switch to ${esc(TACTICS[A.k].name)} ›</b>`}`;}
+    rc.classList.toggle('on',same);rc.classList.toggle('fresh',!same);rc.onclick=same?null:()=>{L.setTac(A.k);const box=app.querySelector('[data-cyc="live"] .cycname');if(box){const ks=Object.keys(TACTICS);box.innerHTML=`<b>${TACTICS[A.k].name}</b><small>${ks.indexOf(A.k)+1} / ${ks.length}</small>`;}};}}}
  liveScoresTick(m);
  if(!L.statT||performance.now()-L.statT>400){L.statT=performance.now();
   const s=m.stats;const pt=s.poss[0]+s.poss[1]||1;const p0=Math.round(s.poss[0]/pt*100);
@@ -7778,9 +7806,10 @@ function liveScoresTick(m){if(!LIVE_OTHERS.length)return;const min=Math.min(90,M
 // half-time: one thing the assistant has noticed
 function htTipHTML(m,L){if(!m)return '';const me=m.teams[L.mine];const A=tacAdvice(m,me);const nm=k=>TACTICS[k]?TACTICS[k].name:k;
  // the same read as the live recommendation: it never says one thing while the touchline box says another
- let tip=!A?'Keep going, boss.':A.stay?(/: stay on/.test(A.text)?`It's working, boss. ${A.text.split(':')[0]}. Stay on ${nm(A.k)}.`:`${A.text.replace(/^./,c=>c.toUpperCase())}.`):A.wo?`They've worked out our ${nm(me.side.tactic)}. Switch to ${nm(A.k)} for the second half: ${styleWhy(m,me,A.k)}.`:`I'd switch to ${nm(A.k)}: ${styleWhy(m,me,A.k)}.`;
- // if we keep the same style into the second half it will be worked out soon after
- if(A&&A.stay){const left=woLimit(m,me,me.side.tactic)-(m.t-(me.tacT0||0));if(left<m.dur*0.12)tip+=` They'll work it out early in the second half though, so be ready to change.`;}
+ // he only suggests a change if the half has gone badly or our style has been read; otherwise it's encouragement
+ const why=typeof struggle==='function'?struggle(m,me):null;const wo=workedOut(m,me);const sd=m.score[L.mine]-m.score[1-L.mine];
+ let tip;if((why||wo)&&A&&!A.stay)tip=`${why||`They've worked out our ${nm(me.side.tactic)}`}. ${A.text.replace(/^./,c=>c.toUpperCase())}.`;
+ else tip=sd>0?'Good half, boss. Keep doing what we are doing.':sd<0?'We are still in this. Have a think about what is and isn\'t working out there.':'Even so far. Have a think about where they might be weak.';
  const tired=me.players.filter(q=>q.role!=='GK').sort((a,b)=>a.energy-b.energy)[0];
  const inj=me.players.find(q=>q.inj);
  const extra=inj?` And ${inj.p.name} is struggling with that knock: get him off.`:tired&&tired.energy<55?` ${tired.p.name} is tiring (${Math.round(tired.energy)}% energy).`:'';
