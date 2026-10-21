@@ -1877,7 +1877,7 @@ function kickoff(m,teamIdx,snap){
 }
 
 function restart(m,teamIdx,x,y,kind){
- const b=m.ball;m.offPend=null;
+ const b=m.ball;m.offPend=null;m.penRun=false;m.penStrike=null;
  if(kind==='goalkick'){
   // ball stays where it went out; the keeper fetches it and walks it back to the six-yard box
   const T=m.teams[teamIdx];const gk=T.gk;
@@ -1903,25 +1903,28 @@ function restart(m,teamIdx,x,y,kind){
  else if(kind==='corner'){let bs=-1;for(const pl of T.players){if(pl.role==='GK')continue;const v=eff(pl,'pas')+(hasT(pl,'crosser')?6:0);if(v>bs){bs=v;taker=pl;}}}
  else if(kind==='pen'||kind==='fk'){let bs=-1;for(const pl of T.players){if(pl.role==='GK')continue;const v=eff(pl,'sho')+(pl.cap?3:0)+(pl.p.age||25)*0.15+(kind==='fk'&&hasT(pl,'fkspec')?100:0);if(v>bs){bs=v;taker=pl;}}}
  else{let bd=1e9;for(const pl of T.players){if(pl.role==='GK')continue;const d=hyp(pl.x-x,pl.y-y);if(d<bd){bd=d;taker=pl;}}}
- m.taker=taker;taker.tx=x-T.dir*1.2;taker.ty=y;m.penKick=kind==='pen'?{taker}:null;m.fkKick=kind==='fk'?{taker}:null;if(kind!=='fk')m.fkWall=null;
+ m.taker=taker;taker.tx=x-T.dir*(kind==='pen'?2.9:1.2);taker.ty=y+(kind==='pen'?(m.rng()<0.5?-1:1)*1.1:0);m.penKick=kind==='pen'?{taker}:null;m.fkKick=kind==='fk'?{taker}:null;if(kind!=='fk')m.fkWall=null;
  m.cornerKick=kind==='corner'?{taker}:null;
  if(kind!=='corner')m.cnPhase=null;
  m.state=kind;m.stateT=kind==='corner'?99:kind==='goalkick'?2.0:kind==='pen'?6.5:kind==='fk'?6.0:kind==='free'?2.4:1.3;b.passBy=null;b.loft=null;m.forcePass=kind!=='pen'&&kind!=='fk';m.cross=kind==='corner';
+ // a corner cuts straight to the set-up: ball on the spot, the taker at the flag, everyone in the box
+ if(kind==='corner'&&!m._ffw&&!EXP.cnWalk){const [cx,cy]=m.cnSpot;const sx=cx+m.outSide*0.5,sy=cy+(cy<PW/2?-0.5:0.5);b.x=cx;b.y=cy;b.vx=b.vy=0;taker.x=sx;taker.y=sy;taker.vx=taker.vy=0;taker.tx=sx;taker.ty=sy;m.cnPhase='set';
+  const fl=m.flash;m._ffw=true;for(let i=0;i<330;i++)step(m,1/30);m._ffw=false;m.flash=fl;taker.x=sx;taker.y=sy;b.x=cx;b.y=cy;m.stateT=1.6;}
 }
 
 function step(m,dt){
  if(m.finished)return;
  if(m.capPick!=null){if(m.autoCap){const T=m.teams[m.capPick];m.capPick=null;passArmband(m,T);}else return;}
  const b=m.ball;
- m.t+=dt*(SP_CLOCK[m.state]||1);
+ if(!m._ffw)m.t+=dt*(SP_CLOCK[m.state]||1);
  // connected team-mates close by: they read each other's game, so passing, control and tackling are a touch sharper
  for(const pl of m.players){pl._mt=m.t;pl.sink=!!m.teams[pl.team].tac.sink;}
  if(((m.lkT=(m.lkT||0)+dt))>0.2){m.lkT=0;for(const pl of m.players){pl.lkOn=false;if(!pl.lk)continue;for(const q of m.teams[pl.team].players)if(linked(pl,q)){pl.lkOn=true;break;}}}
  if(m.flash)m.flash.t-=dt;
- if(m.half===1&&m.t>=m.dur/2){m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
+ if(m.half===1&&m.t>=m.dur/2&&!m._ffw&&!cornerHold(m,m.dur/2)){m.whC=null;m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
  // extra time: half-time at 105, ends swap
- if(m.etOn&&m.etHalf===1&&m.t>=m.etStart+m.dur/6){m.etHalf=2;ev(m,'ht','Extra time: half-time',-1);for(const T of m.teams)T.dir*=-1;kickoff(m,0,true);m.stateT=1.6;m.flash={text:'EXTRA TIME · HALF-TIME',t:2.5,team:-1};}
- if(m.t>=endT(m)){
+ if(m.etOn&&m.etHalf===1&&m.t>=m.etStart+m.dur/6&&!m._ffw&&!cornerHold(m,m.etStart+m.dur/6)){m.whC=null;m.etHalf=2;ev(m,'ht','Extra time: half-time',-1);for(const T of m.teams)T.dir*=-1;kickoff(m,0,true);m.stateT=1.6;m.flash={text:'EXTRA TIME · HALF-TIME',t:2.5,team:-1};}
+ if(m.t>=endT(m)&&!m._ffw){
   // the final whistle only goes once the ball crosses back over halfway: if a side can't clear its own half, the clock keeps ticking
   const bb=m.ball;const side=Math.sign(bb.x-PL/2)||1;if(m.ftSide==null)m.ftSide=side;
   const crossed=side!==m.ftSide;
@@ -1965,6 +1968,7 @@ function step(m,dt){
      if(hyp(pl.x-sx,pl.y-sy)<0.6||m.cnT>6){b.x=cx;b.y=cy;b.vx=b.vy=0;m.cnPhase='set';m.stateT=0.9;pl.tx=sx;pl.ty=sy;}}
     else{b.x=cx;b.y=cy;b.vx=b.vy=0;moveTo(pl,pl.tx,pl.ty,0.4,dt);}
    }
+   else if(pl===m.taker&&m.state==='pen'&&m.penRun){const T0=m.teams[pl.team];const bx=b.x-T0.dir*0.55,by=b.y;moveTo(pl,bx,by,0.6,dt,20,true);if(hyp(pl.x-bx,pl.y-by)<0.4)m.penStrike=pl;}
    else if(pl===m.taker){moveTo(pl,pl.tx,pl.ty,1.25,dt);}
    else if(m.state==='goal'){moveTo(pl,pl.x+pl.vx*.1,pl.y+pl.vy*.1,0.3,dt);}
    else{let [x,y]=m.state==='kickoff'?[pl.tx,pl.ty]:shapeTarget(m,pl);
@@ -1985,6 +1989,9 @@ function step(m,dt){
   if(m.state==='goal')netPhysics(m,dt);
   if((m.state==='goalkick'&&m.gkPhase==='fetch')||(m.state==='corner'&&m.cnPhase==='fetch'))rollBehindGoal(m,dt);
   if(m.state==='offside'&&typeof offsideTick==='function'&&offsideTick(m,dt))return;
+  // the penalty: once everyone is set, the taker makes his short run-up and strikes it
+  if(m.state==='pen'&&m.stateT<=0&&!m.penRun&&m.taker){const tk=m.taker;if(hyp(tk.x-tk.tx,tk.y-tk.ty)>1.2){tk.x=tk.tx;tk.y=tk.ty;}tk.vx=tk.vy=0;m.penRun=true;m.stateT=99;ev(m,'pentake',`${tk.p.name} steps up...`,tk.team);}
+  if(m.penStrike){const tk=m.penStrike;m.penStrike=null;m.penRun=false;m.penKick=null;m.state='play';m.taker=null;b.owner=null;b.last=tk.team;b.lastP=tk;m.forcePass=false;doShot(m,tk,{pen:true});return;}
   if(m.stateT<=0&&m.state==='dark'){const d=m.dark;m.dark=null;ev(m,'lights','The lights are back on',-1);restart(m,d.team,clamp(b.x,2,PL-2),clamp(b.y,2,PW-2),'free');return;}
   if(m.stateT<=0){
    if(m.state==='goal'){kickoff(m,m.pendingKick,false);return;}
@@ -2127,9 +2134,10 @@ function offBallAI(m,pl,dt){
  if(pl.role==='GK'&&b.shot&&b.shot.team!==pl.team&&!b.owner){
   const gx=pl.x;let ty=GY;
   if(Math.abs(b.vx)>0.1){ty=b.y+b.vy*(gx-b.x)/b.vx;}
+  if(b.shot.gkTy!=null)ty=b.shot.gkTy;
   ty=clamp(ty,GY-GW/2-1,GY+GW/2+1);
   const save=b.shot.save;
-  moveTo(pl,gx,ty,save?2.2:0.9,dt,save?60:14);pl.dive=0.3;return;
+  const pd=b.shot.gkTy!=null;moveTo(pl,gx,ty,save||pd?2.2:0.9,dt,save||pd?60:14);pl.dive=0.3;return;
  }
  if(!b.owner){
   // loose ball: chase if best placed on team or intended receiver
@@ -2320,7 +2328,7 @@ function carrierAI(m,pl,dt){
  if(m.fkKick&&m.fkKick.taker===pl){pl.vx*=0.5;pl.vy*=0.5;if(pl.decideT<=0){m.fkKick=null;const g0=goalOf(T),dd=dist(pl,g0);
    const spec=hasT(pl,'fkspec');if(dd<(spec?35:31)&&m.rng()<(spec?0.95:dd<24?0.82:0.62)){ev(m,'fk',spec?`${pl.p.name} lines up the free kick... he's a specialist`:`${pl.p.name} goes for goal from the free kick`,pl.team);return doShot(m,pl,{fk:true,power:true,curve:spec});}
    m.fkWall=null;const pb=bestPass(m,pl,true);ev(m,'fk',`${pl.p.name} plays the free kick short`,pl.team);if(pb)return doPass(m,pl,pb.r);return;}return;}
- if(m.penKick&&m.penKick.taker===pl){pl.vx*=0.5;pl.vy*=0.5;if(pl.decideT<=0){m.penKick=null;m.forcePass=false;ev(m,'pentake',`${pl.p.name} steps up...`,pl.team);return doShot(m,pl,{pen:true});}return;}
+ if(m.penKick&&m.penKick.taker===pl){m.penKick=null;m.forcePass=false;return doShot(m,pl,{pen:true});}
  if(pl.role==='GK'&&m.t>=endT(m)-m.dur*5/90&&m.state==='play'){// from 85 minutes the keeper just launches it upfield
   m.forcePass=false;if(m.cornerKick&&m.cornerKick.taker===pl)m.cornerKick=null;pl.vx*=0.8;pl.vy*=0.8;if(pl.decideT>0.6)pl.decideT=0.6;if(pl.decideT<=0)return gkBoot(m,pl);return;}
  if(pl.role==='GK'){if(m.gkHolder!==pl){m.gkHolder=pl;m.gkHoldT=0;m.gkReadyT=null;}m.gkHoldT+=dt;
@@ -2593,7 +2601,20 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  if(m.rng()<(0.015+dG/170)*clamp((100-sho)/40,0.12,1.3)*(1-0.8*clin))ty=GY+(m.rng()<0.5?-1:1)*(GW/2+0.6+m.rng()*3);
  // how likely this chance is to go in: the situation sets the odds, then shooter against keeper.
  // ranking: open goal > one-on-one > tap-in from a cross > penalty > header or volley from a cross > close range > ... > long range
- let F=null;if(!EXP.nofin){const gk=O.gk;const gkr=gk?eff(gk,'gk'):60;const cross=m.t-(pl.crossT0||-9)<2.5;let base,cat;
+ let F=null;
+ // a penalty: most go for a corner, a few are blasted, the odd cool head chips it down the middle.
+ // The keeper's chance depends on him against the taker, and one tucked right into the corner is very hard to stop
+ if(o.pen&&!EXP.nofin){const gk=O.gk;const gkr=gk?eff(gk,'gk'):60;const r=m.rng();const panP=hasT(pl,'icecold')||hasT(pl,'showboat')||hasT(pl,'flair')?0.16:0.05;const blP=pl.p.sho>=82||pl.p.str>=82||pl.bst==='power'?0.22:0.1;
+  const style=r<panP?'panenka':r<panP+blP?'blast':'corner';const sd=m.rng()<0.5?-1:1;
+  const pg=style==='corner'?clamp(0.8+(sho-gkr)/140,0.6,0.93):style==='blast'?clamp(0.74+(sho-gkr)/160,0.55,0.9):0.78;const goal=m.rng()<pg;let fs=false,gy;
+  if(goal){ty=style==='corner'?GY+sd*(GW/2-0.45-m.rng()*0.8):style==='blast'?GY+sd*m.rng()*2.8:GY+(m.rng()-0.5)*0.8;
+   gy=style==='corner'?(m.rng()<0.65?GY-sd*3.8:GY+sd*(GW/2-2.4)):GY+(m.rng()<0.5?-1:1)*3.8;}
+  else{const x=m.rng();if(style==='corner'){if(x<0.58){fs=true;ty=GY+sd*(GW/2-1.9);gy=ty;}else if(x<0.82){fs=null;ty=GY+sd*(GW/2+0.6+m.rng()*1.4);gy=GY+sd*3;}else{fs=null;ty=GY+sd*(GW/2);gy=GY+sd*3.5;F={wood:'post'};}}
+   else if(style==='blast'){if(x<0.5){fs=true;ty=GY+sd*m.rng()*2.2;gy=ty;}else{fs=null;o._over=true;ty=GY+sd*m.rng()*2;gy=GY+(m.rng()<0.5?-1:1)*3.5;}}
+   else{if(x<0.75){fs=true;ty=GY+(m.rng()-0.5)*0.6;gy=GY;}else{fs=null;o._over=true;ty=GY;gy=GY+(m.rng()<0.5?-1:1)*3.8;}}}
+  F=Object.assign(F||{},{save:fs,cat:'pen',pg,penStyle:style,gkTy:gy});(m.fin=m.fin||{}).pen=(m.fin.pen||[0,0]);m.fin.pen[0]++;if(goal)m.fin.pen[1]++;
+  ev(m,'penstyle',style==='panenka'?`${pl.p.name} chips it down the middle!`:style==='blast'?`${pl.p.name} blasts it!`:`${pl.p.name} goes for the corner...`,pl.team);}
+ else if(!EXP.nofin){const gk=O.gk;const gkr=gk?eff(gk,'gk'):60;const cross=m.t-(pl.crossT0||-9)<2.5;let base,cat;
   if(o.pen){base=0.46;cat='pen';}else if(o.fk){base=o.curve?(dG<22?0.62:dG<28?0.52:0.38):0.085;cat='fk';}else if(o.curve){base=dG<20?0.36:dG<25?0.29:0.2;cat='curl';}else if(o.open){base=0.9;cat='open';}else if(oneV1){base=0.62;cat='1v1';}
   else if(cross&&dG<9){base=0.58;cat='tapX';}else if(cross){base=o.flying?0.33:0.28;cat='cross';}else if(o.defl){base=0.35;cat='defl';}else if(o.turn){base=0.4;cat='turn';}
   else if(o.cut){base=(dG<18?0.2:dG<24?0.15:0.09)*G_FIN;cat='cut';}else if(o.byline){base=0.045;cat='wide';}else if(o.snap){base=0.12*G_FIN;cat='snap';}else if(o.oneT){base=(dG<12?0.32:0.2)*G_FIN;cat='oneT';}
@@ -2627,7 +2648,8 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   m.stats.shots[pl.team]++;if(onC)m.stats.ont[pl.team]++;pl.st.sh++;if(onC)pl.st.on++;b.passBy=null;return;}
  if(!EXP.nokick)kickFrom(m,pl,g.x,ty);
  const dx=g.x-b.x,dy=ty-b.y;const d=hyp(dx,dy);
- b.owner=null;b.vx=dx/d*speed;b.vy=dy/d*speed;b.kicker=pl;b.kickT=m.t;b.intended=null;b.last=pl.team;b.lastP=pl;b.loft=null;
+ const pst=F&&F.penStyle;const spd=pst==='panenka'?11:pst==='blast'?speed*1.12:speed;
+ b.owner=null;b.vx=dx/d*spd;b.vy=dy/d*spd;b.kicker=pl;b.kickT=m.t;b.intended=null;b.last=pl.team;b.lastP=pl;b.loft=pst==='panenka'?{t0:m.t,T:d/11,prot:1}:null;
  let save=false;
  if(on){const gk=O.gk;const place=Math.abs(ty-GY)/(GW/2);
   const yc=b.y+(ty-b.y)*clamp((gk.x-b.x)/((g.x-b.x)||1),0,1);const off=Math.abs(gk.y-yc);
@@ -2642,7 +2664,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  (m.sk2=m.sk2||{})[o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']=((m.sk2||{})[o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']||0)+1;
  // a bender: the ball swerves out round the blockers and back in, by up to 4m (usually 1.5-3m)
  const curve=o.curve&&!o.chip?(()=>{const dev=m.rng()<0.12?3.2+m.rng()*0.8:1.4+m.rng()*1.7;const sc=sd0=>{let mn=99;for(const q of O.players){if(q.role==='GK')continue;for(let f=0.2;f<0.95;f+=0.15){const x=b.x+(g.x-b.x)*f,y=b.y+(ty-b.y)*f+sd0*dev*4*f*(1-f);const dd=hyp(q.x-x,q.y-y);if(dd<mn)mn=dd;}}return mn;};const side=sc(1)>=sc(-1)?1:-1;m.nBend=(m.nBend||0)+1;return {x0:b.x,y0:b.y,gx:g.x,ty,dev,side};})():null;
- b.shot={kind:o.fk?'fk':o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(curve){b.shot.curve=curve;b.shot.curl=true;}if(F){b.shot.wood=F.wood;b.shot.glc=F.glc;b.shot.inOff=F.inOff;b.shot.curl=F.curl||!!curve;if(F.wall){b.shot.blockBy=F.wall;b.shot.on=false;}}if(o.fk)m.fkWall=null;if(big)m.lastPower=m.t;
+ b.shot={kind:o.fk?'fk':o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?O.gk.p.gk:0};if(curve){b.shot.curve=curve;b.shot.curl=true;}if(F&&F.gkTy!=null){b.shot.gkTy=F.gkTy;b.shot.speed=spd;}if(o._over){b.shot.over=true;b.shot.on=false;}if(F){b.shot.wood=F.wood;b.shot.glc=F.glc;b.shot.inOff=F.inOff;b.shot.curl=F.curl||!!curve;if(F.wall){b.shot.blockBy=F.wall;b.shot.on=false;}}if(o.fk)m.fkWall=null;if(big)m.lastPower=m.t;
  // a parked bus: bodies in the shooting lane get in the way, and better attackers find a way through
  if(O.tac.park){const e=clamp(1+(O.ovr-T.ovr)/20,0.3,1.4);let n=0;for(const q of O.players){if(q.role==='GK')continue;if(segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1)n++;}
   if(n&&m.rng()<1-Math.pow(1-0.42*e,n)){b.shot.blockBy=O.players.find(q=>q.role!=='GK'&&segDist(q.x,q.y,b.x,b.y,g.x,ty)<1.6&&dist(q,b)>1);}}
@@ -2656,6 +2678,8 @@ function updateBall(m,dt){
  if(b.owner!==m.prevOwner){if(b.owner){const lo=m.lastOwnerP;if(lo&&lo.team!==b.owner.team&&m.t-(m.lastSwT||-9)<0.6){m.nRapid=(m.nRapid||0)+1;(m.rapidSrc=m.rapidSrc||{})[m._src||'?']=(m.rapidSrc[m._src||'?']||0)+1;}m._src=null;if(lo!==b.owner){m.lastSwT=m.t;m.lastOwnerP=b.owner;}}if(m.prevOwner){endDuel(m.prevOwner);m.prevOwner.feet=false;}m.prevOwner=b.owner;if(b.owner)b.gainT=m.t;}
  // a corner: the ball sits on the corner spot until the taker strikes it
  if(m.cnBall&&(b.owner!==m.cnBall.tk||m.state!=='play'))m.cnBall=null;
+ if(m.penBall&&(!m.penKick||b.owner!==m.penKick.taker))m.penBall=null;
+ if(b.owner&&m.penBall){b.x=m.penBall.x;b.y=m.penBall.y;b.vx=b.vy=0;return;}
  if(b.owner&&m.cnBall){b.x=m.cnBall.x;b.y=m.cnBall.y;b.vx=b.vy=0;const o=b.owner;o.vx*=0.5;o.vy*=0.5;return;}
  if(b.owner){
   const o=b.owner;const sp=hyp(o.vx,o.vy);b.shot=null;b.intended=null;
@@ -2887,7 +2911,7 @@ function aiTactics(m,dt){
  for(const T of m.teams){if(T.side.user)continue;if(T.tac0==null)T.tac0=T.side.tactic||'balanced';
   T.aiT=(T.aiT??(m.dur*(0.15+m.rng()*0.1)))-dt;if(T.aiT>0)continue;T.aiT=m.dur*(0.07+m.rng()*0.06);
   const O=m.teams[1-T.idx];const sd=m.score[T.idx]-m.score[O.idx];const pr=m.t/m.dur;const ok=O.side.tactic;let k=T.tac0;
-  {const P=T.side.profs&&T.side.profs[T.side.tactic];if(P&&P.weak.includes(ok)&&m.rng()<0.65){// they've been found out: switch to something your style doesn't hurt
+  {const P=T.side.profs&&T.side.profs[T.side.tactic];if(P&&P.weak.includes(ok)&&m.t-(O.tacT0||0)>m.dur*0.12&&m.rng()<0.65){// they've been found out: switch to something your style doesn't hurt
     const opts=Object.keys(T.side.profs).filter(x=>x!=='sink'&&x!==T.side.tactic&&!T.side.profs[x].weak.includes(ok));if(opts.length){setTac(m,T,opts[Math.floor(m.rng()*opts.length)],true);continue;}}}
   if(sd<0&&pr>0.88)k='sink';else if(sd<0&&pr>0.6)k=m.rng()<0.5?'attacking':(ok==='park'||ok==='defensive'?'wings':'press');
   else if(sd>0&&pr>0.82)k=sd>=2?'defensive':'park';else if(sd>0&&pr>0.65)k=m.rng()<0.6?'defensive':'counter';
@@ -3001,14 +3025,26 @@ function gkParry(m,gk,def,sh){const b=m.ball;const gr=eff(gk,'gk');const pOwn=cl
 function kickFrom(m,pl,tx,ty){const b=m.ball;const dx=tx-pl.x,dy=ty-pl.y,d=hyp(dx,dy)||1;const ux=dx/d,uy=dy/d;if(m.cnBall&&m.cnBall.tk===pl){b.x=m.cnBall.x;b.y=m.cnBall.y;m.cnBall=null;}else{b.x=pl.x+ux*0.7;b.y=pl.y+uy*0.7;}pl.face=[ux,uy];b.kickDir=[ux,uy];b.kickFromP=pl;}
 // ONE tactical read, used by the live recommendation, the commentary and the assistant at half-time:
 // it comes from how the opposition (in their current style) cope with each of yours, and whether yours has been worked out
-function workedOut(m,T){const k=T.side.tactic;if(k==='sink')return false;return m.t-(T.tacT0||0)>m.dur*(k==='balanced'?0.22:0.3);}
-function tacAdvice(m,U){const O=m.teams[1-U.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];if(!P)return null;const cur=U.side.tactic;const wo=workedOut(m,U);
- const nm=k=>TACTICS[k].name;const weak=P.weak.filter(k=>k!=='sink');const alt=weak.find(k=>k!==cur)||TAC_ORDER.find(k=>k!==cur&&!P.strong.includes(k)&&k!=='sink');
- if(cur==='sink')return null;
+// how long a style lasts before the opposition read it varies from match to match and style to style:
+// Balanced roughly 15-30 minutes, the others roughly 20-45. Once read, a style stays known to them for a while
+function woLimit(m,T,k){if(m.woSeed==null)m.woSeed=Math.floor(m.rng()*1e6);const h=(hashStr(m.woSeed+'|'+T.idx+'|'+k)%1000)/1000;return m.dur*(k==='balanced'?0.17+h*0.17:0.22+h*0.28);}
+function tacKnown(m,T,k){const w=T.woT&&T.woT[k];return w!=null&&m.t-w<m.dur*0.4;}
+// a corner won just before half-time is still taken: the whistle waits for the taker's ball and the next touch
+// (a header, a shot, a clearance), so a goal can come from it seconds before the break
+function cornerHold(m,tEnd){const bb=m.ball;if(m.t>tEnd+m.dur*3/90){m.whC=null;return false;}
+ if(m.state==='corner'&&!m.whC)m.whC={taker:m.taker,taken:false};const C=m.whC;if(!C)return false;
+ if(m.state==='play'&&!C.taken&&bb.lastP===C.taker)C.taken=true;const second=C.taken&&bb.lastP&&bb.lastP!==C.taker;
+ const keep=m.state==='goal'||m.state==='corner'||!C.taken||!second||!!bb.shot;if(!keep||m.state==='kickoff'){m.whC=null;return false;}return true;}
+function workedOut(m,T){const k=T.side.tactic;if(k==='sink')return false;if(tacKnown(m,T,k)&&m.t-(T.tacT0||0)>m.dur*2/90)return true;
+ if(m.t-(T.tacT0||0)>woLimit(m,T,k)){(T.woT=T.woT||{})[k]=m.t;return true;}return false;}
+function tacAdvice(m,U){const O=m.teams[1-U.idx];const P=O.side.profs&&O.side.profs[O.side.tactic];if(!P)return null;const cur=U.side.tactic;if(cur==='sink')return null;const wo=workedOut(m,U);
+ const nm=k=>TACTICS[k].name;const fresh=k=>k!=='sink'&&k!==cur&&!tacKnown(m,U,k);
+ const weak=P.weak.filter(k=>k!=='sink');const wAlt=weak.find(fresh);const nAlt=TAC_ORDER.find(k=>fresh(k)&&!P.strong.includes(k));const alt=wAlt||nAlt;
  if(weak.includes(cur)&&!wo)return {k:cur,stay:true,text:`${nm(cur)} is working against their ${nm(O.side.tactic)}: stay on it`};
- if(wo)return {k:alt,wo:true,text:`They have worked out your ${nm(cur)}: switch to ${nm(alt)}`};
- if(P.strong.includes(cur))return {k:alt,text:`They are comfortable against ${nm(cur)}: switch to ${nm(alt)}`};
- return {k:alt,text:`Their ${nm(O.side.tactic)} looks vulnerable to ${nm(alt)}: switch to it`};}
+ if(wo)return alt?{k:alt,wo:true,text:`They have worked out your ${nm(cur)}: switch to ${nm(alt)}`}:{k:cur,stay:true,text:`They have read most of our styles: keep going with ${nm(cur)}`};
+ if(P.strong.includes(cur))return {k:alt||cur,text:`They are comfortable against ${nm(cur)}: switch to ${nm(alt||cur)}`};
+ if(wAlt)return {k:wAlt,text:`Their ${nm(O.side.tactic)} looks vulnerable to ${nm(wAlt)}: switch to it`};
+ return {k:cur,stay:true,text:`No clear weakness left to hit: ${nm(cur)} is fine for now`};}
 const TAC_ORDER=['balanced','counter','through','wings','press','long','attacking','defensive','park'];
 function recCounter(m,U,O){if(U.side.auto)return;const a=tacAdvice(m,U);m.recT=m.t;if(a)ev(m,'rec',a.stay?`They have changed to ${TACTICS[O.side.tactic].name}, but ${TACTICS[a.k].name} still works: stay on it`:`They have changed to ${TACTICS[O.side.tactic].name}. ${a.text.replace(/^./,c=>c.toUpperCase())}`,U.idx);}
 function recStep(m){}
@@ -6252,7 +6288,7 @@ function startMatch(H,A,ctx){twlThemeSync();document.querySelectorAll(".installp
  $('#pause').onclick=()=>{const ov=document.querySelector('.subover');if(ov&&LIVE.paused){ov.remove();UI.subOut=null;LIVE.paused=false;sndPause(false);$('#pause').textContent='Pause';return;}LIVE.paused=!LIVE.paused;sndPause(LIVE.paused);$('#pause').textContent=LIVE.paused?'Resume':'Pause';};
  app.querySelectorAll('[data-spd]').forEach(b=>b.onclick=()=>{LIVE.speed=+b.dataset.spd;app.querySelectorAll('[data-spd]').forEach(x=>x.classList.toggle('on',x===b));});
  // a new game plan takes effect straight away; it is only written into the match log once left alone for three seconds
- wireCycler(app,'live',LIVE.setTac=k=>{if(mgrDelay(()=>LIVE.setTac(k)))return;myTeam().tactic=k;save();const tm=LIVE.m.teams[LIVE.mine];tm.tac=TACTICS[k];tm.ment=tm.tac.ment||0;tm.side.tactic=k;tm.balT=0;
+ wireCycler(app,'live',LIVE.setTac=k=>{if(mgrDelay(()=>LIVE.setTac(k)))return;myTeam().tactic=k;save();const tm=LIVE.m.teams[LIVE.mine];if(tm.side.tactic!==k){tm.tacT0=LIVE.m.t;tm.woAnn=false;}tm.tac=TACTICS[k];tm.ment=tm.tac.ment||0;tm.side.tactic=k;tm.balT=0;
   clearTimeout(UI.tacT);const L0=LIVE;UI.tacT=setTimeout(()=>{if(!LIVE||LIVE!==L0)return;const cur=myTeam().tactic;if(L0.lastTacLog===cur)return;L0.lastTacLog=cur;ev(LIVE.m,'tac',`Game plan changed to ${TACTICS[cur].name}`,LIVE.mine);},3000);});
  $('#ballsel').onchange=e=>{S.ball=e.target.value;save();};
  $('#subsbtn').onclick=()=>openSubs();
@@ -7179,7 +7215,11 @@ function shootoutTeams(H,A,m){if(m){return [0,1].map(i=>{const pl=m.teams[i].pla
  return [H,A].map(t=>{const xi=xiPlayers(t).filter(Boolean);return {ps:takerOrder(xi),gk:xi.find(p=>p.pos==='GK')||xi[0]};});}
 function shootout(m,L,H,A){const T=m?shootoutTeams(null,null,m):shootoutTeams(H,A,null);const kicks=[];const sc=[0,0];let n=[0,0];
  const take=i=>{const t=T[i],p=t.ps[n[i]%t.ps.length];n[i]++;const gk=T[1-i].gk;const pr=penP(p,gk);const x=Math.random();let res='goal';if(x>=pr){res=Math.random()<0.62?'saved':Math.random()<0.5?'wide':'post';}if(res==='goal')sc[i]++;
-  kicks.push({team:i,name:p.name,res,side:['l','c','r'][Math.floor(Math.random()*3)],dive:['l','c','r'][Math.floor(Math.random()*3)]});};
+  // most go for a corner; now and then one is blasted or chipped down the middle
+  const tr=p.trait;const st=Math.random();const panP=tr==='icecold'||tr==='showboat'||tr==='flair'?0.16:0.05,blP=(p.sho||60)>=82?0.2:0.1;const style=st<panP?'panenka':st<panP+blP?'blast':'corner';
+  const side=style==='corner'?(Math.random()<0.5?'l':'r'):'c';const opp=side==='l'?'r':'l';const any=Math.random()<0.5?'l':'r';
+  const dive=res==='saved'?(style==='corner'?side:'c'):res==='goal'?(style==='corner'?(Math.random()<0.65?opp:side):any):any;
+  kicks.push({team:i,name:p.name,res:style!=='corner'&&res==='post'?'wide':res,side,dive,style,f:Math.random()});};
  for(let k=0;k<5;k++){for(const i of [0,1]){take(i);// stop as soon as one side can't be caught
    const left=[5-n[0],5-n[1]];if(sc[0]>sc[1]+left[1]||sc[1]>sc[0]+left[0])break;}
   if(sc[0]>sc[1]+(5-n[1])||sc[1]>sc[0]+(5-n[0]))break;}
@@ -7209,11 +7249,18 @@ function pitchShootout(m,L,done){const so=shootout(m,L);const b=m.ball;m.flash=n
   if(ph==='walk'){if(taker._out&&taker.role!=='GK'){const bp=behind(taker);const endX=PL/2+((lines[taker.team].length-1)/2)*Math.min(4.4,58/lines[taker.team].length)+9;if(taker._out===true){if(mv(taker,bp[0],bp[1],9,dt))taker._out=2;}else if(mv(taker,endX,bp[1],11,dt))taker._out=false;}else if(mv(taker,spot[0]-3.2,spot[1]+(cur.team?0.8:-0.8),11,dt)&&t>0.5){ph='wait';t=0;}}
   else if(ph==='wait'){taker.vx=1;taker.vy=0;if(t>0.45){ph='run';t=0;}}
   else if(ph==='run'){if(mv(taker,spot[0]-0.7,spot[1],7,dt)){ph='kick';t=0;
-    const yT={l:GY-2.7,c:GY+0.3,r:GY+2.7}[cur.side];const wide=cur.res==='wide',post=cur.res==='post';
-    to=wide?[gx+3,GY+(cur.side==='l'?-5.2:5.2)]:post?[gx,GY+(cur.side==='l'?-3.7:3.7)]:cur.res==='saved'?[gx-0.8,yT]:[gx+1.6,yT];from=[b.x,b.y];
-    const dv=cur.res==='saved'?cur.side:cur.dive;kp&&(kp._dv=dv==='c'?0:dv==='l'?-1:1);b.kicker=taker;b.lastP=taker;}}
-  else if(ph==='kick'){const p=Math.min(1,t/0.42);b.x=from[0]+(to[0]-from[0])*p;b.y=from[1]+(to[1]-from[1])*p;b.vx=(to[0]-from[0])*2;b.vy=(to[1]-from[1])*2;
-   if(kp){kp.y=GY+(kp._dv||0)*2.6*Math.min(1,t/0.3);kp.dive=kp._dv?0.6:0;}
+    const sg=cur.side==='l'?-1:cur.side==='r'?1:0;const st=cur.style||'corner';const f=cur.f??Math.random();
+    // a goal tucked into the corner sits just inside the post; a saved one is a little closer to the keeper
+    const yT=st==='corner'?GY+sg*(cur.res==='saved'?GW/2-1.9:GW/2-0.45-f*0.8):st==='blast'?GY+(f-0.5)*4.4:GY+(f-0.5)*0.6;
+    const wide=cur.res==='wide',post=cur.res==='post';
+    to=wide?(st==='corner'?[gx+3,GY+sg*(GW/2+0.8+f*1.4)]:[gx+3,yT]):post?[gx,GY+sg*(GW/2)]:cur.res==='saved'?[gx-0.8,yT]:[gx+1.6,yT];from=[b.x,b.y];
+    kp&&(kp._dv=cur.dive==='c'?0:cur.dive==='l'?-1:1);
+    // how far he gets: all the way to a saved ball, short of one tucked in the corner on his side
+    kp&&(kp._reach=cur.res==='saved'?Math.abs(yT-GY):cur.dive===cur.side?Math.max(1.5,Math.abs(yT-GY)-1.7):3.8);
+    ctl.kt=st==='blast'?0.3:st==='panenka'?0.95:0.42;b.loft=st==='panenka'?{t0:m.t,T:0.95,prot:1}:null;ctl.lt=0;
+    if(st==='panenka')ev(m,'pen',`${cur.name} chips it down the middle...`,cur.team);b.kicker=taker;b.lastP=taker;}}
+  else if(ph==='kick'){const p=Math.min(1,t/(ctl.kt||0.42));if(b.loft)b.loft.t0=m.t-t;if(p>=1)b.loft=null;b.x=from[0]+(to[0]-from[0])*p;b.y=from[1]+(to[1]-from[1])*p;b.vx=(to[0]-from[0])*2;b.vy=(to[1]-from[1])*2;
+   if(kp){kp.y=GY+(kp._dv||0)*(kp._reach||2.6)*Math.min(1,t/0.3);kp.dive=kp._dv?0.6:0;}
    if(p>=1){ph='result';t=0;const scored=cur.res==='goal';if(scored)sc[cur.team]++;
     if(cur.res==='saved'){b.vx=-7;b.vy=(Math.random()-0.5)*6;}else if(cur.res==='post'){b.vx=-5;b.vy=(cur.side==='l'?3:-3);}else{b.vx=b.vy=0;}
     const sd=T[cur.team].side;const txt=scored?'GOAL':cur.res==='saved'?'SAVED':cur.res==='post'?'OFF THE POST':'MISSED';
@@ -7687,7 +7734,7 @@ function htTipHTML(m,L){if(!m)return '';const me=m.teams[L.mine];const A=tacAdvi
  // the same read as the live recommendation: it never says one thing while the touchline box says another
  let tip=!A?'Keep going, boss.':A.stay?`It's working, boss. ${nm(A.k)} is causing them real problems: stay on it.`:A.wo?`They've worked out our ${nm(me.side.tactic)}. Switch to ${nm(A.k)} for the second half.`:/comfortable/.test(A.text)?`They look comfortable against ${nm(me.side.tactic)}. I'd switch to ${nm(A.k)}: it's what hurts them.`:`I'd go with ${nm(A.k)}. Against their ${nm(m.teams[1-L.mine].side.tactic)} it's the one that hurts them.`;
  // if we keep the same style into the second half it will be worked out soon after
- if(A&&A.stay){const left=m.dur*(me.side.tactic==='balanced'?0.22:0.3)-(m.t-(me.tacT0||0));if(left<m.dur*0.12)tip+=` They'll work it out early in the second half though, so be ready to change.`;}
+ if(A&&A.stay){const left=woLimit(m,me,me.side.tactic)-(m.t-(me.tacT0||0));if(left<m.dur*0.12)tip+=` They'll work it out early in the second half though, so be ready to change.`;}
  const tired=me.players.filter(q=>q.role!=='GK').sort((a,b)=>a.energy-b.energy)[0];
  const inj=me.players.find(q=>q.inj);
  const extra=inj?` And ${inj.p.name} is struggling with that knock: get him off.`:tired&&tired.energy<55?` ${tired.p.name} is tiring (${Math.round(tired.energy)}% energy).`:'';
