@@ -1921,7 +1921,7 @@ function step(m,dt){
  for(const pl of m.players){pl._mt=m.t;pl.sink=!!m.teams[pl.team].tac.sink;}
  if(((m.lkT=(m.lkT||0)+dt))>0.2){m.lkT=0;for(const pl of m.players){pl.lkOn=false;if(!pl.lk)continue;for(const q of m.teams[pl.team].players)if(linked(pl,q)){pl.lkOn=true;break;}}}
  if(m.flash)m.flash.t-=dt;
- if(m.half===1&&m.t>=m.dur/2&&!m._ffw&&!cornerHold(m,m.dur/2)){m.whC=null;m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
+ if(m.half===1&&m.t>=m.dur/2&&!m._ffw&&!cornerHold(m,m.dur/2)){m.whC=null;m.half=2;ev(m,'ht','Half-time',-1);for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+8+p.p.sta/10);for(const T of m.teams)for(const q of (T.side.bench||[]))if(q._endE!=null&&!q._inj)q._endE=Math.min(100,q._endE+(8+q.sta/10)*0.5);for(const T of m.teams)T.dir*=-1;kickoff(m,1,true);m.stateT=1.6;m.flash={text:'HALF-TIME',t:3,team:-1};}
  // extra time: half-time at 105, ends swap
  if(m.etOn&&m.etHalf===1&&m.t>=m.etStart+m.dur/6&&!m._ffw&&!cornerHold(m,m.etStart+m.dur/6)){m.whC=null;m.etHalf=2;ev(m,'ht','Extra time: half-time',-1);for(const T of m.teams)T.dir*=-1;kickoff(m,0,true);m.stateT=1.6;m.flash={text:'EXTRA TIME · HALF-TIME',t:2.5,team:-1};}
  if(m.t>=endT(m)&&!m._ffw){
@@ -1942,6 +1942,9 @@ function step(m,dt){
    for(const p of m.players)if(!p.inj)p.energy=Math.min(100,p.energy+4);ev(m,'et','Full-time: extra time to come',-1);kickoff(m,1,true);m.stateT=2.4;m.etPause=true;m.flash={text:'EXTRA TIME',t:3,team:-1};return;}
   if(!keep){m.finished=true;m.streaker=null;if(m.ko&&m.score[0]===m.score[1])m.needPens=true;ev(m,'ft',m.etOn?'Full-time after extra time':'Full-time',-1);return;}
  }
+ // players already substituted get their breath back on the bench: about a fifth of a point a minute,
+ // so a man taken off at half-time is much fresher afterwards (and for the next game) than one taken off at 85
+ if(m.state!=='goal'){const k=dt*0.2*90/m.dur*(m._ffw?0:1);if(k>0)for(const T of m.teams)for(const q of (T.side.bench||[]))if(q._endE!=null)q._endE=Math.min(100,q._endE+k*Math.max(0.6,q.sta/80));}
  if(m.cond.streak)streakers(m,dt);
  // team lines (deepest opponent outfielder)
  for(const T of m.teams)T.wingT=T.tac.cross?(T.wingT||0)+dt:Math.max(0,(T.wingT||0)-dt*1.5);
