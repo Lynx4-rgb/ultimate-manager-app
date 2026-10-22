@@ -1,6 +1,6 @@
 // Offline support: the game itself is stored on first visit, fonts are stored the first time they load.
 // Change VERSION whenever you upload a new index.html so phones pick up the update.
-const VERSION = 'ultimate-manager-v102';
+const VERSION = 'ultimate-manager-v104';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './icon-maskable-192.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
