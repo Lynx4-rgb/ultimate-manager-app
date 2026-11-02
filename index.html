@@ -1676,6 +1676,8 @@ function newWorld(seed){
  if(typeof attrCompress==='function')for(const p of teams.flatMap(t=>t.squad).concat(free)){if(!p.acmp){attrCompress(p);p.ovr=overall(p);p.value=valueOf(p);}}
  if(typeof r3Stars==='function')r3Stars(teams.flatMap(t=>t.squad).concat(free));
  if(typeof r3Top==='function')r3Top(teams.flatMap(t=>t.squad).concat(free));
+ // every club picks its best eleven from the squad as it finally stands (the eleven used to be picked before the ratings were settled, so some fielded the wrong men)
+ for(const t of teams)t.xi=autoPick(t.squad,t.formation);
  return {teams,free};
 }
 const R3_EXTRA=['Louis Saha|CF|84|27','Park Ji-sung|RM|82|28|sta:95'];
@@ -2105,7 +2107,7 @@ function minLabel(m){if(m.etOn)return m.t<=m.endT?String(minute(m)):'120+'+Math.
 function ev(m,type,text,team){m.events.push({min:minute(m),lab:minLabel(m),type,text,team});}
 // tired legs: every attribute drops by (100 - energy) / 5 per cent: 90% energy = 2% weaker, 75% = 5% weaker
 function enF(pl){return 1-(100-clamp(pl.energy,0,100))/500;}
-var PACE_K=0.91;var OPP_K=1,OPP_S=1; // no opposition handicap and no separate health rules: both sides tire, recover and lose sharpness exactly the same way (user's request) // the side you play against is a fraction less sharp and a touch slower than its ratings say // players move a touch slower overall (ball speeds are untouched)
+var PACE_K=0.885;var OPP_K=1,OPP_S=1; // no opposition handicap and no separate health rules: both sides tire, recover and lose sharpness exactly the same way (user's request) // the side you play against is a fraction less sharp and a touch slower than its ratings say // players move a touch slower overall (ball speeds are untouched)
 function maxSpeed(pl){return PACE_K*(pl.sink?1.15:1)*(pl.duel||pl.duelOn?0.85:1)*(pl.bst==='turbo'?1.08:1)*(pl.hot>0?1.07:1)*(pl.urg?1.04:1)*(pl.cs||1)*(4.3+gulf(ovv(pl.p.spd))/100*5.2)*enF(pl)*(pl.stun>0?0.45:1)*(pl.burst>(pl._mt||0)?1.28:1)*(pl.aBa==='spd'?1.1:1)*(pl.blitzT>(pl._mt||0)?1.18:1)*(pl.brk>(pl._mt||0)?1.1:1)*(pl.ctrRun>(pl._mt||0)?1.03+0.1*clamp(pl.energy,0,100)/100:1)*(pl.surge>(pl._mt||0)?1.04:1);}
 function pwMul(pl,a){switch(pl.pw){
  case 'armour':return a==='str'?1.16:a==='tck'?1.12:a==='spd'?0.97:1;
@@ -6227,12 +6229,22 @@ function clubOf(pid){const T=T_();for(let i=0;i<T.length;i++)if(T[i].squad.some(
 function playerById(pid){for(const t of T_()){const p=findP(t,pid);if(p)return p;}return S.world.free.find(p=>p.id===pid);}
 function leagueTeams(l){return T_().map((t,i)=>i).filter(i=>T_()[i].league===l);}
 
+// two made-up clubs that stood far apart from their leagues (user's request): brought closer to the rest, keeping their place -
+// Ashworth Town stay top of the National League N/S (a few points clear), Ashford Athletic stay bottom of the Non-League (a few points adrift)
+function evenTeams(teams,skip){const K=['spd','sho','pas','dri','tck','str','sta','gk'];
+ const fix=(id,gap,top)=>{const t=teams.find(x=>x.id===id);if(!t||teams.indexOf(t)===skip)return;t.xi=autoPick(t.squad,t.formation);
+  const rest=teams.filter(x=>x!==t&&x.league===t.league).map(teamOvr);if(!rest.length)return;
+  const tg=top?Math.max(...rest)+gap:Math.min(...rest)-gap;let g=0;
+  while(g++<60){const o=teamOvr(t);const up=o<tg;if(o===tg||(g>1&&up!==t._up))break;t._up=up;const f=up?1.015:0.985;for(const p of t.squad){if(p.real||p.legend)continue;for(const k of K)p[k]=Math.max(1,Math.round(p[k]*f));refresh(p);}t.xi=autoPick(t.squad,t.formation);}
+  delete t._up;if(top?teamOvr(t)<=Math.max(...rest):teamOvr(t)>=Math.min(...rest)){/* keep its place */}};
+ fix('awt',4,true);fix('asa',2,false);}
 // ---------- new game ----------
 function newGame(teamIdx,o,orig){
  const w=newWorld(20261011);
  if(o){const t=w.teams[teamIdx];if(o.name)t.name=o.name;if(o.short&&o.short.length>=2)t.short=o.short;if(o.c1&&o.c2&&(o.c1!==t.c1||o.c2!==t.c2)){t.c1=o.c1;t.c2=o.c2;t.kitSet=true;}}
  w.teams[teamIdx].budget=1e6;
- S={v:2,dm1:1,pt1:1,gc1:1,w2:1,vb3:1,st2:1,st1:1,ac2:1,ac1:1,vb2:1,r3m:1,r3m2:1,r3m3:1,ret3:1,gks1:1,cut2:1,r90:1,c99:1,r88:1,gkw:1,ra1:1,me:teamIdx,season:1,round:0,world:w,fx:[],last:null,done:false,news:[],nextId:100000,balls:['white','orange'],ball:'white',trait2:1,trait3:1,trait4:1,real2:1,ret2:1,lgCap:1,capFix:1,rs2:1,pot90:1,potFix:1,strFix:1};
+ evenTeams(w.teams,-1);
+ S={v:2,ev1:1,dm1:1,pt1:1,gc1:1,w2:1,vb3:1,st2:1,st1:1,ac2:1,ac1:1,vb2:1,r3m:1,r3m2:1,r3m3:1,ret3:1,gks1:1,cut2:1,r90:1,c99:1,r88:1,gkw:1,ra1:1,me:teamIdx,season:1,round:0,world:w,fx:[],last:null,done:false,news:[],nextId:100000,balls:['white','orange'],ball:'white',trait2:1,trait3:1,trait4:1,real2:1,ret2:1,lgCap:1,capFix:1,rs2:1,pot90:1,potFix:1,strFix:1};
  makeFixtures();save();UI.tab='match';render();
 }
 function makeFixtures(){S.fx=[...Array(NL).keys()].map(l=>{const ids=leagueTeams(l);return fixtures(ids.length).map(rd=>rd.map(f=>({h:ids[f.h],a:ids[f.a],hs:null,as:null})));});}
@@ -8892,6 +8904,7 @@ if(S&&!S.w2&&typeof r3Stars==='function'){const all=[...S.world.teams.flatMap(t=
 // holding midfielders get their own position (DM), rated on tackling, passing and strength; the top of the game is re-set around them
 if(S&&!S.dm1&&typeof r3Stars==='function'){const all=[...S.world.teams.flatMap(t=>t.squad),...S.world.free];for(const p of all){if(p.r3&&typeof r3Apply==='function')r3Apply(p,true);else p.ovr=overall(p);}r3Stars(all);r3Top(all);for(const p of all)if(!p.legend){p.ovr=overall(p);p.value=valueOf(p);}S.dm1=1;save();}
 // no made-up player's attribute above 95 in existing careers either (goalkeeping as shown)
+if(S&&!S.ev1&&S.world){S.world.teams.forEach((t,i)=>{if(i!==S.me)t.xi=autoPick(t.squad,t.formation);});evenTeams(S.world.teams,S.me);S.ev1=1;save();}
 if(S&&!S.gc1&&S.world){for(const p of [...S.world.teams.flatMap(t=>t.squad),...S.world.free]){if(p.real||p.legend||p.superstar||p.cupLvl)continue;let ch=false;for(const k of ATTRS)if(p[k]>growCap(k)){p[k]=growCap(k);ch=true;}if(ch){p.ovr=overall(p);p.value=valueOf(p);}}S.gc1=1;save();}
 if(S&&!S.pt1&&typeof r3Stars==='function'){const all=[...S.world.teams.flatMap(t=>t.squad),...S.world.free];for(const p of all){if(p.r3&&typeof r3Apply==='function')r3Apply(p,true);else p.ovr=overall(p);}r3Stars(all);r3Top(all);for(const p of all)if(!p.legend){p.ovr=overall(p);p.value=valueOf(p);}S.pt1=1;save();}
 if(S&&!S.cut2){const all=[...S.world.teams.flatMap(t=>t.squad),...S.world.free];for(const p of all){if(CUT_IN.includes(p.name)&&(p.trait==null||TRAIT_OF[p.name]==='cutinside')){p.trait='cutinside';continue;}if(!p.real&&CAT[p.pos]==='WM'&&p.trait==null){const keep=p.trait;delete p.trait;const t=traitOf(p);if(t!=='cutinside')p.trait=keep;}}S.cut2=1;save();}
