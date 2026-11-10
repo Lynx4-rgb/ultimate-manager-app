@@ -463,7 +463,7 @@ h1,h2{text-shadow:0 1px 0 rgba(0,0,0,.45),0 0 1px rgba(255,235,190,.15)}
 /* ---- transfer market: blue portal; header row stays put while you scroll ---- */
 .pbody .tblwrap.mtable{overflow:visible;margin:0}
 .mtable thead th{position:sticky;top:0;z-index:2;background:#0c1a2b;box-shadow:inset 0 -1px 0 #2c4a6e}
-.mtable td.n,.mtable th.n{width:46px}.mtable th.clubcol,.mtable td.clubcol{padding-left:18px}.mtable .trcol .trait{margin-left:0;white-space:nowrap}
+.mtable td.n,.mtable th.n{width:46px;text-align:center} /* market figures sit in the middle of their column */.mtable th.clubcol,.mtable td.clubcol{padding-left:18px}.mtable .trcol .trait{margin-left:0;white-space:nowrap}
 
 .mside{display:contents}
 #rotate{display:none}
@@ -685,7 +685,7 @@ html,body{margin:0}
  .mdph .md-a .bigfix{padding:2px 0}.mdph .md-a .bigfix h3{font-size:15px}.mdph .md-a .bigfix .badge,.mdph .md-a .bigfix .badge svg{width:40px!important;height:40px!important}
  .mdph .md-a .venue{flex:1;min-height:40px;height:auto;max-height:120px}.mdph .md-a .actions{gap:6px;margin-top:6px}.mdph .md-a .actions .btn{padding:6px 10px}
  .mdph .md-a .note{font-size:10px}.mdph .md-a p.note{margin-top:4px!important}
- .mdph .notes{height:calc(100dvh - 62px);overflow:hidden;display:flex;flex-direction:column;padding:8px 10px}.mdph .notes .ntree{flex:0 1 auto;margin-bottom:6px}
+ .mdph .notes{height:calc(100dvh - 62px);overflow:hidden;display:flex;flex-direction:column;padding:8px 10px}.mdph .notes .nh,.mdph .notes .nd{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}.mdph .md-a>.panel{overflow:hidden;box-sizing:border-box} /* the two match-day boxes always fit the phone screen: a long story is trimmed, never spills */.mdph .notes .ntree{flex:0 1 auto;margin-bottom:6px}
  .mdph .notes .nh{font-size:13px!important;white-space:normal}.mdph .notes .nitem.lead .nh{font-size:15px!important}.mdph .notes .nd{font-size:11px!important}.mdph .notes #morenotes{align-self:flex-start;margin-top:0}
  .mdph .ph-mid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;align-items:stretch}
  .mdph .ph-side{display:flex;flex-direction:column;gap:10px;min-width:0}.mdph .ph-side>section:last-child{flex:1}
@@ -1227,9 +1227,9 @@ body.twl .tacpop{background:#15140f}
 .ticker.livescores .lsview{position:absolute;left:46px;right:0;top:0;bottom:0;overflow:hidden;display:flex;align-items:center}
 .ticker.livescores .tk{padding:0;animation-duration:45s;font-size:12.5px;gap:0;will-change:transform}
 .ticker.livescores .lshalf{display:inline-flex;align-items:center;flex:none}
-.ticker.livescores .lshalf>*{margin-right:28px;flex:none}
+.ticker.livescores .lshalf>*{margin-right:10px;flex:none}.lsi{display:inline-flex;align-items:center;gap:4px}.lsi .badge{flex:none} /* club badges in the live scores, results closer together */
 .lsi em{display:inline-block;min-width:2.4em;text-align:center;font-variant-numeric:tabular-nums}
-.lsi small{display:inline-block;width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+.lsi small:empty{display:none}.lsi small{display:inline-block;max-width:92px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 .ticker.livescores .lslab{position:absolute;left:0;top:0;bottom:0;z-index:2;display:grid;place-items:center;padding:0 8px;background:#c0392b;color:#fff;font:800 11px var(--data);letter-spacing:.12em}
 .lsi b{color:#e6eef8;font-weight:700}.lsi em{font-style:normal;color:#ffd166;font-weight:800;margin:0 3px}.lsi small{color:#8fb3d6;margin-left:4px}
 .lsi em.flash{animation:lsflash 1.4s}@keyframes lsflash{0%,40%{color:#fff;text-shadow:0 0 8px #ffd166}}
@@ -1682,6 +1682,8 @@ function newWorld(seed){
  if(typeof attrCompress==='function')for(const p of teams.flatMap(t=>t.squad).concat(free)){if(!p.acmp){attrCompress(p);p.ovr=overall(p);p.value=valueOf(p);}}
  if(typeof r3Stars==='function')r3Stars(teams.flatMap(t=>t.squad).concat(free));
  if(typeof r3Top==='function')r3Top(teams.flatMap(t=>t.squad).concat(free));
+ // a real player is only ever at one club (a couple were listed twice)
+ {const seen=new Set();for(const t of teams){t.squad=t.squad.filter(p=>{if(!p.real)return true;if(seen.has(p.name))return false;seen.add(p.name);return true;});}}
  // every club picks its best eleven from the squad as it finally stands (the eleven used to be picked before the ratings were settled, so some fielded the wrong men)
  for(const t of teams)t.xi=autoPick(t.squad,t.formation);
  return {teams,free};
@@ -1737,17 +1739,15 @@ function fixtures(n){
 }
 // ===== player traits: personality, not ability. Most help; a few can drive a manager mad =====
 const TRAITS={
- flair:{name:'Flair',desc:'Loves to beat his man with a trick. Dazzling when it works, but he can lose it trying one move too many.',cats:['WM','ST','CM','FB']},
+ flair:{name:'Flair',desc:'Loves to beat his man with a trick, and usually does.',cats:['WM','ST','CM','FB']},
  longshot:{name:'Long-range shooter',desc:'Shoots on sight from 20-30 yards. Spectacular goals, and a few in the stands.',cats:['CM','WM','ST']},
- poacher:{name:'Fox in the box',desc:'Lives on the six-yard line and gambles on crosses. Deadly with tap-ins, quiet outside the box.',cats:['ST']},
  retainer:{name:'Press-resistant',desc:'Shields the ball and hardly ever gets caught in possession.',cats:['CM','CB','WM','FB']},
- playmaker:{name:'Playmaker',desc:'Always looking for the killer pass. Unlocks defences, sometimes too ambitious.',cats:['CM','WM','CB']},
+ playmaker:{name:'Playmaker',desc:'Always looking for the killer pass - and finds it. Unlocks defences.',cats:['CM','WM','CB']},
  target:{name:'Target man',desc:'Holds the ball up, wins the aerial battles and brings others into play.',cats:['ST']},
  runner:{name:'Runs in behind',desc:'Constantly darting beyond the last defender looking for the through ball.',cats:['ST','WM','FB']},
  engine:{name:'Engine',desc:'Never stops running. Still going strong when others are out on their feet.',cats:['CM','FB','WM']},
- enforcer:{name:'Enforcer',desc:'Crunching tackles that win the ball back, but the referee knows his name.',cats:['CB','CM','FB']},
+ enforcer:{name:'Enforcer',desc:'Crunching, clean tackles that win the ball back.',cats:['CB','CM','FB']},
  leader:{name:'Captain material',desc:'Organises and lifts everyone around him.',cats:['CB','CM','GK','ST']},
- biggame:{name:'Big-game player',desc:'Raises his level against better opponents.',cats:['ST','CM','WM','CB']},
  clutch:{name:'Late show',desc:'At his most dangerous in the last ten minutes.',cats:['ST','WM','CM']},
  crosser:{name:'Crossing specialist',desc:'Takes it to the byline and fizzes it across the six-yard box.',cats:['WM','FB']},
  fkspec:{name:'Free-kick specialist',desc:'Bends powerful shots round defenders and walls: the ball swerves in the air and dips back in. First choice for every free kick in range.',cats:['CM','WM','ST','FB']},
@@ -1756,19 +1756,21 @@ const TRAITS={
  icecold:{name:'Ice-cold finisher',desc:'Calm and clinical when it is one-on-one.',cats:['ST','WM']},
  sweeper:{name:'Sweeper keeper',desc:'Races off his line to snuff out through balls.',cats:['GK']},
  shotstopper:{name:'Shot-stopper',desc:'Lightning reflexes from close range.',cats:['GK']},
- selfish:{name:'Glory hunter',desc:'Shoots when he should pass. Scores a few, wastes plenty. Frustrating when you want patience.',cats:['ST','WM'],bad:1},
- hothead:{name:'Hothead',desc:'Plays on the edge. Wins his battles, but a red card is never far away.',cats:['CB','CM','ST','FB'],bad:1},
- showboat:{name:'Showboat',desc:'Plays to the crowd with tricks, even when the simple pass is on.',cats:['WM','CM','ST'],bad:1},
+ selfish:{name:'Goal-hungry',desc:'Always looking for a shot - and makes his chances count. More shots, struck with real conviction.',cats:['ST','WM'],bad:1},
+ showboat:{name:'Showboat',desc:'An entertainer: his tricks come off, beating men and lifting the crowd.',cats:['WM','CM','ST'],bad:1},
 };
-const TRAIT_OF={'William Saliba':'retainer','Thierry Henry':'icecold','Steven Gerrard':'longshot','Frank Lampard':'longshot','Roy Keane':'enforcer','Patrick Vieira':'engine','Paul Scholes':'longshot','Ryan Giggs':'flair','Cristiano Ronaldo':'flair','David Beckham':'fkspec','Alan Shearer':'poacher','Didier Drogba':'biggame','Wayne Rooney':'hothead','Eric Cantona':'leader','John Terry':'leader','Tony Adams':'leader','Kevin De Bruyne':'playmaker','Luka Modrić':'retainer','NGolo Kanté':"engine",'N\'Golo Kanté':'engine','Erling Haaland':'poacher','Harry Kane':'icecold','Mohamed Salah':'cutinside','Dennis Bergkamp':'playmaker','Paul Gascoigne':'showboat','Gareth Bale':'cutinside','Jamie Vardy':'runner','Peter Schmeichel':'shotstopper','Edwin van der Sar':'sweeper','Alisson Becker':'sweeper','Ederson':'sweeper','Virgil van Dijk':'fortress','Claude Makélélé':'retainer','Rodri':'retainer','Bruno Fernandes':'playmaker','Cole Palmer':'icecold','Bukayo Saka':'cutinside','Jude Bellingham':'biggame','Matt Le Tissier':'longshot','Gianfranco Zola':'flair','Ian Wright':'poacher','Robert Pires':'flair','Arjen Robben':'cutinside','Jamal Musiala':'flair','Trent Alexander-Arnold':'crosser','Andy Robertson':'crosser','Sergio Agüero':'clutch','Florian Wirtz':'playmaker','Martin Ødegaard':'playmaker','Declan Rice':'engine','Phil Foden':'cutinside','Son Heung-min':'runner','Dwight Yorke':'icecold','Kenny Dalglish':'playmaker','Ian Rush':'poacher','Fernando Torres':'runner','John Barnes':'flair','Jimmy Greaves':'poacher','Dixie Dean':'target','Gary Lineker':'poacher','Rio Ferdinand':'retainer','Nemanja Vidić':'fortress','Bobby Moore':'leader','Stuart Pearce':'enforcer','Mark Viduka':'target','Christophe Dugarry':'showboat','Robbie Savage':'hothead','Lucas Paquetá':'flair','Dimitri Payet':'fkspec','Paolo Di Canio':'hothead','Viktor Gyökeres':'target','Alexander Isak':'icecold','Hugo Ekitiké':'flair','Jérémy Doku':'flair','Rayan Cherki':'showboat','Eberechi Eze':'flair','Kai Havertz':'target','Bruno Guimarães':'playmaker','Anthony Gordon':'runner','Ollie Watkins':'runner','Jack Grealish':'retainer','Yaya Touré':'biggame','Kevin Phillips':'poacher','Les Ferdinand':'target','Zinedine Zidane':'flair','Lionel Messi':'flair','Ronaldinho':'showboat','Ronaldo Nazário':'icecold','Zlatan Ibrahimović':'selfish','Andrea Pirlo':'fkspec','Xavi':'retainer','Andrés Iniesta':'retainer','Gianluigi Buffon':'shotstopper','Manuel Neuer':'sweeper','Pelé':'biggame','Diego Maradona':'flair','Johan Cruyff':'playmaker','Gerd Müller':'poacher','Lev Yashin':'shotstopper','Franz Beckenbauer':'leader','George Best':'showboat','Bobby Charlton':'longshot','Eusébio':'longshot','Thor':'target','Loki':'showboat','Robin Hood':'icecold','Little John':'enforcer','Hermes':'runner','Sun Wukong':'flair','Arthur':'leader','Achilles':'hothead','Riyad Mahrez':'cutinside','Ángel Di María':'cutinside','Mohammed Kudus':'cutinside','Jarrod Bowen':'cutinside','Franck Ribéry':'cutinside','Marcel Desailly':'fortress','Giorgio Chiellini':'fortress','Ibrahima Konaté':'fortress','Dan Burn':'fortress','Rúben Dias':'fortress','James Ward-Prowse':'fkspec','Siniša Mihajlović':'fkspec','Roberto Carlos':'fkspec','Michel Platini':'fkspec','Christian Eriksen':'fkspec','James Maddison':'fkspec','Kieran Trippier':'fkspec'};
+const TRAIT_OF={'William Saliba':'retainer','Thierry Henry':'icecold','Steven Gerrard':'longshot','Frank Lampard':'longshot','Roy Keane':'enforcer','Patrick Vieira':'engine','Paul Scholes':'longshot','Ryan Giggs':'flair','Cristiano Ronaldo':'flair','David Beckham':'fkspec','Eric Cantona':'leader','John Terry':'leader','Tony Adams':'leader','Kevin De Bruyne':'playmaker','Luka Modrić':'retainer','NGolo Kanté':"engine",'N\'Golo Kanté':'engine','Harry Kane':'icecold','Mohamed Salah':'cutinside','Dennis Bergkamp':'playmaker','Paul Gascoigne':'showboat','Gareth Bale':'cutinside','Jamie Vardy':'runner','Peter Schmeichel':'shotstopper','Edwin van der Sar':'sweeper','Alisson Becker':'sweeper','Ederson':'sweeper','Virgil van Dijk':'fortress','Claude Makélélé':'retainer','Rodri':'retainer','Bruno Fernandes':'playmaker','Cole Palmer':'icecold','Bukayo Saka':'cutinside','Matt Le Tissier':'longshot','Gianfranco Zola':'flair','Robert Pires':'flair','Arjen Robben':'cutinside','Jamal Musiala':'flair','Trent Alexander-Arnold':'crosser','Andy Robertson':'crosser','Sergio Agüero':'clutch','Florian Wirtz':'playmaker','Martin Ødegaard':'playmaker','Declan Rice':'engine','Phil Foden':'cutinside','Son Heung-min':'runner','Dwight Yorke':'icecold','Kenny Dalglish':'playmaker','Fernando Torres':'runner','John Barnes':'flair','Dixie Dean':'target','Rio Ferdinand':'retainer','Nemanja Vidić':'fortress','Bobby Moore':'leader','Stuart Pearce':'enforcer','Mark Viduka':'target','Christophe Dugarry':'showboat','Lucas Paquetá':'flair','Dimitri Payet':'fkspec','Viktor Gyökeres':'target','Alexander Isak':'icecold','Hugo Ekitiké':'flair','Jérémy Doku':'flair','Rayan Cherki':'showboat','Eberechi Eze':'flair','Kai Havertz':'target','Bruno Guimarães':'playmaker','Anthony Gordon':'runner','Ollie Watkins':'runner','Jack Grealish':'retainer','Les Ferdinand':'target','Zinedine Zidane':'flair','Lionel Messi':'flair','Ronaldinho':'showboat','Ronaldo Nazário':'icecold','Zlatan Ibrahimović':'selfish','Andrea Pirlo':'fkspec','Xavi':'retainer','Andrés Iniesta':'retainer','Gianluigi Buffon':'shotstopper','Manuel Neuer':'sweeper','Diego Maradona':'flair','Johan Cruyff':'playmaker','Lev Yashin':'shotstopper','Franz Beckenbauer':'leader','George Best':'showboat','Bobby Charlton':'longshot','Eusébio':'longshot','Thor':'target','Loki':'showboat','Robin Hood':'icecold','Little John':'enforcer','Hermes':'runner','Sun Wukong':'flair','Arthur':'leader','Riyad Mahrez':'cutinside','Ángel Di María':'cutinside','Mohammed Kudus':'cutinside','Jarrod Bowen':'cutinside','Franck Ribéry':'cutinside','Marcel Desailly':'fortress','Giorgio Chiellini':'fortress','Ibrahima Konaté':'fortress','Dan Burn':'fortress','Rúben Dias':'fortress','James Ward-Prowse':'fkspec','Siniša Mihajlović':'fkspec','Roberto Carlos':'fkspec','Michel Platini':'fkspec','Christian Eriksen':'fkspec','James Maddison':'fkspec','Kieran Trippier':'fkspec'};
 // wingers known for cutting in onto their stronger foot
 const CUT_IN=["Bryan Mbeumo", "Federico Chiesa", "Noni Madueke", "Estêvão", "Michael Olise", "Lamine Yamal", "Ousmane Dembélé", "Khvicha Kvaratskhelia", "Christian Pulisic", "Lorenzo Insigne", "Eden Hazard", "Hakim Ziyech", "Omar Marmoush", "Jadon Sancho", "Takefusa Kubo", "Alessandro Del Piero", "Cody Gakpo", "Harvey Barnes", "Iliman Ndiaye", "Omari Hutchinson", "Abdul Fatawu", "Luis Díaz", "Vinícius Júnior", "Rodrygo", "Neymar", "Gabriel Martinelli"];for(const n of CUT_IN)if(TRAIT_OF[n]===undefined)TRAIT_OF[n]='cutinside';
+// the original roll table, kept exactly so every made-up player keeps the trait he always had (or none, if his was removed)
+const TRAIT_ROLL=[['flair',['WM','ST','CM','FB']],['longshot',['CM','WM','ST']],['poacher',['ST']],['retainer',['CM','CB','WM','FB']],['playmaker',['CM','WM','CB']],['target',['ST']],['runner',['ST','WM','FB']],['engine',['CM','FB','WM']],['enforcer',['CB','CM','FB']],['leader',['CB','CM','GK','ST']],['biggame',['ST','CM','WM','CB']],['clutch',['ST','WM','CM']],['crosser',['WM','FB']],['fkspec',['CM','WM','ST','FB']],['cutinside',['WM']],['fortress',['CB']],['icecold',['ST','WM']],['sweeper',['GK']],['shotstopper',['GK']],['selfish',['ST','WM']],['hothead',['CB','CM','ST','FB']],['showboat',['WM','CM','ST']]];const TRAIT_BAD0=['selfish','hothead','showboat'];
 function traitOf(p){
  if(p.trait!==undefined)return p.trait;
  let t=TRAIT_OF[p.name];
  if(t===undefined){let h=2166136261;for(const ch of p.name+'#t'){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}h>>>=0;const r=(h%1000)/1000,r2=((h>>>10)%1000)/1000;
-  const cat=CAT[p.pos]||'CM';const opts=Object.keys(TRAITS).filter(k=>TRAITS[k].cats.includes(cat));
-  if(cat==='WM'&&r>=0.58&&r<0.72&&opts.includes('cutinside'))t='cutinside';else if(r<0.72||!opts.length)t=null;else{const w=opts.map(k=>TRAITS[k].bad?0.35:1);let x=r2*w.reduce((a,b)=>a+b,0);t=opts[opts.length-1];for(let i=0;i<opts.length;i++){x-=w[i];if(x<=0){t=opts[i];break;}}}}
+  const cat=CAT[p.pos]||'CM';const opts=TRAIT_ROLL.filter(k=>k[1].includes(cat)).map(k=>k[0]);
+  if(cat==='WM'&&r>=0.58&&r<0.72&&opts.includes('cutinside'))t='cutinside';else if(r<0.72||!opts.length)t=null;else{const w=opts.map(k=>TRAIT_BAD0.includes(k)?0.35:1);let x=r2*w.reduce((a,b)=>a+b,0);t=opts[opts.length-1];for(let i=0;i<opts.length;i++){x-=w[i];if(x<=0){t=opts[i];break;}}}}
+ if(t&&!TRAITS[t])t=null; /* a trait that has been taken out of the game: he simply has none (no replacement) */
  p.trait=t;return t;
 }
 // revised ratings (v3) supplied by the user: [pos, age, spd, sho, pas, dri, tck, str, gk as shown on screen, sta, target rating, real?]
@@ -1803,6 +1805,11 @@ function r3Apply(p,keepAge){if(!p||p.legend||p.superstar||p.cupLvl||p.mystery)re
 // The forwards are lifted in proportion (no attribute past its top figure); every other keeper is scaled down in proportion so the best of them is 89;
 // anyone else who would be above 90 is brought down in proportion to 89.
 const P_TUNE={'casemiro':['DM',78],'morgan rogers':['AM',81]};
+const ATTR_SET={'bruno fernandes':{pas:91}};
+const GK_TG={'kepa arrizabalaga':81,'david raya':82,'hugo lloris':82,'david seaman':83,'senne lammens':74};
+function gkBoost(p,tg){let g=0;while(overall(p)<tg&&g++<80){p.gk++;}while(overall(p)>tg&&g++<160){p.gk--;}}
+function gkLift(L){for(const p of L){if(!p.real||p.pos!=='GK'||p.gkL)continue;const k=R3_FOLD(p.name);if(STAR_GK.includes(k)){p.gkL=1;continue;}
+ const o=overall(p);let tg=GK_TG[k]||(o<89?Math.round(89-(89-o)*0.6):o);tg=Math.min(89,tg);if(tg!==o)gkBoost(p,tg);p.gkL=1;p.ovr=overall(p);p.value=valueOf(p);}}
 const STAR_UP={'arjen robben':93,'cristiano ronaldo':93,'mohamed salah':92,'thierry henry':91,'gareth bale':91};const STAR_GK=['peter schmeichel','petr cech'];
 function scaleP(p,f){for(const k of ['spd','sho','pas','dri','tck','str','sta'])p[k]=Math.max(1,Math.min(ATOP[k],Math.round(p[k]*f)));if(p.pos==='GK')p.gk=Math.max(1,Math.round(Math.min(ATOP.gk/0.9,p.gk*f)));}
 function boostTo(p,tg){let g=0;while(overall(p)<tg&&g++<200){const w=WEIGHTS[p.pos];let moved=false;for(const k in w){if(k==='gk'&&p.pos!=='GK')continue;const cap=k==='gk'?ATOP.gk/0.9:ATOP[k];if(p[k]<cap){p[k]=Math.min(cap,p[k]+1);moved=true;}}if(!moved)break;}}
@@ -1818,6 +1825,10 @@ function r3Stars(list){const L=list.filter(p=>p&&!p.legend&&!p.superstar&&!p.cup
  for(const p of L){if(p.pos==='DM'&&['roy keane','claude makelele'].includes(R3_FOLD(p.name))&&overall(p)<90){boostTo(p,90);p.ovr=overall(p);p.value=valueOf(p);}}
  // individual tweaks (user's choice): [position, target rating] - lifted on the three attributes that matter most for that position
  for(const p of L){const tg=P_TUNE[R3_FOLD(p.name)];if(!tg||!p.real)continue;p.pos=tg[0];const w=WEIGHTS[p.pos];const ks=Object.keys(w).sort((a,b)=>w[b]-w[a]).slice(0,3);let g=0;while(overall(p)<tg[1]&&g++<60){let mv=false;for(const k of ks)if(p[k]<ATOP[k]){p[k]++;mv=true;}if(!mv)break;}p.ovr=overall(p);p.value=valueOf(p);}
+ // single-attribute fixes (user's choice)
+ for(const p of L){const f=ATTR_SET[R3_FOLD(p.name)];if(!f||!p.real)continue;for(const k in f)p[k]=f[k];p.ovr=overall(p);p.value=valueOf(p);}
+ // keepers (user's choice): the real keepers below the very top are lifted towards it - more of them in the 80s - and a few set directly
+ gkLift(L);
  // a few others may sit on exactly 90 (never more than three, so 90+ stays within ten players); the rest of that group drop to 89
  {const at=L.filter(p=>p.pos!=='GK'&&!STAR_UP[R3_FOLD(p.name)]&&overall(p)>=90).sort((a,b)=>b.ovr-a.ovr);for(const p of at.slice(3)){let g=0;while(overall(p)>89&&g++<40)scaleP(p,0.99);p.ovr=overall(p);p.value=valueOf(p);}}}
 
@@ -2004,15 +2015,15 @@ function useBoost(m,ti,k){
  T.boost={type:k,until:m.t+m.dur*10/90};ev(m,'boost',`Booster: ${BOOSTERS[k].name}`,ti);
 }
 const TACTICS={
- park:{name:'Park the bus',desc:'Everyone behind the ball. Pros: keeps players deep and compact, so opponents struggle to find space and score; excellent for protecting a lead. Cons: you invite pressure and struggle to create chances or get players forward.',ment:-2,possShift:-0.12,defShift:-0.16,holdBack:true,park:true,runs:.25,shoot:.6,block:2.6,short:1},
- defensive:{name:'Defensive',desc:'A less extreme version of park the bus. Pros: prioritises defensive shape and reduces the risk of being caught out of position; useful against strong attacking sides. Cons: you may lack attacking support and struggle to break down teams who also defend deep.',ment:-1,possShift:-0.07,defShift:-0.06,holdBack:true,compact:0.82,runs:.45,shoot:.85,block:1.7,short:1,patient:true},
- counter:{name:'Counter attack',desc:'Hit teams on the break. Pros: exploits the space opponents leave when they attack, creating quick chances and punishing sides that commit too many forward. Cons: if the opposition stay deep or have strong defensive cover, your counter-attacks may come to nothing.',ment:-1,defShift:-0.07,possShift:-0.03,counter:true,breakT:5.5},
+ park:{name:'Park the bus',desc:'Everyone behind the ball. Pros: keeps players deep and compact, so opponents struggle to find space and score; excellent for protecting a lead. Cons: you invite pressure and struggle to create chances or get players forward.',ment:-2,possShift:-0.12,defShift:-0.16,holdBack:true,park:true,runs:.25,shoot:.6,block:2.6,clearFast:1},
+ defensive:{name:'Defensive',desc:'A less extreme version of park the bus. Pros: prioritises defensive shape and reduces the risk of being caught out of position; useful against strong attacking sides. Cons: you may lack attacking support and struggle to break down teams who also defend deep.',ment:-1,possShift:-0.07,defShift:-0.06,holdBack:true,compact:0.74,blockBox:1,runs:.45,shoot:.85,block:1.7,patient:true},
+ counter:{name:'Counter attack',desc:'Hit teams on the break. Pros: exploits the space opponents leave when they attack, creating quick chances and punishing sides that commit too many forward. Cons: if the opposition stay deep or have strong defensive cover, your counter-attacks may come to nothing.',ment:-1,defShift:-0.07,possShift:-0.1,prog:1.35,quick:0.8,counter:true,breakT:5.5},
  balanced:{name:'Balanced',desc:'A mix of everything. Pros: a good balance of attack and defence that keeps you flexible against different opponents. Cons: it lacks the specialist strengths of the other styles, and left on too long the opposition work it out.',balanced:true},
  long:{name:'Long balls',desc:'Long balls over the top and switches of play. Pros: gets the ball into advanced areas quickly, bypasses a crowded midfield, and suits fast strikers or strong target men. Cons: you can lose the ball a lot, especially if your forwards are weak in the air or your passing is poor.',long:true,prog:1.15,runs:1.4},
  wings:{name:'Wings',desc:'Get the ball wide and deliver it into the box. Pros: stretches the opposition, creates crossing chances and exploits space on the flanks. Cons: attacks can become predictable, and strong full-backs or good wide cover can shut it down. It also tires your wide players.',wide:1.18,wing:1.0,cross:true,shoot:1.2},
  through:{name:'Through balls',desc:'Thread balls through the middle for runners. Pros: sends attackers into the space behind the defence for clear chances, ideal for quick forwards with good movement. Cons: it relies on precise timing and passing; an organised, deep defence can stop it, and misplaced passes invite counters.',through:true,runs:1.9,prog:1.25,vision:0.85},
  press:{name:'High press',desc:'Close the opposition down high up the pitch. Pros: forces mistakes and wins the ball near their goal for quick chances. Cons: leaves space behind your back line, tires your players, and good passing sides can play through it.',defShift:.15,possShift:.07,pushUp:true,press:true,runs:1.4},
- attacking:{name:'Attacking',quick:0.72,attFin:1.15,attPow:2,desc:'Commit more players forward. Pros: more passing options in the final third and constant pressure on their defence. Cons: fewer players protect your own goal, so you are vulnerable to counter-attacks.',ment:1,possShift:.07,pushUp:true,runs:1.9,shoot:1.15,longRange:0,aggro:true,vision:0.85,creative:true,highLine:true,press:true},
+ attacking:{name:'Attacking',quick:0.72,attFin:1.15,attPow:2,desc:'Commit more players forward. Pros: more passing options in the final third and constant pressure on their defence. Cons: fewer players protect your own goal, so you are vulnerable to counter-attacks.',ment:1,possShift:.07,pushUp:true,runs:1.9,shoot:1.4,longRange:0,aggro:true,vision:0.85,creative:true,highLine:true,press:true},
  physical:{name:'Physical',desc:'Get in their faces. Pros: your players close the ball down quickly, tackle much harder and are more likely to get fired up. Cons: more fouls and cards, and the rough treatment can wind the other team up until most of them are fired up too.',press:true,aggro:true,physical:true,runs:1.1},
  sink:{name:'Kitchen sink',desc:'Everything forward, keeper up to the halfway line. Pros: an all-out attempt to score, for when you desperately need a goal late on. Cons: your defence is left wide open, so the opposition can easily score again on the counter, and your players burn energy twice as fast.',ment:3,possShift:.22,defShift:.2,pushUp:true,press:true,aggro:true,runs:2.2,shoot:1.9,longRange:10,sink:true},
 };
@@ -2027,7 +2038,9 @@ const hasT=(pl,k)=>pl.p.trait===k;
 // it only works when they are close to each other on the pitch
 var LKOFF={};
 function linked(a,b){return a!==b&&a.team===b.team&&!!a.lk&&a.lk.has(b.p.id)&&dist(a,b)<26;}
-function tUse(pl){return 0.6+(pl.conf??0.5);}
+function tUse(pl){return 0.95+(pl.conf??0.5)*0.7;} /* traits make a real difference now */
+// a trait coming into play: a little label floats up above the player (never more than one every so often per player)
+function tFx(m,pl,txt,gap){if(!pl||m._ffw)return;if(m.t-(pl._tfxT||-99)<(gap||10))return;pl._tfxT=m.t;(m.tfx=m.tfx||[]).push({pl,txt,t:m.t,team:pl.team});if(m.tfx.length>14)m.tfx.shift();}
 function tGood(pl,ok){pl.conf=clamp((pl.conf??0.5)+(ok?0.12:-0.06),0.1,1);}
 function linkOf(side,pid){const s=new Set();for(const [a,b] of side.links||[]){if(a===pid)s.add(b);else if(b===pid)s.add(a);}return s.size?s:null;}
 // the little extras come in patches: each one has a hot spell now and then and quiet spells in between (a regime that carries over
@@ -2238,8 +2251,8 @@ function step(m,dt){
    if(pl===m.taker&&m.state==='goalkick'){
     m.gkT=(m.gkT||0)+dt;
     if(m.gkPhase==='fetch'){const [wx,wy]=goalRoute(pl,b.x,b.y);moveTo(pl,wx,wy,1.9,dt,30,true);if(dist(pl,b)<2.2||m.gkT>2.5){m.gkPhase='return';m.gkT=0;}}
-    else{const [sx0,sy0]=m.gkSpot;const [sx,sy]=goalRoute(pl,sx0,sy0);moveTo(pl,sx,sy,1.7,dt,30,true);const T=m.teams[pl.team];b.x=pl.x+T.dir*0.7;b.y=pl.y;
-     if(m.gkPhase==='return'&&(hyp(pl.x-sx0,pl.y-sy0)<0.9||m.gkT>3)){if(m.gkT>3){pl.x=sx0;pl.y=sy0;b.x=pl.x+T.dir*0.7;b.y=pl.y;}m.gkPhase='set';m.stateT=0.35;}}
+    else{const [sx0,sy0]=m.gkSpot;const [sx,sy]=goalRoute(pl,sx0,sy0);moveTo(pl,sx,sy,1.7,dt,30,true);const T=m.teams[pl.team];b.x=pl.x;b.y=pl.y; /* carried back in his hands, held in the middle of him */
+     if(m.gkPhase==='return'&&(hyp(pl.x-sx0,pl.y-sy0)<0.9||m.gkT>3)){if(m.gkT>3){pl.x=sx0;pl.y=sy0;b.x=pl.x;b.y=pl.y;}m.gkPhase='set';m.stateT=0.35;}}
    }
    else if(pl===m.taker&&m.state==='corner'&&m.cnPhase){
     m.cnT+=dt;const [cx,cy]=m.cnSpot;const T=m.teams[pl.team];
@@ -2258,7 +2271,7 @@ function step(m,dt){
    else if(m.state==='goal'){moveTo(pl,pl.x+pl.vx*.1,pl.y+pl.vy*.1,0.3,dt);}
    else{let [x,y]=m.state==='kickoff'?[pl.tx,pl.ty]:shapeTarget(m,pl);
     // a corner: the opposition give the taker room, backing off around the flag
-    if(m.state==='corner'&&m.taker&&pl.team!==m.taker.team&&pl.role!=='GK'){const sp=m.cnSpot||[b.x,b.y];const dd=hyp(x-sp[0],y-sp[1]);const need=9.2;if(dd<need){const ux=(x-sp[0])/(dd||1),uy=(y-sp[1])/(dd||1);x=sp[0]+ux*need;y=sp[1]+uy*need;if(x<1||x>PL-1){x=clamp(x,1,PL-1);}y=clamp(y,1,PW-1);}
+    if((m.state==='corner'||m.state==='free'||m.state==='fk')&&m.taker&&pl.team!==m.taker.team&&pl.role!=='GK'&&!(m.fkWall&&m.fkWall.some(z=>z.q===pl))){/* corners and free kicks: the opposition stand back the full ten yards */const sp=m.state==='corner'?(m.cnSpot||[b.x,b.y]):[b.x,b.y];const dd=hyp(x-sp[0],y-sp[1]);const need=9.2;if(dd<need){const ux=(x-sp[0])/(dd||1),uy=(y-sp[1])/(dd||1);x=sp[0]+ux*need;y=sp[1]+uy*need;if(x<1||x>PL-1){x=clamp(x,1,PL-1);}y=clamp(y,1,PW-1);}
      const pd=hyp(pl.x-sp[0],pl.y-sp[1]);if(pd<need-0.5){const ux=(pl.x-sp[0])/(pd||1),uy=(pl.y-sp[1])/(pd||1);x=sp[0]+ux*need;y=sp[1]+uy*need;}}
     if(m.state==='dark'){x=pl.x;y=pl.y;}
     if(m.state==='fk'&&m.fkWall){const w=m.fkWall.find(z=>z.q===pl);if(w){x=w.x;y=w.y;}else if(pl.role==='GK'&&pl.team!==m.taker.team){const g=goalOf(m.teams[m.taker.team]);x=g.x-m.teams[m.taker.team].dir*0.8;y=GY+clamp((b.y-GY)*0.25,-2.5,2.5);}else{const d0=hyp(x-b.x,y-b.y);if(d0<9.5&&pl!==m.taker){x=b.x+(x-b.x)/(d0||1)*9.5;y=b.y+(y-b.y)/(d0||1)*9.5;}}}
@@ -2385,7 +2398,7 @@ function shapeTarget(m,pl){
  const shift=inPoss?(T.boost&&T.boost.type==='wall'&&m.t<T.boost.until?-0.03:0)+bp*0.55+ment+(T.tac.possShift||0)+(breaking?0.15:0)+(T.urgent?0.08:0):bp*0.55-0.11+ment+(T.tac.defShift||0);
  let px=pl.sx*(inPoss?1.0:0.88)+shift;
  if(inPoss){
-  if(T.tac.pushUp&&(pl.role==='FB'||pl.role==='CM'))px+=0.07;
+  if(T.tac.pushUp&&(pl.role==='FB'||pl.role==='CM'))px+=pl.role==='CM'&&pl.sx<0.4?0.02:0.07; /* the holding midfielder stays in to screen */
   if(T.tac.sink&&(pl.role==='CB'||pl.role==='FB'))px+=0.12;
   if(T.tac.holdBack&&(pl.role==='CB'||pl.role==='FB'||(pl.role==='CM'&&pl.sx<0.33)))px=Math.min(px,pl.role==='CB'?0.36:0.45);
   if(T.tac.patient&&!T.tac.park&&(pl.role==='CM'||pl.role==='WM'))px=Math.min(px,pl.role==='CM'?0.6:0.72);
@@ -2427,7 +2440,7 @@ function shapeTarget(m,pl){
   for(const o of O.players){if(o.role==='GK')continue;if(T.tac.park&&progOf(T,o.x)>0.36)continue;const d=hyp(o.x-sx,o.y-sy);if(d<nd){nd=d;near=o;}}
   if(near){const og=ownGoal(T);const gx=og.x-near.x,gy=og.y-near.y;const gd=hyp(gx,gy)||1;
    const inBox=progOf(T,near.x)<0.18&&Math.abs(near.y-GY)<PG.boxW+1;
-   const mx=near.x+gx/gd*SEP,my=near.y+gy/gd*SEP;const w=inBox?0.88:(pl.role==='CB'||pl.role==='FB'?0.55:0.4)*(T.tac.park?0.6:1); /* in the box, a defender sticks tight to his man, goal-side */
+   const far=hyp(m.ball.x-near.x,m.ball.y-near.y)>18;const md=inBox?SEP:SEP+(far?1.5:0.5);/* tight in the box; a yard off his man when the ball is elsewhere */const mx=near.x+gx/gd*md,my=near.y+gy/gd*md;const w=inBox?0.88:(far?0.8:1)*(pl.role==='CB'||pl.role==='FB'?0.55:0.4)*(T.tac.park?0.6:1); /* in the box, a defender sticks tight to his man, goal-side */
    return [sx+(mx-sx)*w,sy+(my-sy)*w];}
   return [sx,sy];
  }
@@ -2609,7 +2622,7 @@ function startDuel(m,d,own){
  else if(own.powerRun&&m.t<own.powerRun.until&&own.powerRun.n<3&&d.role!=='GK'&&own.role!=='GK'){const z=own.duel;z.shove=true;z.T=0.35+m.rng()*0.2;z.p=clamp(0.5+(eff(d,'str')+eff(d,'tck')*0.5-eff(own,'str')-eff(own,'spd')*0.5)/60+own.powerRun.n*0.08,0.15,0.85);m.nShove=(m.nShove||0)+1;}
 }
 // a won challenge: the man on the ball is knocked off it and sent skidding; the ball is left loose where it was for the winner to collect
-function looseWin(m,d,own,push){const b=m.ball;const ux0=own.x-d.x,uy0=own.y-d.y,l=hyp(ux0,uy0)||1,ux=ux0/l,uy=uy0/l;
+function looseWin(m,d,own,push){if(hasT(d,'enforcer'))tFx(m,d,'Enforcer');else if(hasT(d,'fortress'))tFx(m,d,'Fortress');const b=m.ball;const ux0=own.x-d.x,uy0=own.y-d.y,l=hyp(ux0,uy0)||1,ux=ux0/l,uy=uy0/l;
  // sometimes the winner goes straight through him: the ball squirts out behind the beaten man and the winner charges through his roundel to collect it
  const thru=d.role!=='GK'&&own.role!=='GK'&&m.rng()<0.45;
  b.owner=null;b.shot=null;b.loft=null;b.passBy=null;b.crossBall=false;b.knock=null;b.last=d.team;b.lastP=d;b.kicker=own;b.kickT=m.t;b.intended=d;
@@ -2646,8 +2659,8 @@ function duels(m,dt){
   if(z.t<z.T)continue;
   endDuel(own);const T=m.teams[d.team];d.tcd=T.tac.press?0.85:T.tac.aggro?1.0:1.25;
   // over-eager challenges: a foul, sometimes a booking, very occasionally a red
-  if(d.role!=='GK'){const inBox=(()=>{const g=goalOf(m.teams[own.team]);return Math.abs(own.x-g.x)<PG.box&&Math.abs(own.y-GY)<PG.boxW;})();const fp=(m.derby?1.5:1)*(inBox?1.15:1)*((hasT(d,'enforcer')?0.05:0)+(hasT(d,'hothead')?0.035:0)+0.07+(T.tac.press?0.04:0)+(T.tac.aggro?0.03:0)+(T.tac.physical?0.05:0)+(eff(d,'tck')<55?0.03:0)+clamp((eff(d,'str')-eff(own,'str'))/400,0,0.05));
-   if(m.rng()<fp*(inBox?1:0.75)){foul(m,d,own);continue;}} /* a quarter fewer free kicks out on the pitch (penalties unchanged) */
+  if(d.role!=='GK'){const inBox=(()=>{const g=goalOf(m.teams[own.team]);return Math.abs(own.x-g.x)<PG.box&&Math.abs(own.y-GY)<PG.boxW;})();const fp=(m.derby?1.5:1)*(inBox?1.15:1)*((hasT(d,'enforcer')?0.05:0)+(hasT(d,'hothead')?0.035:0)+0.07+(T.tac.press?0.04:0)+(T.tac.aggro?0.03:0)+(T.tac.physical?0.13:0)+(eff(d,'tck')<55?0.03:0)+clamp((eff(d,'str')-eff(own,'str'))/400,0,0.05));
+   if(m.rng()<fp*(T.tac.physical?1.8:inBox?1:0.75)){foul(m,d,own);continue;}} /* a quarter fewer free kicks out on the pitch (penalties unchanged) */
   if(hasT(own,'flair')||hasT(own,'showboat')||hasT(own,'retainer'))tGood(own,false);
   if(m.rng()<z.p){
    m.stats.tackles[d.team]++;d.st.tk++;own.st.lost++;own.tcd=1.6;own.stun=0.7;own.windup=0;own.pend=null;if(eff(d,'str')-eff(own,'str')>6&&m.rng()<0.015*rm(m,'injury'))injure(m,own,'tackle');
@@ -2676,7 +2689,7 @@ function curlSk(pl){return clamp((eff(pl,'pas')*0.4+eff(pl,'sho')*0.4+eff(pl,'dr
 function foul(m,d,own,o){o=o||{};
  m.fouls=m.fouls||[0,0];m.fouls[d.team]++;own.stun=0;d.stun=0.8;
  const r=m.rng()*(m.derby?0.7:1);let card=null;
- const phy=m.teams[d.team].tac.physical;if(r<(hasT(d,'hothead')?0.015:0.008)*(phy?1.5:1))card='red';else if(r<(phy?0.33:0.25))card=d.yellow?'red2':'yellow';
+ const phy=m.teams[d.team].tac.physical;if(r<(hasT(d,'hothead')?0.015:0.008)*(phy?1.5:1))card='red';else if(r<(phy?0.42:0.25))card=d.yellow?'red2':'yellow';
  if(o.card){}else if(phy){/* the rough stuff winds the other side up: enough of it and most of them are fired up */const V=m.teams[own.team];V.anger=(V.anger||0)+(card?2:1);if(V.anger>=3&&!V.fury){V.fury=true;const vs=V.players.filter(q=>q.role!=='GK');for(const q of vs)if(m.rng()<0.75)q.psych=m.t+m.dur*15/90;vs.sort(()=>m.rng()-0.5).slice(0,2).forEach(q=>q.hot=Math.max(q.hot||0,18));ev(m,'fury',`${V.side.name} have had enough of the rough treatment - they're fired up now!`,V.idx);m.flash={text:'FIRED UP',sub:`${V.side.short||V.side.name} are up for the fight`,t:2.2,team:V.idx,col:'#e3b341'};}}
  if(o.card){card=o.card==='none'?null:o.card==='yellow'?(d.yellow?'red2':'yellow'):'red';}
  m.foulAt={x:m.ball.x,y:m.ball.y};if(!m.twl&&(o.why!=='barge'||m.rng()<0.5)&&m.rng()<0.4){own.flipT=m.t;own.flipAt={x:own.x,y:own.y};}
@@ -2821,7 +2834,7 @@ function carrierAI(m,pl,dt){
    if(!pl.brk||pl.brk<m.t){m.nBreak=(m.nBreak||0)+1;/* each time through he picks his own moment: somewhere 11-21m out, a confident finisher sometimes earlier; or when the keeper comes to him */pl.brD=11+m.rng()*8+clamp((eff(pl,'sho')-70)/10,0,2)*m.rng();pl.brGK=5+m.rng()*3;}pl.brk=m.t+0.35;
    // the keeper rushes out to meet him: a cool head dinks it over him
    if(gk&&!(pl.lobCD>m.t)&&gkD>4.5&&gkD<13&&dG0>10&&hyp(gk.x-g.x,gk.y-g.y)>4){pl.lobCD=m.t+5;const sk=(eff(pl,'sho')+eff(pl,'pas'))/2;
-    if(m.rng()<rm(m,'lob')*clamp(0.1+(sk-62)/180+(hasT(pl,'icecold')?0.1:0),0.04,0.4)){pl.drib=null;m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} tries to lob the keeper`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}
+    if(m.rng()<0.45*rm(m,'lob')*clamp(0.1+(sk-62)/180+(hasT(pl,'icecold')?0.1:0),0.04,0.4)){pl.drib=null;m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} tries to lob the keeper`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}
    if((dG0<(pl.brD||14)||gkD<(pl.brGK||6))&&m.t-(pl.brShotT||-9)>1.2){pl.brShotT=m.t;pl.drib=null;return act(()=>doShot(m,pl,{oneV1:true}));}
    const ty=GY+(gk&&gk.y>pl.y?-1.8:1.8)*clamp(1-dG0/40,0.3,1);const dx=g.x-pl.x,dy=ty-pl.y,dl=hyp(dx,dy)||1;pl.drib=[dx/dl,dy/dl];pl.decideT=Math.max(pl.decideT,0.2);
    moveTo(pl,pl.x+pl.drib[0]*8,pl.y+pl.drib[1]*8,1,dt);return;}}
@@ -2846,19 +2859,19 @@ function carrierAI(m,pl,dt){
    // initiative 2: the keeper has come charging out - a good player lifts it over him
    if(gk&&gOff>5.5&&dG>11&&dG<36&&ang<1.5&&near>2.6&&!pl.pend&&!(pl.lobCD>m.t)){const gkD=dist(gk,pl);
     if(gkD>5&&gkD<28&&segDist(gk.x,gk.y,pl.x,pl.y,g.x,GY)<3){const skill=(eff(pl,'sho')+eff(pl,'pas'))/2;pl.lobCD=m.t+4; // weighs it up once, not every touch
-     const pc=clamp(0.07+(skill-62)/200+(gOff-5.5)*0.03,0.03,0.4)*rm(m,'lob');
+     const pc=0.45*clamp(0.07+(skill-62)/200+(gOff-5.5)*0.03,0.03,0.4)*rm(m,'lob');
      if(m.rng()<pc){m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} tries to lob the keeper`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}}
    if(gk&&gOff>6&&ang<1.6&&!pl.pend&&!(pl.gkoCD>m.t)&&near>2.2){pl.gkoCD=m.t+3;let blk=0;for(const q of O){if(q.role!=='GK'&&segDist(q.x,q.y,pl.x,pl.y,g.x,GY)<1.6&&dist(q,g)<dG)blk++;}
     if(dG<30&&dG>7&&!blk&&m.rng()<0.65){m.nGkOff=(m.nGkOff||0)+1;ev(m,'open',`${pl.p.name} sees the keeper off his line and shoots early`,pl.team);return act(()=>doShot(m,pl,{quick:true}));}
-    if(dG>=30&&dG<60&&gOff>9&&m.rng()<0.5){m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} spots the keeper off his line and tries to lob him from distance!`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}}
+    if(dG>=30&&dG<60&&gOff>9&&m.rng()<0.2){m.nLob=(m.nLob||0)+1;ev(m,'lob',`${pl.p.name} spots the keeper off his line and tries to lob him from distance!`,pl.team);return act(()=>doShot(m,pl,{chip:true}));}}}
   if(dG>25&&dG<44&&ang<1.0&&near>SEP&&!(pl.wdCD>m.t)&&!pl.pend){pl.wdCD=m.t+3;const q=Math.max(eff(pl,'sho'),(eff(pl,'sho')+eff(pl,'str'))/2);
    if(q>=76&&m.rng()<WORLDIE_P*rm(m,'worldie')*(1+(q-76)/12)){m.nWdTry=(m.nWdTry||0)+1;pl.drib=null;ev(m,'wdtry',`${pl.p.name} winds up from distance...`,pl.team);return loadUp(()=>doShot(m,pl,{power:true,force:true,worldie:true}),0.6+m.rng()*0.15,true);}}
   if(hasT(pl,'fkspec')&&dG>16&&dG<30&&ang<1.15&&near>1.6&&!(pl.curlCD>m.t)){pl.curlCD=m.t+4;if(m.rng()<0.4*tUse(pl)){m.nCurl=(m.nCurl||0)+1;return loadUp(()=>doShot(m,pl,{power:true,curve:true}),0.35+m.rng()*0.1,false);}}
   // kitchen sink: let fly from distance at every chance
   if(T.tac.sink&&dG<44&&dG>12&&ang<1.3&&m.rng()<0.7){const big=m.rng()<0.4;m.nSink=(m.nSink||0)+1;return loadUp(big?()=>doShot(m,pl,{power:true,force:true}):()=>doShot(m,pl,{}),near<SEP+0.4?0.3:0.45,big);}
   if(dG<rng_&&ang<(hasT(pl,'selfish')?1.9:1.6)){
-   let p=(pl.hot>0?1.4:1)*(T.urgent?1.6:1)*SHOOT_K*Math.pow(clamp((rng_-dG)/rng_,0,1),1.15)*(0.35+eff(pl,'sho')/140)*(T.tac.shoot||1)*(ang>0.9?0.5:1);
-   if(m.teams[1-pl.team].tac.park){let n=0;for(const q of O){if(q.role!=='GK'&&segDist(q.x,q.y,pl.x,pl.y,g.x,GY)<2)n++;}if(n>=2)p*=0.4;else if(n===1)p*=0.75;}
+   let p=(pl.hot>0?1.4:1)*(T.urgent?1.6:1)*SHOOT_K*Math.pow(clamp((rng_-dG)/rng_,0,1),1.15)*(0.35+eff(pl,'sho')/140)*(T.tac.shoot||1)*(ang>0.9?0.18:ang>0.65?0.55:1); /* from a tight angle he looks to pull it back or cross it instead */
+   {const OT=m.teams[1-pl.team].tac;if(OT.park||OT.blockBox){let n=0;for(const q of O){if(q.role!=='GK'&&segDist(q.x,q.y,pl.x,pl.y,g.x,GY)<2)n++;}const k=OT.park?1:0.9;if(n>=2)p*=1-0.6*k;else if(n===1)p*=1-0.25*k;}} /* bodies in the way: against a deep, compact side he doesn't snatch at it */
    if((ovv(pl.p.str)>=82||ovv(pl.p.sho)>=82)&&dG>20)p*=1.5;
    // from distance he looks up first: a team-mate in a clearly better spot (closer in, free, and the ball to him is on) or open grass to run into, and he doesn't snatch at it
    if(dG>21&&!T.urgent&&!T.tac.sink){let better=false;for(const r of T.players){if(r===pl||r.role==='GK')continue;const rg=dist(r,g);if(rg>dG-7||dist(r,pl)>30)continue;let op=99;for(const o2 of O){const od=dist(o2,r);if(od<op)op=od;}if(op<4.5||(typeof isOff==='function'&&isOff(m,T,r,0.3)))continue;
@@ -2866,7 +2879,7 @@ function carrierAI(m,pl,dt){
     let room3=99;for(const o2 of O){if(o2.role==='GK')continue;const dx=o2.x-pl.x,dy=o2.y-pl.y,d0=hyp(dx,dy)||1;if(dx*T.dir/d0>0.45&&d0<room3)room3=d0;}
     if(better)p*=T.tac.creative?0.35:0.5;if(room3>10)p*=0.4;}
    if(hasT(pl,'longshot')&&dG>18)p*=1.8*tUse(pl);if(hasT(pl,'selfish'))p*=1.6;if(hasT(pl,'poacher')&&dG>18)p*=0.6;
-   if(dG<11)p=Math.max(p,0.7);else if(dG<18)p=Math.max(p,0.5);
+   if(ang<0.65){if(dG<11)p=Math.max(p,0.7);else if(dG<18)p=Math.max(p,0.5);}
    if(T.urgent&&dG>20&&near>SEP+1)p=Math.max(p,0.12+eff(pl,'sho')/700);
    const firstTime=m.t-pl.crossT<2.0&&dG<20;
    if(firstTime)p=Math.max(p,dG<10?0.95:0.75);
@@ -2912,7 +2925,7 @@ function carrierAI(m,pl,dt){
    if(progOf(T,pl.x)>0.88&&!(pl.cbCD>m.t)){pl.cbCD=m.t+1.5;let packed=0;for(const o of O){if(o.role!=='GK'&&dist(o,g)<9)packed++;}let cb=null,cs=-9;for(const r of T.players){if(r===pl||r.role==='GK')continue;const rg=dist(r,g);if(rg<9||rg>19||Math.abs(r.y-GY)>12)continue;let op=99;for(const o of O){const od=dist(o,r);if(od<op)op=od;}if(op<3.5)continue;const dd=dist(r,pl);if(cutOut(m,pl.team,pl.x,pl.y,r.x,r.y,Math.min(dd*(b.k||0.8)+8,38)))continue;const sc=op*0.2-rg*0.05;if(sc>cs){cs=sc;cb=r;}}
     if(cb&&(packed>=2||arr<needArr)){methTry(m,T,'cross');m.nCutback=(m.nCutback||0)+1;if(m.rng()<0.4)ev(m,'cutback',`${pl.p.name} pulls it back for ${surname(cb.p.name)}`,pl.team);cb.crossT=m.t;return act(()=>doPass(m,pl,cb));}}
    if(arr<needArr&&!pressured&&progOf(T,pl.x)<0.93){for(const q of T.players){if(q._box>m.t-0.5){q.dart=m.t+1.6;q.burst=Math.max(q.burst||0,m.t+1.0);}}}
-   else if(best&&(arr>=1||wingT&&nIn>=1)&&(runners.forEach(q=>{q.dart=m.t+1.8;q.burst=Math.max(q.burst||0,m.t+1.3);}),true)&&(progOf(T,pl.x)>(wingT?0.68:0.8)&&!deep||pressured||(nIn>=1&&progOf(T,pl.x)>0.63&&(pl.role==='WM'||pl.role==='FB'||hasT(pl,'crosser'))&&m.rng()<(wingT?0.7:0.4))||arr>=needArr&&m.rng()<methW(T,'cross')*(wingT?0.75+0.14*Math.min(nIn,3)+(progOf(T,pl.x)-0.55)*1.5:0.3))){methTry(m,T,'cross');const sp=crossSpot(m,pl);const tgt=runnerFor(m,pl,sp)||best;m.cross=true;for(const q of T.players){if(q._box>m.t-0.5){q.dart=m.t+1.8;q.burst=Math.max(q.burst||0,m.t+1.4);}}return crossWind(m,pl,sp,()=>doPass(m,pl,tgt,{tx:sp[0],ty:sp[1],loft:true,cross:true}),near>SEP+1?0.38+m.rng()*0.12:0.26,loadUp);}
+   else if(best&&(arr>=1||wingT&&nIn>=1)&&(runners.forEach(q=>{q.dart=m.t+1.8;q.burst=Math.max(q.burst||0,m.t+1.3);}),true)&&(progOf(T,pl.x)>(wingT?0.68:0.8)&&!deep||pressured||(nIn>=1&&progOf(T,pl.x)>0.63&&(pl.role==='WM'||pl.role==='FB'||hasT(pl,'crosser'))&&m.rng()<(wingT?0.85:0.35))||arr>=needArr&&m.rng()<methW(T,'cross')*(wingT?0.95+0.14*Math.min(nIn,3)+(progOf(T,pl.x)-0.55)*1.5:0.3))){methTry(m,T,'cross');const sp=crossSpot(m,pl);const tgt=runnerFor(m,pl,sp)||best;m.cross=true;for(const q of T.players){if(q._box>m.t-0.5){q.dart=m.t+1.8;q.burst=Math.max(q.burst||0,m.t+1.4);}}return crossWind(m,pl,sp,()=>doPass(m,pl,tgt,{tx:sp[0],ty:sp[1],loft:true,cross:true}),near>SEP+1?0.38+m.rng()*0.12:0.26,loadUp);}
   }
   // showboats (and the very best dribblers) take their man on with a trick
   {const show=hasT(pl,'showboat'),ace=eff(pl,'dri')>90;if((show||ace)&&!(pl.skillCD>m.t)){const dir0=dribbleDir(m,pl);let dfd=null,dd=4.5;
@@ -2964,7 +2977,7 @@ function carrierAI(m,pl,dt){
   if(pb&&pb.s>0.3&&progOf(T,pl.x)<0.66&&!breaking)ds-=0.15*clamp(vis0,0.4,1.2);
   ds+=(m.rng()-0.5)*0.2;
   // in trouble near his own goal with nothing on: get rid of it, don't try to play out
-  if(progOf(T,pl.x)<0.3&&(pressured||near<3.5)&&(!pb||pb.s<0.15)&&!breaking){m.nBoot=(m.nBoot||0)+1;return act(()=>fieldClear(m,pl));}
+  if((progOf(T,pl.x)<0.3&&(pressured||near<3.5)&&(!pb||pb.s<0.15)||T.tac.clearFast&&progOf(T,pl.x)<0.42&&near<7&&(!pb||pb.s<0.55))&&!breaking){m.nBoot=(m.nBoot||0)+1;return act(()=>fieldClear(m,pl));}
   if(EXP.dlog)EXP.dlog.push([pressured?1:0,pb?+pb.s.toFixed(2):null,+ds.toFixed(2),pb&&pb.s>ds?1:0,+progOf(T,pl.x).toFixed(2),pl.role]);
   // a man in front of him in their half and only a ball backwards on: he doesn't turn it back, he holds it - close control, slows, waits for a run
   if(pb&&progOf(T,pl.x)>0.45&&!breaking&&near>2.1&&(progOf(T,pb.r.x)-progOf(T,pl.x))*PL<-3&&ahead>0&&m.t>(pl.holdCD||0)&&m.rng()<0.7){
@@ -3013,11 +3026,11 @@ function skillExec(m,pl,o,gen){
  const r=m.rng();const pdiff=eff(pl,'spd')-eff(o,'spd');let kind=d0<2.0?(r<0.5?'split':'side'):(r<0.3?'lift':r<0.7?'side':'split');if(gen==='wing'&&pdiff>5&&m.rng()<0.6)kind='burst';
  // the contest: his touch, timing and acceleration against the defender reading it. Too tight to him and there's no room to play it past; a defender charging in is already committed
  const vx=o.vx||0,vy=o.vy||0;const closing=Math.max(0,-(vx*fx+vy*fy));
- const exec=(kind==='burst'?dri*0.4+eff(pl,'spd')*0.6:dri*0.8+eff(pl,'spd')*0.2)+(gen==='wing'?13:0)+(pl.role==='WM'||pl.slot==='LW'||pl.slot==='RW'?4:0)+gauss(m.rng)*7+(hasT(pl,'showboat')?3:0)+(pl.hot>0?3:0);
+ const exec=(kind==='burst'?dri*0.4+eff(pl,'spd')*0.6:dri*0.8+eff(pl,'spd')*0.2)+(gen==='wing'?13:0)+(pl.role==='WM'||pl.slot==='LW'||pl.slot==='RW'?4:0)+gauss(m.rng)*7+(hasT(pl,'showboat')?7:hasT(pl,'flair')?5:0)+(pl.hot>0?3:0);
  const read=tck+4+gauss(m.rng)*7+(d0<1.3?10:d0>3.6?4:0)+(kind==='split'?3:kind==='lift'?1:0)-closing*1.6+(o.stun>0?-12:0);
  if(exec<=read){looseWin(m,o,pl,3);pl.stun=0.6;pl.tcd=1.4;m.stats.tackles[o.team]++;o.st.tk++;pl.st.lost++;ev(m,'skill',`${o.p.name} reads ${surname(pl.p.name)}'s move and takes the ball`,o.team);if(hasT(pl,'showboat'))tGood(pl,false);(m.sk3=m.sk3||{})[kind+'0']=((m.sk3||{})[kind+'0']||0)+1;return;}
  (m.sk3=m.sk3||{})[kind+'1']=((m.sk3||{})[kind+'1']||0)+1;
- m.nSkill=(m.nSkill||0)+1;if(hasT(pl,'showboat'))tGood(pl,true);
+ m.nSkill=(m.nSkill||0)+1;if(hasT(pl,'showboat'))tGood(pl,true);if(hasT(pl,'showboat'))tFx(m,pl,'Showboat!',4);else if(hasT(pl,'flair'))tFx(m,pl,'Flair',4);else tFx(m,pl,'Skill!',4);
  // the defender is wrong-footed: planted, barely moving, and can't touch the ball while it goes by
  const outside=gen==='wing'||kind==='burst';const fz=(outside?0.85:0.55)+clamp((exec-read)/40,0,0.4);o.stun=fz;o.noPick=m.t+fz;o.vx*=0.1;o.vy*=0.1;o.tcd=outside?2.2:1.6;o.slowT=m.t+fz+0.8; /* beaten round the outside, the full-back is on the wrong foot: slow to turn and give chase */
  pl.burst=m.t+1.4;pl.via=null;pl.drib=null;
@@ -3104,9 +3117,10 @@ function bestPass(m,pl,force){
   if(pl.role!=='GK'&&r.role!=='GK'){const back=(progOf(T,r.x)-myP)*PL;if(back<-3&&!T.waste){if(brk)s_pen=0.9;else if(myP>0.45)s_pen=0.35;else s_pen=0;}else s_pen=0;}else s_pen=0;
   let s=-s_pen+prog*0.034*(tac.prog||1)*(brk?2.2:1)*(hasT(pl,'playmaker')&&prog>0?1.4+0.4*(pl.conf??0.5):1);
   if(tac.patient&&myP<0.62){const op0=Math.min(...O.map(o=>dist(o,r)));if(op0>6&&d<26&&(progOf(T,r.x)-myP)*PL>-14)s+=0.3;if(d>30)s-=0.5;}
-  if(d>28&&!tac.long&&!wideR)s-=0.45+(d-28)*0.02;
+  if(d>28&&!tac.long&&!wideR)s-=0.7+(d-28)*0.03;
   // wing play: from the middle, get it out wide to the wingers (and overlapping full-backs) to go and cross
   if(tac.cross&&wideR&&(r.role==='WM'||r.role==='FB'||r.slot==='LW'||r.slot==='RW')&&!(Math.abs(pl.y-GY)>16&&Math.sign(pl.y-GY)===Math.sign(r.y-GY)&&pl.role==='WM')&&progOf(T,r.x)>0.3&&progOf(T,r.x)<0.9)s+=1.2+(r.role==='WM'?0.3:0); /* the long ball is the exception, not the rule (unless that's the plan) */
+  if(tac.clearFast){if(prog>10&&(r.role==='ST'||r.role==='WM'))s+=0.35;else if(prog<-3)s-=0.35;} /* parking the bus: win it, get it forward or away - no keeping it at the back */
   if(tac.short&&d>24)s-=tac.park?0.5:0.3;if(tac.short&&prog<10&&d<20)s+=0.12;
   if(tac.long&&d>24&&prog>8&&r.role!=='CB'&&r.role!=='GK')s+=0.55*clamp((eff(pl,'pas')-45)/40,0.3,1.2);
   if(tac.long&&Math.abs(pl.y-r.y)>28&&Math.abs(r.y-GY)>16&&prog>-8)s+=0.45;
@@ -3161,7 +3175,7 @@ function bestPass(m,pl,force){
 // passing with a man in your face: a lesser passer against a good presser hurries it and it goes astray
 function pressErr(m,pl){if(pl.role==='GK')return 1;let op=null,od=3.4;for(const q of m.teams[1-pl.team].players){const dq=dist(q,pl);if(dq<od){od=dq;op=q;}}
  if(!op)return 1;return 1+clamp((eff(op,'tck')-eff(pl,'pas')+8)/22,0,1.6)*(1-od/3.4+0.3);}
-function doPass(m,pl,r,o){o=o||{};
+function doPass(m,pl,r,o){o=o||{};if(o.thru&&hasT(pl,'playmaker'))tFx(m,pl,'Playmaker: killer pass');else if(o.cross&&hasT(pl,'crosser'))tFx(m,pl,'Pinpoint cross');if(o.thru&&hasT(r,'runner'))tFx(m,r,'Runs in behind');
  if(!o.clear&&!o.cross&&pl.role!=='GK'&&typeof offsideCheck==='function'&&offsideCheck(m,pl,r))return;
  const b=m.ball;const d=dist(pl,r);const T=m.teams[pl.team];const tac=T.tac;
  const lead=Math.min(1.2,d/18);
@@ -3235,7 +3249,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  if(o.xFin&&o.aimY==null){/* meeting a cross: he picks the gap - the spot with the clearest line past the bodies and away from the keeper */let by=null,bs=-1e9;const gk0=O.gk;for(let k=0;k<7;k++){const ay=GY-GW/2+0.7+(GW-1.4)*k/6;let cl=9;for(const q of O.players){if(q.role==='GK')continue;const sd=segDist(q.x,q.y,pl.x,pl.y,g.x,ay);if(sd<cl)cl=sd;}const kd=gk0?Math.abs(gk0.y-ay):3;const sc=Math.min(cl,3)*1.2+Math.min(kd,4)*0.6+(m.rng()-0.5)*0.4;if(sc>bs){bs=sc;by=ay;}}o.aimY=by;}
  const plc=clamp((sho-55)/35,0,1);const aim2=o.aimY!=null?o.aimY:GY+side*(GW/2-inset*(1-0.45*clin))*(0.55+0.45*plc);
  const composure=clamp(1.18-onBall*0.1-clamp((near0-2)*0.035,0,0.18)+(near0<1.8?0.12:0),0.72,1.3);
- let ty=aim2+gauss(m.rng)*(o.open?0.45:1)*(1-0.45*clin)*(o.header?1.5*clamp(1.7-(eff(pl,'str')+eff(pl,'sho'))/170,0.75,1.35):1)/* a header is hard to place */*composure*(0.8+dG*0.14)*clamp(2.6-sho/38,0.22,1.15)*0.88*(pl.bst==='sniper'?0.55:1) /* good finishers find the target far more often */*(T.tac.sink?0.8:1)*(tap?0.45:o.turn?clamp(1.6-(sho+eff(pl,'str'))/170,0.5,1.2):o.snap?1.2:o.quick?1.15:o.power?0.9:1)*calm*(1+clamp((angT0-0.55)/0.6,0,1)*(o.byline?0.15:0.8))*(o.byline?clamp(1.5-(sho+eff(pl,'str'))/180,0.45,1):1);
+ let ty=aim2+gauss(m.rng)*(o.open?0.45:1)*(1-0.45*clin)*(o.header?1.5*clamp(1.7-(eff(pl,'str')+eff(pl,'sho'))/170,0.75,1.35):1)/* a header is hard to place */*composure*(0.8+dG*0.14)*clamp(2.6-sho/38,0.22,1.15)*0.88*(pl.bst==='sniper'?0.55:1)*(hasT(pl,'selfish')||hasT(pl,'icecold')?0.85:1)*(hasT(pl,'clutch')&&m.t>m.dur*0.85?0.85:1) /* good finishers find the target far more often */*(T.tac.sink?0.8:1)*(tap?0.45:o.turn?clamp(1.6-(sho+eff(pl,'str'))/170,0.5,1.2):o.snap?1.2:o.quick?1.15:o.power?0.9:1)*calm*(1+clamp((angT0-0.55)/0.6,0,1)*(o.byline?0.15:1.3))*(o.byline?clamp(1.5-(sho+eff(pl,'str'))/180,0.45,1):1);
  // a few shots are simply dragged wide; everything stays on the ground
  if(!o.open&&!tap&&m.rng()<(0.015+dG/170)*clamp((100-sho)/40,0.12,1.3)*(1-0.8*clin))ty=GY+(m.rng()<0.5?-1:1)*(GW/2+0.6+m.rng()*3);
  // how likely this chance is to go in: the situation sets the odds, then shooter against keeper.
@@ -3258,7 +3272,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   const gq=gk?eff(gk,'gk'):60;const stay=m.rng()<0.12;const read=m.rng()<clamp(0.5+(gq-sho)/250,0.4,0.62);const kd=stay?0:read?sd:-sd;
   const reachP=GK_PEN+(gq-60)/70-(style==='blast'?0.35:0);
   const offT=Math.abs(lat)>3.66||z>2.44;
-  if(offT){fs=null;if(z>2.44)o._over=true;else if(Math.abs(lat)<3.9){F={wood:'post'};}gy=GY+kd*3.5;}
+  if(offT){fs=null;if(z>2.44&&Math.abs(lat)<3.66){F={wood:'bar'};}else if(z>2.44)o._over=true;else if(Math.abs(lat)<3.9){F={wood:'post'};}gy=GY+kd*3.5;}
   else{const rl=Math.abs(lat),ok=kd===0?hyp(rl,Math.max(0,z-1))<1.0:Math.sign(lat)===kd?(rl>0.5&&hyp(rl,Math.max(0,z-1)*0.8)<=reachP)||rl<=0.5&&z<0.9:rl<0.45&&z<0.8;
    if(ok){fs=true;gy=ty;}else{goal=true;gy=GY+kd*(kd?reachP*2:0);}}
   F=Object.assign(F||{},{save:fs,cat:'pen',pg,penStyle:style,gkTy:gy});(m.fin=m.fin||{}).pen=(m.fin.pen||[0,0]);m.fin.pen[0]++;if(goal)m.fin.pen[1]++;
@@ -3301,7 +3315,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
   const ay=Math.abs(ty-GY),sd=Math.sign(ty-GY)||1;let onT=false;
   if(ay<=half-0.1&&tz<=2.32)onT=true;
   else if(ay<=half+0.25&&tz<=2.5&&ay>half-0.1)F.wood='post';
-  else if(ay<=half+0.25&&tz>2.32&&tz<=2.6)F.wood='bar';
+  else if(ay<=half+0.25&&tz>2.32)F.wood='bar'; /* anything high but between the posts hits the crossbar - it never sails over it */
   // bodies in the way: a defender close to the line of the shot gets something on it - closer in he has less time to react; a lofted ball can clear him; a bender goes round
   if(!o.curve&&!o.open){let bb=null,bd=9;const lx=g.x-pl.x,ly=ty-pl.y,ll=hyp(lx,ly)||1;
    for(const q of O.players){if(q.role==='GK'||q.stun>0)continue;const al=((q.x-pl.x)*lx+(q.y-pl.y)*ly)/ll;if(al<1.0||al>ll-0.4)continue;
@@ -3333,15 +3347,15 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  if(o.chip){// a lofted chip: over the keeper and dropping under the bar, or over the bar if he gets it wrong
   const gk=O.gk;const gOff=gk?hyp(gk.x-g.x,gk.y-g.y):9;const sk=(sho+eff(pl,'pas'))/2;
   let cy=GY+(gk&&Math.abs(gk.y-GY)>1?(gk.y<GY?1:-1):(m.rng()<0.5?-1:1))*(1.5+m.rng()*3)+gauss(m.rng)*clamp(1.6-sk/100,0.4,1.2)*(0.6+dG/25);
-  const over=m.rng()<clamp(0.42-sk/260+dG/160,0.07,0.42);const onC=!over&&Math.abs(cy-GY)<GW/2-0.12;
+  const tooHigh=m.rng()<clamp(0.42-sk/260+dG/160,0.07,0.42);const barHit=tooHigh&&Math.abs(cy-GY)<GW/2+0.25;const over=tooHigh&&!barHit;const onC=!tooHigh&&Math.abs(cy-GY)<GW/2-0.12; /* a chip that's too high comes back off the crossbar - it never sails over it */
   const spC=clamp(0.62-(gOff-4.5)*0.05-(sk-65)/170+(gk?(eff(gk,'spd')-65)/280:0),0.08,0.7);
   if(!EXP.nokick)kickFrom(m,pl,g.x,cy);
   const dx=g.x-b.x,dy=cy-b.y,d=hyp(dx,dy)||1;const T0=clamp(d/16,0.7,2.1);const speed=d/T0*1.3;
-  b.owner=null;b.vx=dx/d*speed;b.vy=dy/d*speed;b.kicker=pl;b.kickT=m.t;b.intended=null;b.last=pl.team;b.lastP=pl;/* the arc is timed to the goal line: a good chip is dropping just under the bar as it crosses, one that's over is still clearly above it (it used to look as if it should go in) */b.loft={t0:m.t,T:T0/1.3*(over?1.75:1.08),prot:1};
+  b.owner=null;b.vx=dx/d*speed;b.vy=dy/d*speed;b.kicker=pl;b.kickT=m.t;b.intended=null;b.last=pl.team;b.lastP=pl;/* the arc is timed to the goal line: a good chip is dropping just under the bar as it crosses, one that's over is still clearly above it (it used to look as if it should go in) */b.loft={t0:m.t,T:T0/1.3*(over?1.75:barHit?1.2:1.08),prot:1};
   // can the keeper get back under it? he has the ball's hang time, less his reaction, to get across to where it drops; a chip over a keeper who's on his line gets tipped away
-  let save=false;if(onC&&gk){const dd=hyp(gk.x-g.x,(gk.y-cy)*0.5);const gq=eff(gk,'gk'),ga=eff(gk,'spd');const need=GK_RT+0.1+Math.max(0,dd-(GK_R0+0.9))/(4.2+(ga-60)/25+(gq-60)/60);save=need<=T0;}
+  let save=false;if(onC&&gk){const dd=hyp(gk.x-g.x,(gk.y-cy)*0.5);const gq=eff(gk,'gk'),ga=eff(gk,'spd');const need=GK_RT+0.1+Math.max(0,dd-(GK_R0+0.9))/(4.2+(ga-60)/25+(gq-60)/60);save=need<=T0*1.2;} /* keepers recover to more chips than before */
   (m.sk2=m.sk2||{}).lob=((m.sk2||{}).lob||0)+1;
-  b.shot={reb:reb0,kind:'lob',o1:false,team:pl.team,on:onC,save,shooter:pl,over,speed,power:false,near:false,chip:true,gkr:gk?ovv(gk.p.gk):0};
+  b.shot={reb:reb0,kind:'lob',o1:false,team:pl.team,on:onC,save,shooter:pl,over,speed,power:false,near:false,chip:true,gkr:gk?ovv(gk.p.gk):0,wood:barHit?'bar':null};
   m.stats.shots[pl.team]++;if(onC)m.stats.ont[pl.team]++;pl.st.sh++;if(onC)pl.st.on++;b.passBy=null;return;}
  if(!EXP.nokick)kickFrom(m,pl,g.x,ty);
  const dx=g.x-b.x,dy=ty-b.y;const d=hyp(dx,dy);
@@ -3361,6 +3375,7 @@ function doShot(m,pl,o){o=o||{};if(pl.bst==='power')o.power=true;
  (m.sk2=m.sk2||{})[o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']=((m.sk2||{})[o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal']||0)+1;
  // a bender: the ball swerves out round the blockers and back in, by up to 4m (usually 1.5-3m)
  const curve=o.curve&&!o.chip?(()=>{const dev=(m.rng()<0.05?1.8+m.rng()*0.4:0.7+m.rng()*0.9)*(0.85+0.3*Math.min(1,curlSk(pl)))*((m.bt||0)>=3?1.2:1); /* a gentle bend: a metre or so off the straight line */const sc=sd0=>{let mn=99;for(const q of O.players){if(q.role==='GK')continue;for(let f=0.2;f<0.95;f+=0.15){const x=b.x+(g.x-b.x)*f,y=b.y+(ty-b.y)*f+sd0*dev*4*f*(1-f);const dd=hyp(q.x-x,q.y-y);if(dd<mn)mn=dd;}}return mn;};const side=sc(1)>=sc(-1)?1:-1;m.nBend=(m.nBend||0)+1;return {x0:b.x,y0:b.y,gx:g.x,ty,dev,side};})():null;
+ {const lt=m.t>m.dur*0.85;if(hasT(pl,'icecold')&&(o.oneV1||dG<14))tFx(m,pl,'Ice-cold finish');else if(hasT(pl,'longshot')&&dG>20)tFx(m,pl,'Long-range strike');else if(hasT(pl,'fkspec')&&o.fk)tFx(m,pl,'Free-kick specialist',1);else if(hasT(pl,'cutinside')&&o.cut)tFx(m,pl,'Cuts inside',1);else if(hasT(pl,'clutch')&&lt)tFx(m,pl,'Late show');else if(hasT(pl,'selfish'))tFx(m,pl,'Goal-hungry');}
  b.shot={clean:!!o.xFin,worldie:!!o.worldie,dist:dist(pl,g),reb:reb0,kind:o.fk?'fk':o.pen?'pen':o.byline?'byline':o.oneT?'oneT':oneV1?'1v1':tap?'tap':o.open?'open':o.power?'power':o.snap?'snap':o.turn?'turn':'normal',o1:oneV1,team:pl.team,on,save,shooter:pl,over:false,speed,power:big,near:!!o._near,gkr:O.gk?ovv(O.gk.p.gk):0};if(curve){b.shot.curve=curve;b.shot.curl=true;}if(F&&F.gkTy!=null){b.shot.gkTy=F.gkTy;b.shot.speed=spd;}if(o._tz>1.4)b.shot.air={t0:m.t,T:clamp(d/Math.max(8,spd),0.3,1.3),h:clamp((o._tz-1)/1.6,0.2,0.6)};if(o._over){b.shot.over=true;b.shot.on=false;}if(F){b.shot.wood=F.wood;b.shot.glc=F.glc;b.shot.inOff=F.inOff;b.shot.curl=F.curl||!!curve;if(F.wall){b.shot.blockBy=F.wall;b.shot.on=false;}}if(o.fk)m.fkWall=null;if(big)m.lastPower=m.t;
  // a parked bus: bodies in the shooting lane get in the way, and better attackers find a way through
  if(hasT(pl,'longshot')&&dG>18)tGood(pl,on);if(hasT(pl,'selfish'))tGood(pl,on);
@@ -3415,10 +3430,10 @@ function updateBall(m,dt){
     if(b.x<E){b.x=E;if(b.vx<0)b.vx=0;if(o.vx<0)o.vx=0;}if(b.x>PL-E){b.x=PL-E;if(b.vx>0)b.vx=0;if(o.vx>0)o.vx=0;}
     o.x=clamp(o.x,0.2,PL-0.2);o.y=clamp(o.y,0.2,PW-0.2);}
    // a quick player with nobody in front and acres of space knocks it on and chases it
-   if(dribbling&&sp>4&&o.touchCD<=0&&!o.duel&&!o.cut&&!o.trick&&progOf(m.teams[o.team],o.x)<0.86&&o.face[0]*m.teams[o.team].dir>0.3&&o.vx*m.teams[o.team].dir>2){ /* only ever knocked on towards the other goal - never back towards his own */o.touchCD=0.8; /* tap it on and run onto it, again and again while there's grass ahead */
-    let clear=true;for(const q of m.teams[1-o.team].players){const qx=q.x-o.x,qy=q.y-o.y;const qd=hyp(qx,qy);if(qd<11&&(qx*o.face[0]+qy*o.face[1])/qd>0.35){clear=false;break;}}
-    if(clear&&m.rng()<(0.35+eff(o,'spd')/350)*({counter:1.35,wings:1.25,attacking:1.2,balanced:1.0,defensive:0.85,park:0.7}[m.teams[o.team].side.tactic]||1)){
-     const ts=sp*1.9+4.5+m.rng()*2.5;/* knocked a clear few metres ahead of him, so you see it leave his feet */if(knockSafe(m,o,ts)){b.vx=o.face[0]*ts;b.vy=o.face[1]*ts;b.knock=true;o.knockT=m.t;m.nKnock=(m.nKnock||0)+1;}}}
+   if(dribbling&&sp>4&&o.touchCD<=0&&!o.duel&&!o.cut&&!o.trick&&progOf(m.teams[o.team],o.x)<0.86&&o.face[0]*m.teams[o.team].dir>0.3&&o.vx*m.teams[o.team].dir>2){ /* only ever knocked on towards the other goal - never back towards his own */o.touchCD=0.6; /* tap it on and run onto it, again and again while there's grass ahead */
+    let clear=true;for(const q of m.teams[1-o.team].players){const qx=q.x-o.x,qy=q.y-o.y;const qd=hyp(qx,qy);if(qd<9&&(qx*o.face[0]+qy*o.face[1])/qd>0.35){clear=false;break;}}
+    if(clear&&m.rng()<(0.55+eff(o,'spd')/300)*({counter:1.35,wings:1.25,attacking:1.2,balanced:1.0,defensive:0.85,park:0.7}[m.teams[o.team].side.tactic]||1)){
+     const ts=sp*2.3+6.5+m.rng()*2.5;/* knocked a clear few metres ahead of him, so you see it leave his feet */if(knockSafe(m,o,ts)){b.vx=o.face[0]*ts;b.vy=o.face[1]*ts;b.knock=true;o.knockT=m.t;m.nKnock=(m.nKnock||0)+1;}}}
   }
   }else{
   const inAir=b.loft&&b.loft.ka&&m.t-b.loft.t0<b.loft.T;if(b.loft&&b.loft.ka&&!inAir&&!b.loft.land){b.loft.land=1;b.vx*=0.5;b.vy*=0.5;} /* it lands and checks up */
@@ -3456,7 +3471,7 @@ function updateBall(m,dt){
     // the keeper dives to the ball
     // the keeper gets to the ball (a dive), the ball doesn't jump to him
     {const dx=b.x-def.dir*0.5-gk.x,dy=b.y-gk.y,dl=hyp(dx,dy),reach=4.2,f=dl>reach?reach/dl:1;gk.x+=dx*f;gk.y+=dy*f;gk.x=clamp(gk.x,0.6,PL-0.6);gk.recoverT=m.t+1.6;{/* the force of the shot knocks him back a touch before he resets */const k0=Math.min(1,spd/30)*(2.2+m.rng()*1.2);gk.vx=b.vx/(spd||1)*k0;gk.vy=b.vy/(spd||1)*k0*0.6;gk.recoilT=m.t+0.3;}if(b.x<0.4||b.x>PL-0.4)b.x=clamp(b.x,0.4,PL-0.4);} /* he makes the save in front of his line, never from behind it */gk.vx=gk.vy=0;gk.dive=0.4;
-    if(!wasPen&&!pw0&&m.rng()<clamp(0.1+(eff(gk,'gk')-75)/140-(spd-22)/90,0.04,0.3)){m.nCatch=(m.nCatch||0)+1;gk.feet=false;ev(m,'save',`${gk.p.name} gathers it safely`,gk.team);m.flash={text:'SAVE',t:1.0,team:gk.team};b.owner=gk;b.last=gk.team;b.lastP=gk;b.vx=b.vy=0;gk.decideT=1.0;m.forcePass=true;gk.st.sv++;}else gkParry(m,gk,def,sh);
+    if(hasT(gk,'shotstopper'))tFx(m,gk,'Shot-stopper');if(!wasPen&&!pw0&&m.rng()<clamp(0.1+(eff(gk,'gk')-75)/140-(spd-22)/90,0.04,0.3)){m.nCatch=(m.nCatch||0)+1;gk.feet=false;ev(m,'save',`${gk.p.name} gathers it safely`,gk.team);m.flash={text:'SAVE',t:1.0,team:gk.team};b.owner=gk;b.last=gk.team;b.lastP=gk;b.vx=b.vy=0;gk.decideT=1.0;m.forcePass=true;gk.st.sv++;}else gkParry(m,gk,def,sh);
     if(wasPen){const AT=m.teams[sh.team],g=goalOf(AT);
      if(m.rng()<0.05){ev(m,'retake','Retake! The keeper came off his line too early',sh.team);m.flash={text:'RETAKE',t:1.4,team:sh.team};restart(m,sh.team,g.x-AT.dir*PG.spot,GY,'pen');return;}
      if(m.rng()<0.33){const rx=g.x-AT.dir*(4+m.rng()*3),ry=GY+(m.rng()-0.5)*6;b.owner=null;b.shot=null;b.loft=null;b.vx=(rx-b.x)*1.5;b.vy=(ry-b.y)*1.5;b.kicker=gk;b.kickT=m.t;b.last=gk.team;b.lastP=gk;const r0=AT.players.filter(q=>q.role!=='GK').sort((a,c)=>dist(a,{x:rx,y:ry})-dist(c,{x:rx,y:ry}))[0];const f=m.rng()<0.6?sh:r0;b.intended=f;f.crossT=m.t;f.burst=m.t+1;ev(m,'rebound',`Saved, but it spills out towards ${f.p.name}!`,f.team);}}
@@ -3546,7 +3561,7 @@ function updateBall(m,dt){
    if(sc){sc.st.g++;if(sc.fromPass&&sc.fromPass.team===sc.team&&m.t-sc.fromT<8)sc.fromPass.st.as++;}
    if(b.shot&&b.shot.reb)m.nRebGoal=(m.nRebGoal||0)+1;if(sc)m.scorers.push({team:att.idx,pid:sc.p.id,name:sc.p.name,min:minute(m)});
    else m.scorers.push({team:att.idx,pid:null,name:'Own goal',min:minute(m)});
-   methGoal(m,att);   ev(m,'goal',`GOAL! ${name}${b.shot&&b.shot.inOff?' (in off the post)':''}`,att.idx);m.flash={text:'GOAL',sub:sc?`${sc.p.name} scored!`:'Own goal!',t:3.4,team:att.idx};if(b.shot&&b.shot.worldie&&sc){const yd=Math.round(b.shot.dist*1.094);m.flash={text:'WHAT A GOAL!',sub:`${sc.p.name} from ${yd} yards!`,t:4.2,team:att.idx};ev(m,'worldie',`An absolute screamer from ${sc.p.name}, ${yd} yards out!`,att.idx);m.nWorldie=(m.nWorldie||0)+1;}
+   {const ld=def.players.find(q=>hasT(q,'leader'));if(ld){tFx(m,ld,'Captain material: rallies the team',1);for(const q of def.players){if(q!==ld&&q.role!=='GK'&&hyp(q.x-ld.x,q.y-ld.y)<30){q.hot=Math.max(q.hot||0,12);q.fired=m.t+5;}}}}methGoal(m,att);   ev(m,'goal',`GOAL! ${name}${b.shot&&b.shot.inOff?' (in off the post)':''}`,att.idx);m.flash={text:'GOAL',sub:sc?`${sc.p.name} scored!`:'Own goal!',t:3.4,team:att.idx};if(b.shot&&b.shot.worldie&&sc){const yd=Math.round(b.shot.dist*1.094);m.flash={text:'WHAT A GOAL!',sub:`${sc.p.name} from ${yd} yards!`,t:4.2,team:att.idx};ev(m,'worldie',`An absolute screamer from ${sc.p.name}, ${yd} yards out!`,att.idx);m.nWorldie=(m.nWorldie||0)+1;}
    if(b.shot&&b.shot.near)(m.thru=m.thru||[]).push(b.shot.gkr);
    const gsp=hyp(b.vx,b.vy);m.ripPow=!!(b.shot&&b.shot.power);const nearPost=Math.abs(b.y-GY)>GW/2-3.4;m.ripKind=nearPost?'side':'back';m.ripOK=!m.cond.noRip&&m.ripPow&&gsp>=24&&m.rng()<(nearPost?RIP_P:RIP_BACK)*rm(m,'rip');
    if(m.ripOK){/* the net only tears where the ball is actually heading: the side netting only if it is travelling that way, otherwise straight through the back */if(m.ripKind==='side'){const sg=b.y<GY?-1:1;if(Math.sign(b.vy)!==sg||Math.abs(b.vy)<Math.abs(b.vx)*0.25)m.ripKind='back';}m.nRip=(m.nRip||0)+1;}if(m.ripPow)m.nBigGoal=(m.nBigGoal||0)+1;
@@ -6223,7 +6238,9 @@ function load(){try{const s=localStorage.getItem(saveKey());if(s){const o=JSON.p
 function toast(t){document.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600);}
 
 // rating tiers
-const TIERS=[[29,'#000000','#fff'],[39,'#7a1414','#fff'],[49,'#d32f2f','#fff'],[59,'#f07c1a','#1b1205'],[69,'#f2cf1d','#1b1605'],[79,'#9be15d','#10210a'],[89,'#1f9d45','#fff'],[99,'#7b3fc4','#fff'],[999,'#1d2f9c','#fff']];
+const TIERS=[[29,'#000000','#fff'],[39,'#7a1414','#fff'],[49,'#d32f2f','#fff'],[59,'#f07c1a','#1b1205'],[69,'#f2cf1d','#1b1605'],[79,'#9be15d','#10210a'],[89,'#1f9d45','#fff'],[99,'#7b3fc4','#fff'],[999,'#0f8f9a','#fff']]; /* 100+ is teal */
+// individual attributes have their own colour bands: 100+ teal, 90+ purple, 75-89 green, 60-74 light green, 40-59 yellow, 20-39 orange, 19 or below red (a darker shade on light cards)
+function mcol(v,light){const t=v>=100?['#2ac6c0','#0f7f7a']:v>=90?['#a678ff','#6a35c9']:v>=75?['#2fb35a','#1d7d3c']:v>=60?['#9be15d','#4f8f1c']:v>=40?['#f2cf1d','#8a6d00']:v>=20?['#f08c2a','#b45c0a']:['#e05050','#b02a2a'];return light?t[1]:t[0];}
 function tier(v){for(const t of TIERS)if(v<=t[0])return {bg:t[1],fg:t[2]};}
 const GOLD='#e3b341';
 const GOLD_AT=80; /* the gold ring is for 80+ players only */function isGold(v){return v>=GOLD_AT;}
@@ -6308,7 +6325,7 @@ function newGame(teamIdx,o,orig){
  if(o){const t=w.teams[teamIdx];if(o.name)t.name=o.name;if(o.short&&o.short.length>=2)t.short=o.short;if(o.c1&&o.c2&&(o.c1!==t.c1||o.c2!==t.c2)){t.c1=o.c1;t.c2=o.c2;t.kitSet=true;}}
  w.teams[teamIdx].budget=1e6;
  evenTeams(w.teams,-1);
- S={v:2,ci1:1,bl2:1,pk1:1,ev1:1,dm1:1,pt1:1,gc1:1,w2:1,vb3:1,st2:1,st1:1,ac2:1,ac1:1,vb2:1,r3m:1,r3m2:1,r3m3:1,ret3:1,gks1:1,cut2:1,r90:1,c99:1,r88:1,gkw:1,ra1:1,me:teamIdx,season:1,round:0,world:w,fx:[],last:null,done:false,news:[],nextId:100000,balls:['white','orange'],ball:'white',trait2:1,trait3:1,trait4:1,real2:1,ret2:1,lgCap:1,capFix:1,rs2:1,pot90:1,potFix:1,strFix:1};
+ S={v:2,tr6:1,dup1:1,gk3:1,ci1:1,bl2:1,pk1:1,ev1:1,dm1:1,pt1:1,gc1:1,w2:1,vb3:1,st2:1,st1:1,ac2:1,ac1:1,vb2:1,r3m:1,r3m2:1,r3m3:1,ret3:1,gks1:1,cut2:1,r90:1,c99:1,r88:1,gkw:1,ra1:1,me:teamIdx,season:1,round:0,world:w,fx:[],last:null,done:false,news:[],nextId:100000,balls:['white','orange'],ball:'white',trait2:1,trait3:1,trait4:1,real2:1,ret2:1,lgCap:1,capFix:1,rs2:1,pot90:1,potFix:1,strFix:1};
  makeFixtures();save();UI.tab='match';render();
 }
 function makeFixtures(){S.fx=[...Array(NL).keys()].map(l=>{const ids=leagueTeams(l);return fixtures(ids.length).map(rd=>rd.map(f=>({h:ids[f.h],a:ids[f.a],hs:null,as:null})));});}
@@ -6607,7 +6624,7 @@ function npFill(el){const imgs=[...el.querySelectorAll('img.npimg:not([src])')];
  for(const im of imgs){const n=byId[im.dataset.np];if(!n)continue;const [W,H]=dims(im);const key=JSON.stringify(n.pp)+W+'x'+H;if(typeof NP_CACHE!=='undefined'&&NP_CACHE.has(key))im.src=NP_CACHE.get(key);}
  npFonts().then(()=>{let k=0;const next=()=>{const im=imgs[k++];if(!im)return;if(im.isConnected&&!im.hidden&&!(im.closest('[hidden]'))){const n=byId[im.dataset.np];if(n){const [W,H]=dims(im);im.src=newspaperImage(n.pp,W,H);}setTimeout(next,16);}else next();};next();});}
 // the papers are saved for the big stories: titles, cups and freak scorelines
-function npKeep(pp){if(!pp)return false;if(pp.kind==='title'||pp.kind==='cup')return true;const a=pp.mine||0,b=pp.theirs||0;return a+b>=7||a>=5||Math.abs(a-b)>=5;}
+function npKeep(pp){return false; /* newspaper clippings are switched off - every result is a headline */if(!pp)return false;if(pp.kind==='title'||pp.kind==='cup')return true;const a=pp.mine||0,b=pp.theirs||0;return a+b>=7||a>=5||Math.abs(a-b)>=5;}
 function notesHTML(){
  ingestNews();let N=S.notes||[];
  // after a game, your result (with its newspaper, if there is one) always sits at the top; anything else from that round goes below it
@@ -7070,7 +7087,10 @@ function quickFair(H,A,mk){let m=mk();const g=teamOvr(H)-teamOvr(A);const ad=Mat
  for(let k=0;k<2;k++){const fav=g>0?0:1;const lost=m.score[fav]<m.score[1-fav];const drew=m.score[0]===m.score[1];
   if(!(lost&&Math.random()<clamp((ad-3)/10,0,0.85))&&!(drew&&Math.random()<clamp((ad-6)/20,0,0.4)))break;m=mk();}
  return m;}
-function quickMine(mf){
+// there is always a captain: if you haven't picked one (or yours is injured or not playing), the man in the side with the best average match rating recently takes the armband
+function ensureCaptain(){const me=myTeam();const xi=xiPlayers(me).filter(Boolean);const ok=q=>q&&!(q.injG>0)&&xi.includes(q);const cur=me.squad.find(p=>p.id===me.captain);if(ok(cur))return;
+ const av=p=>{const f=(p.form||[]).filter(x=>typeof x==='number');return f.length?f.reduce((a,b)=>a+b,0)/f.length:0;};const pick=xi.filter(q=>!(q.injG>0)).sort((a,b)=>av(b)-av(a)||b.ovr-a.ovr)[0];if(pick){me.captain=pick.id;save();toast(`${pick.name} takes the armband`);}}
+function quickMine(mf){ensureCaptain();
  const T=T_();const f=mf.f;fixXI(myTeam());
  const m=quickFair(T[f.h],T[f.a],()=>runQuick(sideOf(T[f.h],T[f.a],false),sideOf(T[f.a],T[f.h],true),MATCH_DUR,undefined,engineCond(matchCond(T[f.h],S.round))));
  const res={i:mf.i,hs:m.score[0],as:m.score[1],sc:m.scorers.map(s=>({team:s.team,p:s.pid?{id:s.pid,name:s.name}:null,min:s.min})),m};
@@ -7164,7 +7184,7 @@ function openCard(pid,fromEl){
  document.querySelectorAll('.cardlayer').forEach(x=>x.remove());
  const layer=document.createElement('div');layer.className='cardlayer';
  const t=tier(p.ovr);
- const stat=(lbl,val,raw)=>`<div class="ts"><span>${lbl}</span><b ${raw!=null?`style="color:${tier(Math.max(30,raw)).bg==='#f2cf1d'||tier(Math.max(30,raw)).bg==='#9be15d'?'#6b5a00':tier(Math.max(30,raw)).bg}"`:''}>${val}</b></div>`;
+ const stat=(lbl,val,raw)=>`<div class="ts"><span>${lbl}</span><b ${raw!=null?`style="color:${mcol(raw,true)}"`:''}>${val}</b></div>`;
  const cap=isCaptain(p);const statC=(lbl,k)=>{const v=k==='gk'?gkShow(p[k]):p[k];const tt=tier(v);return `<div class="ts"><span>${lbl}</span><b><i style="background:${tt.bg}"></i>${v}${cap?'<em class="capplus">+5</em>':''}</b></div>`;};
  layer.innerHTML=`<div class="tcard ${isGold(p.ovr)?'gold':''}" role="dialog" aria-modal="true" aria-label="${esc(p.name)} player card">
   <div class="tchead" style="background:${club?club.c1:'#3b4a4d'};color:${club?ink(club.c1):'#fff'}">
@@ -7249,7 +7269,7 @@ function renderMarket(){
  </div>
  ${mWhere}<div class="mhead"><span class="eyebrow">${total} players match</span><span class="note">Your wallet <b class="num">${fmt(me.budget)}</b> · Squad ${me.squad.length}/25</span></div>
  <div class="tblwrap mtable"><table><thead><tr>${th('ovr','Rating','ovrcol')}${th('name','Player')}${th('pos','Pos')}${th('age','Age','n')}${th('trait','Trait')}${th('spd','SPD','n')}${th('sho','SHO','n')}${th('pas','PAS','n')}${th('dri','DRI','n')}${th('tck','TCK','n')}${th('str','STR','n')}${th('gk','GK','n')}${th('sta','STA','n')}${th('pot','POT','n potcol')}${th('club','Club','clubcol')}${th('price','Price','n')}<th></th></tr></thead><tbody>
- ${shown.map(e=>{try{const p=e.p;const pr=priceOf_(e);const c=e.et||(e.club<0?null:T[e.club]);const att=k=>{const v=k==='gk'?gkShow(p[k]):p[k];return `<td class="n" style="color:${tier(Math.max(30,v)).bg==='#7a1414'?'#e07070':v>=100?'#8fa2ff':tier(Math.max(30,v)).bg}">${v}</td>`;};
+ ${shown.map(e=>{try{const p=e.p;const pr=priceOf_(e);const c=e.et||(e.club<0?null:T[e.club]);const att=k=>{const v=k==='gk'?gkShow(p[k]):p[k];return `<td class="n" style="color:${mcol(v)}">${v}</td>`;};
   return `<tr><td class="ovrcol">${chip(p.ovr,'lg')}</td><td><button class="linkbtn" data-card="${p.id}">${esc(PHONE()?shortName(p.name):p.name)}</button>${retireNote(p)}</td><td><span class="pos ${CAT[p.pos]}">${p.pos}</span></td><td class="n">${p.age}</td><td class="trcol">${traitTag(p)||'<span class="note">–</span>'}</td>${['spd','sho','pas','dri','tck','str','gk','sta'].map(att).join('')}<td class="n potcol">${p.real||p.legend||p.superstar?'–':potOf(p)}</td>
   <td class="clubcol">${c?`<span class="clubcell">${c.c1?badge(c,20):''}<span>${esc(PHONE()?(c.short||c.name):c.name)}<small>${e.lg?LEG_TAG[e.lg]:e.eur?'Europe':((LEAGUES[c.league]||{}).short||'')}</small></span></span>`:'<span class="note">Free agent</span>'}</td><td class="n">${negDisc(p.id)?`<s class="note">${fmt(priceOf(e))}</s> <b class="good">${fmt(pr)}</b>`:fmt(pr)}</td><td><button class="btn sm ${pr<=me.budget?'primary':''}" data-contact="${p.id}">Contact</button></td></tr>`;}catch(err){console.error(err);return '';} /* one odd row never blanks the whole market */}).join('')}
  </tbody></table></div>
@@ -7427,7 +7447,13 @@ document.addEventListener('pointerdown',e=>{const L=typeof LIVE!=='undefined'?LI
  const [x,y]=unP(px,py);L.m.gkAim={team:L.mine,x,y};L.aimMk={x,y,t:performance.now()};if(L.m.ball.owner===gk)gk.decideT=Math.min(gk.decideT,0.05);e.preventDefault();});
 function aimMarkFx(c){const L=LIVE;if(!L||!L.aimMk)return;const a=1-(performance.now()-L.aimMk.t)/1400;if(a<=0){L.aimMk=null;return;}const [X,Y]=P(L.aimMk.x,L.aimMk.y);const R=CV.R||8;
  c.save();c.globalAlpha=Math.min(1,a*1.5);c.strokeStyle='#ffd24a';c.lineWidth=2;c.beginPath();c.arc(X,Y,R*(1.2+0.6*(1-a)),0,7);c.stroke();c.beginPath();c.moveTo(X-R*0.6,Y);c.lineTo(X+R*0.6,Y);c.moveTo(X,Y-R*0.6);c.lineTo(X,Y+R*0.6);c.stroke();c.restore();}
-function startLive(mf){
+// trait moments: a small label floats up and fades above the player; anyone fired up by his captain gets a little lightning bolt
+function tfxDraw(c,m){const now=performance.now();const R=CV.R||8;
+ for(const pl of m.players){if(pl.fired>m.t){const [X,Y]=P(pl._sx??pl.x,pl._sy??pl.y);c.save();c.font=`${Math.round(R*1.1)}px sans-serif`;c.textAlign='center';c.globalAlpha=0.6+0.4*Math.sin(now/120);c.fillText('⚡',X,Y-R*1.5);c.restore();}}
+ const L=m.tfx||[];for(let i=L.length-1;i>=0;i--){const e=L[i];if(!e.rt)e.rt=now;const a=(now-e.rt)/1800;if(a>=1){L.splice(i,1);continue;}const pl=e.pl;if(!m.players.includes(pl))continue;
+  const [X,Y]=P(pl._sx??pl.x,pl._sy??pl.y);const y=Y-R*1.7-a*R*1.6;c.save();c.globalAlpha=a<0.15?a/0.15:1-Math.max(0,(a-0.55)/0.45);
+  c.font=`700 ${Math.max(10,Math.round(R*0.95))}px "Barlow Condensed",sans-serif`;c.textAlign='center';c.lineWidth=3;c.strokeStyle='rgba(0,0,0,.75)';c.strokeText(e.txt,X,y);c.fillStyle=e.team===(LIVE&&LIVE.mine)?'#ffe08a':'#ffffff';c.fillText(e.txt,X,y);c.restore();}}
+function startLive(mf){ensureCaptain();
  const T=T_();const f=mf.f;
  const cnd=matchCond(T[f.h],S.round);
  startMatch(T[f.h],T[f.a],{mine:f.h===S.me?0:1,cond:cnd,pitch:cnd.pitch,decider:[drawWins(T[f.h].league,f.h),drawWins(T[f.a].league,f.a)],onDone:m=>{
@@ -7589,8 +7615,14 @@ function loop(now){
  if(L.mq&&L.mq.length){const due=L.mq.filter(q=>m.t>=q.at);if(due.length){L.mq=L.mq.filter(q=>m.t<q.at);L.fromQ=true;due.forEach(q=>{try{q.fn();}catch(e){}});L.fromQ=false;toast('Your instructions have reached the bench');}}
  // a whistle (foul, free kick, penalty, card): the action freezes for a moment, whatever the speed, so it can't be missed
  m.simSpd=L.speed;if(m.flash&&m.flash.whistle&&m.flash!==L.whF){L.whF=m.flash;/* a foul with a flip: the roundel goes over first, then the notice comes up */const fl=m.players.some(q=>q.flipT!=null&&m.t-q.flipT<0.1);L.flashAt=fl&&!L.skipping?performance.now()+760:0;if(!L.skipping)L.holdUntil=performance.now()+1100+(L.flashAt?760:0);}
- if(!L.paused&&!m.finished&&!(L.holdUntil>performance.now())){L.acc+=dt*L.speed;let n=0;while(L.acc>=1/60&&n<600){step(m,1/60);L.acc-=1/60;n++;}}
- draw(m);hud(m);sndTick();
+ if(!L.paused&&!m.finished&&!(L.holdUntil>performance.now())){const h0=m.half;L.pb={x:m.ball.x,y:m.ball.y,vx:m.ball.vx,vy:m.ball.vy,ps:m.players.map(q=>[q,q.x,q.y])};L.acc+=dt*L.speed;let n=0;while(L.acc>=1/60&&n<600){step(m,1/60);L.acc-=1/60;n++;if(m.half!==h0||m.finished)break;}
+  /* the whistle for half-time or full-time: the ball runs on and slows to a stop where it was going, rather than freezing */
+  if((m.half!==h0||m.finished)&&!L.skipping&&L.pb&&!L.roll){const B=L.pb;L.roll={x:B.x,y:B.y,vx:m.ball.owner?0:B.vx,vy:m.ball.owner?0:B.vy,ps:B.ps,t0:now,until:now+1500};L.acc=0;}}
+ if(L.roll){const R0=L.roll;const k=Math.exp(-1.6*dt);R0.vx*=k;R0.vy*=k;R0.x=clamp(R0.x+R0.vx*dt,-3,PL+3);R0.y=clamp(R0.y+R0.vy*dt,-3,PW+3);
+  const b=m.ball,sv={x:b.x,y:b.y,o:b.owner,sh:b.shot,lo:b.loft};const sp=R0.ps.map(([q,x,y])=>[q,q.x,q.y,q._sx,q._sy]);b.x=R0.x;b.y=R0.y;b.owner=null;b.shot=null;b.loft=null;for(const [q,x,y] of R0.ps){q.x=x;q.y=y;q._sx=x;q._sy=y;}
+  draw(m);b.x=sv.x;b.y=sv.y;b.owner=sv.o;b.shot=sv.sh;b.loft=sv.lo;for(const [q,x,y,a,c] of sp){q.x=x;q.y=y;q._sx=a;q._sy=c;}hud(m);sndTick();
+  if(now<R0.until){L.raf=requestAnimationFrame(loop);return;}L.roll=null;for(const q of m.players){q._sx=null;}}
+ else{draw(m);hud(m);sndTick();}
  if(m.capPick===L.mine&&!L.capOpen){L.capOpen=true;showCapPick();}
  if(!L.paused&&!m.finished&&!L.skipping)subTip(L,m);
  if(m.half===2&&!L.htShown&&!m.finished){L.htShown=true;if(!L.skipping){L.paused=true;showHT();}}
@@ -8303,7 +8335,11 @@ function draw(m){
  // light: on a pictured venue the shadows follow its sun and its four corner floodlights
  const sdir=v=>port?[-v[1],-v[0]]:v;const ex0=7,ey0=6;
  const flights=LT&&LT.flood?[[-ex0,-ey0],[PL+ex0,-ey0],[-ex0,PW+ey0],[PL+ex0,PW+ey0]].map(([x,y])=>P(x,y)):null;
- for(const pl of m.players){const [X,Y]=P(pl.x,pl.y);
+ // smooth out any sudden jump (a keeper's dive, a nudge into position) so roundels glide rather than flick; a big set-piece cut still snaps
+ {const now=performance.now();const dt=Math.min(0.1,(now-(m._rT||now))/1000);m._rT=now;const k=1-Math.exp(-dt*22);
+  for(const pl of m.players){if(pl._sx==null||m.state!=='play'&&m.state!=='goal'&&m.state!=='kickoff'?false:false){}const dx=pl.x-(pl._sx??pl.x),dy=pl.y-(pl._sy??pl.y),d=Math.hypot(dx,dy);
+   if(pl._sx==null||d>7||d<0.35){pl._sx=pl.x;pl._sy=pl.y;}else{pl._sx+=dx*Math.max(k,0.25);pl._sy+=dy*Math.max(k,0.25);}}}
+ for(const pl of m.players){const [X,Y]=P(pl._sx??pl.x,pl._sy??pl.y);
   if(LT){if(flights)for(const [fx,fy] of flights){const dx=X-fx,dy=Y-fy,dd=Math.hypot(dx,dy)||1;c.fillStyle=`rgba(0,0,0,${LT.flood})`;c.beginPath();c.ellipse(X+dx/dd*R*0.5,Y+dy/dd*R*0.5,R*1.12,R*0.9,Math.atan2(dy,dx),0,7);c.fill();}
    if(LT.sun){const [sx,sy]=sdir(LT.sun);c.fillStyle=`rgba(0,0,0,${LT.sa})`;c.beginPath();c.ellipse(X+sx*R*0.9,Y+sy*R*0.9,R*1.2,R*0.92,Math.atan2(sy,sx),0,7);c.fill();}
    c.fillStyle='rgba(0,0,0,.3)';c.beginPath();c.arc(X+R*0.06,Y+R*0.1,R*1.02,0,7);c.fill();
@@ -8312,9 +8348,9 @@ function draw(m){
   else{const g=c.createRadialGradient(X+R*0.22,Y+R*0.32,R*0.6,X+R*0.22,Y+R*0.32,R*1.45);g.addColorStop(0,'rgba(0,0,0,.55)');g.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=g;c.beginPath();c.arc(X+R*0.22,Y+R*0.32,R*1.45,0,7);c.fill();}}
  const hatQ=[];const tnowK=performance.now()/1000;
  // keffiyeh drapes hang behind the head, so they go down before the roundels
- for(const pl of m.players){const sd=sides[pl.team];if(sd.hat!=='irq')continue;const [X,Y]=P(pl.x,pl.y);const camo=m.twl?twlCamo(m,pl):1;c.globalAlpha=camo;drawKefDrape(c,pl,X,Y,R,hatFace(m,pl),LT,tnowK);c.globalAlpha=1;}
+ for(const pl of m.players){const sd=sides[pl.team];if(sd.hat!=='irq')continue;const [X,Y]=P(pl._sx??pl.x,pl._sy??pl.y);const camo=m.twl?twlCamo(m,pl):1;c.globalAlpha=camo;drawKefDrape(c,pl,X,Y,R,hatFace(m,pl),LT,tnowK);c.globalAlpha=1;}
  for(const pl of m.players){
-  let [X,Y]=P(pl.x,pl.y);const sd=sides[pl.team];const gk=pl.role==='GK';
+  let [X,Y]=P(pl._sx??pl.x,pl._sy??pl.y);const sd=sides[pl.team];const gk=pl.role==='GK';
   {const z=pl.duel||(pl.duelOn&&pl.duelOn.duel);if(z){const amp=z.shove?R*0.13:R*(0.06+0.17*Math.max(0,z.even-0.3));X+=Math.sin(m.t*90+pl.id*1.7)*amp;Y+=Math.cos(m.t*77+pl.id)*amp;}}
   if(pl.windup>0&&pl.windBig&&b.owner===pl){const pr=1-pl.windup/pl.windupMax;const amp=R*(0.08+0.18*pr);X+=Math.sin(m.t*97+pl.id)*amp;Y+=Math.cos(m.t*83+pl.id)*amp;}
   const camo=(m.twl?twlCamo(m,pl):1)*(pl.inj?0.42:1);if(camo<1)c.globalAlpha=camo;
@@ -8339,7 +8375,7 @@ function draw(m){
  if(m.streaker){const z=m.streaker;const [X,Y]=P(z.x,z.y);const [X2]=P(z.x+z.vx,z.y+z.vy);const sz=Math.max(24,(z.r*2.3+1)*CV.s);
   c.save();c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(X+sz*.1,Y+sz*.32,sz*.42,sz*.18,0,0,7);c.fill();const hg=c.createRadialGradient(X,Y,0,X,Y,sz*.75);hg.addColorStop(0,'rgba(255,255,230,.45)');hg.addColorStop(1,'rgba(255,255,230,0)');c.fillStyle=hg;c.fillRect(X-sz,Y-sz,sz*2,sz*2);c.fillStyle='#fff';c.translate(X,Y);if(X2>X)c.scale(-1,1);
   c.font=`${Math.round(sz)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillText(z.em,0,0);c.restore();}
- if(clearOwn(m,b.owner)){const pl=b.owner;const [X,Y]=P(pl.x,pl.y);const t=(pl.cap?'★ ':'')+surname(pl.p.name);c.font=`600 ${Math.max(12,Math.round(R*0.68))}px 'Barlow',system-ui,sans-serif`;const tw=c.measureText(t).width;
+ if(clearOwn(m,b.owner)){const pl=b.owner;const [X,Y]=P(pl._sx??pl.x,pl._sy??pl.y);const t=(pl.cap?'★ ':'')+surname(pl.p.name);c.font=`600 ${Math.max(12,Math.round(R*0.68))}px 'Barlow',system-ui,sans-serif`;const tw=c.measureText(t).width;
   const bh=Math.max(18,R*0.95);const bw=Math.max(tw+12,46);const bx=X-bw/2,by=Y+R*1.35+6;
   // stamina bar
   const e=clamp(pl.energy/100,0,1);const eh=2;const ew=Math.max(18,R*1.4);const ex=X-ew/2;c.fillStyle='rgba(8,16,16,.85)';c.fillRect(ex-1,by-eh-3,ew+2,eh+2);
@@ -8381,7 +8417,7 @@ function draw(m){
    if(sd&&sd.hat){const [ox,oy]=P(own.x,own.y);const dx=X-ox,dy=Y-oy,dl=Math.hypot(dx,dy)||1;if(dy<0&&dl<R*1.9){const up=-dy/dl;const rr=Math.max(dl,R*(1+0.62*up)+br*0.6);X=ox+dx/dl*rr;Y=oy+dy/dl*rr;}}
    // every other player's hat goes under the ball, so the ball is never hidden by someone it's passing
    for(const q of hatQ)if(q[5]!==own){c.globalAlpha=q[4];drawHat(c,q[0],q[1],R,q[2],q[3],LT);q.done=1;}c.globalAlpha=1;}
-  aimMarkFx(c);ballTrailFx(c,X,Y,bR,curBall(),b);drawBall(c,X,Y,bR,(b.x+b.y)*0.9,curBall());if(LT)litTile(c,X,Y,bR,LT,port);}
+  tfxDraw(c,m);aimMarkFx(c);ballTrailFx(c,X,Y,bR,curBall(),b);drawBall(c,X,Y,bR,(b.x+b.y)*0.9,curBall());if(LT)litTile(c,X,Y,bR,LT,port);}
  // hats go on last, so the ball tucks in behind them
  for(const q of hatQ){if(q.done)continue;c.globalAlpha=q[4];drawHat(c,q[0],q[1],R,q[2],q[3],LT);}c.globalAlpha=1;
  drawGoalFront(c,m,0);drawGoalFront(c,m,1);
@@ -8476,8 +8512,8 @@ function createCup(kind){
   drawGroups([...uk,...euro.map((t,i)=>'e'+i)]);
  }else if(kind==='world'){
   const nat=makeNations();// every venue is used once before any is repeated
-  S.vPlayed=(S.vPlayed||[]).filter(v=>WC_VENUES.includes(v));if(S.vPlayed.length>=WC_VENUES.length)S.vPlayed=[];let pool=WC_VENUES.filter(v=>!S.vPlayed.includes(v));if(pool.length>1&&S.vPlayed.length===0)pool=pool.filter(v=>v!==S.lastVenue);const venue=pool[Math.floor(Math.random()*pool.length)];S.lastVenue=venue;S.vPlayed.push(venue);
-  S.cup={kind,euro:nat,earn:0,stage:'groups',md:0,ko:{},out:false,venue};
+  S.vPlayed=(S.vPlayed||[]).filter(v=>WC_VENUES.includes(v));if(S.vPlayed.length>=WC_VENUES.length)S.vPlayed=[];let pool=WC_VENUES.filter(v=>!S.vPlayed.includes(v));if(pool.length>1&&S.vPlayed.length===0)pool=pool.filter(v=>v!==S.lastVenue);/* five venues per World Cup, picked at random (ones not seen lately first); your games rotate through all five */const sh=a=>a.slice().sort(()=>Math.random()-0.5);let five=sh(pool).slice(0,5);if(five.length<5)five=five.concat(sh(WC_VENUES.filter(v=>!five.includes(v))).slice(0,5-five.length));const venue=five[0];S.lastVenue=five[five.length-1];five.forEach(v=>{if(!S.vPlayed.includes(v))S.vPlayed.push(v);});
+  S.cup={kind,euro:nat,earn:0,stage:'groups',md:0,ko:{},out:false,venue,venues:five};
   drawGroups(['w'+S.me,...nat.map((t,i)=>'e'+i)]);
  }else if(kind==='elite'){
   // the Elite League: Europe's greatest clubs and you, home and away
@@ -8638,7 +8674,7 @@ function venueCond(key,tag){
  const V=VENUES[key];const r=mkRng(hashStr(`${S.season}|${key}|${tag}`));let x=r(),w='clear';for(const [k,p] of V.wx){if(x<p){w=k;break;}x-=p;}
  return {w,night:!!V.night,venue:key,pitch:key,ground:V.name,fx:V.fx||null};
 }
-function cupVenue(){const c=S.cup;if(c.kind==='elite'){const f=cupMyFix();if(f){const H=cupT(f.f.h);if(H.twVenue)return H.twVenue;}}if(c.kind==='temporal'){const f=cupMyFix();if(!f)return null;const o=cupT(f.f.h===myCid()?f.f.a:f.f.h);return o.twVenue||null;}if(c.kind==='emperor'){if(c.stage==='final')return 'empfinal';const f=cupMyFix();if(!f)return 'empfinal';const o=cupT(f.f.h===myCid()?f.f.a:f.f.h);return EMP_VENUE[o.id]||'empfinal';}return c.venue||null;}
+function cupVenue(){const c=S.cup;if(c.kind==='elite'){const f=cupMyFix();if(f){const H=cupT(f.f.h);if(H.twVenue)return H.twVenue;}}if(c.kind==='temporal'){const f=cupMyFix();if(!f)return null;const o=cupT(f.f.h===myCid()?f.f.a:f.f.h);return o.twVenue||null;}if(c.kind==='emperor'){if(c.stage==='final')return 'empfinal';const f=cupMyFix();if(!f)return 'empfinal';const o=cupT(f.f.h===myCid()?f.f.a:f.f.h);return EMP_VENUE[o.id]||'empfinal';}if(c.kind==='world'&&Array.isArray(c.venues)&&c.venues.length){const i=c.stage==='groups'?(c.md||0):3+Math.max(0,STAGES.indexOf(c.stage)-1);return c.venues[i%c.venues.length];}return c.venue||null;}
 function cupCond(){const c=S.cup;const tag='cup-'+c.stage+(c.stage==='groups'||c.stage==='league'?c.md:'');
  const vk=cupVenue();if(vk){const cd=venueCond(vk,tag);if(c.kind==='elite'){const f0=cupMyFix();const H0=f0&&cupT(f0.f.h);if(H0&&H0.twField){cd.tname=H0.twField;cd.ground=H0.twField;}}if(c.kind==='temporal'){const f=cupMyFix();const o=f&&cupT(f.f.h===myCid()?f.f.a:f.f.h);if(o&&o.twField){cd.tname=o.twField;cd.ground=o.twField;}cd.w='clear';}return cd;}const f=cupMyFix();return matchCond(f?cupT(f.f.h):myTeam(),c.stage==='groups'?c.md:9,'cup-'+c.stage);}
 // a cup match makes the papers too
@@ -8650,11 +8686,11 @@ function cupNews(mf,m){try{const f=mf.f;const mine=f.h===myCid()?0:1;const me=my
  addNote('CUP NEWS',`${cupName()}: ${me.name} ${verb} ${opp.name} ${gf}–${ga}${m.pens?` (${m.pens[mine]}–${m.pens[1-mine]} pens)`:''}`,sc?`Scorers: ${sc}.`:'',
   {kind:gf>ga||pw===true?'win':gf<ga||pw===false?'loss':'draw',me:me.name,opp:opp.name,mine:gf,theirs:ga,hero:top?surname(top[0]):'',heroReal:!!(top&&isReal(top[0])),mate:mate?surname(mate[0]):'',hat:!!(top&&top[1]>=3),myLum:npLum(me.c1),oppLum:npLum(opp.c1)});}catch(e){console.error(e);}}
 function cupResFromMatch(mf,m){cupNews(mf,m);return {i:mf.i,hs:m.score[0],as:m.score[1],pens:m.pens};}
-function cupWatch(mf){
+function cupWatch(mf){ensureCaptain();
  const f=mf.f;const H=cupT(f.h),A=cupT(f.a);const ko=!['groups','league'].includes(S.cup.stage);const cnd=cupCond();
  startMatch(H,A,{cupMatch:true,mine:f.h===myCid()?0:1,cond:cnd,pitch:cnd.pitch,ko,label:cupName()+' · '+STAGE_NAME[S.cup.stage],onDone:m=>{const before=S.cup.earn;applyForm(m);cupAdvance(cupResFromMatch(mf,m));UI.tab='match';render();if(S.cup.earn>before)toast(`${cupName()} prize money: ${fmt(S.cup.earn-before)}`);}});
 }
-function cupQuick(mf){
+function cupQuick(mf){ensureCaptain();
  const f=mf.f;const H=cupT(f.h),A=cupT(f.a);fixXI(myTeam());
  const ko=!['groups','league'].includes(S.cup.stage);const m=quickFair(H,A,()=>runQuick(sideOf(H,A,false),sideOf(A,H,true),MATCH_DUR,undefined,engineCond(cupCond()),ko));
  if(ko&&m.score[0]===m.score[1])m.pens=shootoutResult(shootout(m,null));
@@ -9034,6 +9070,11 @@ if(S&&S.world){const seen=new Map();const me=S.world.teams[S.me];const touched=n
 // the league-winner reward that was shown as Park Ji-sung (user's request): the real Park Ji-sung joins your squad in place of the made-up mystery player Joe Haddad
 // cup balls for cups already won (the Aurora ball is now the Eternal Cup's; anyone who already has it keeps it)
 // more players who cut inside (Saka, Salah, Bale, Foden) - their old trait is replaced, no one new gains a trait
+// keepers lifted, Bruno Fernandes's passing (existing careers too)
+// traits taken out of the game (Big-game player, Fox in the box, Hothead): those players simply have none now
+if(S&&S.world&&!S.tr6){for(const p of [...S.world.teams.flatMap(t=>t.squad),...S.world.free])if(p.trait&&!TRAITS[p.trait])p.trait=null;S.tr6=1;save();}
+if(S&&S.world&&!S.dup1){const me=S.world.teams[S.me];const seen=new Set(me.squad.filter(p=>p.real).map(p=>p.name));for(const t of S.world.teams){if(t===me)continue;const before=t.squad.length;t.squad=t.squad.filter(p=>{if(!p.real)return true;if(seen.has(p.name))return false;seen.add(p.name);return true;});if(t.squad.length!==before){t.xi=autoPick(t.squad,t.formation);if(t.squad.length<16&&typeof aiRestock==='function')aiRestock(t);}}S.dup1=1;save();}
+if(S&&S.world&&!S.gk3&&typeof gkLift==='function'){const all=[...S.world.teams.flatMap(t=>t.squad),...S.world.free];for(const p of all){const f=ATTR_SET[R3_FOLD(p.name)];if(f&&p.real){for(const k in f)p[k]=f[k];p.ovr=overall(p);p.value=valueOf(p);}}gkLift(all);S.world.teams.forEach((t,i)=>{if(i!==S.me)t.xi=autoPick(t.squad,t.formation);});S.gk3=1;save();}
 if(S&&S.world&&!S.ci1){for(const p of [...S.world.teams.flatMap(t=>t.squad),...S.world.free])if(['Bukayo Saka','Mohamed Salah','Gareth Bale','Phil Foden'].includes(p.name))p.trait='cutinside';S.ci1=1;save();}
 if(S&&S.world&&!S.bl2){const w=S.cupsWon||{};for(const k in BALL_FOR_CUP)if(w[k]&&!(S.balls||[]).includes(BALL_FOR_CUP[k]))S.balls=[...(S.balls||['white','orange']),BALL_FOR_CUP[k]];S.bl2=1;save();}
 if(S&&S.world&&!S.pk1){const me=S.world.teams[S.me];const jh=me.squad.find(p=>p.name==='Joe Haddad'&&p.mystery);
@@ -9097,7 +9138,7 @@ function liveOthers(ctx){const out=[];
  else if(!ctx||!ctx.cupMatch){const rd=S.fx[myLg()][S.round]||[];for(const f of rd){if(f.h===S.me||f.a===S.me||f.hs!==null)continue;prep(f,T_()[f.h],T_()[f.a]);}}
  save();return out;}
 function liveScoresHTML(ctx){let L=[];try{L=liveOthers(ctx);}catch(e){console.error(e);}if(!L.length)return '';LIVE_OTHERS=L;
- const item=(o,i)=>`<span class="lsi"><b>${esc(o.H.short||o.H.name)}</b> <em data-ls="${i}">0–0</em> <b>${esc(o.A.short||o.A.name)}</b> <small data-lsm="${i}"></small></span>`;
+ const item=(o,i)=>`<span class="lsi">${badge(o.H,16)}<b>${esc(o.H.short||o.H.name)}</b> <em data-ls="${i}">0–0</em> <b>${esc(o.A.short||o.A.name)}</b>${badge(o.A,16)}<small data-lsm="${i}"></small></span>`;
  const row=L.map(item).join('<i class="lsdot">•</i>')+'<i class="lsdot">•</i>';
  LS_ROW=row.replace(/data-ls(m?)="/g,'data-ls$1x="');setTimeout(lsFit,0);
  return `<div class="ticker livescores" aria-label="Live scores from the other matches"><span class="lslab">LIVE</span><div class="lsview"><div class="tk"><span class="lshalf">${row}</span><span class="lshalf">${LS_ROW}</span></div></div></div>`;}
