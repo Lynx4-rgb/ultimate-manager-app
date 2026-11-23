@@ -580,6 +580,7 @@ h1,h2{text-shadow:0 1px 0 rgba(0,0,0,.45),0 0 1px rgba(255,235,190,.15)}
 .bench .ptile{margin-top:22px}
 .capover .ftcard h2{font-size:22px;line-height:1.15;margin:4px 0}
 .capover .caplist{grid-template-columns:1fr 1fr;max-height:52vh;overflow:auto}
+@media (orientation:landscape) and (max-height:500px){.capover{align-items:center;justify-content:center}.capover .ftcard{padding:8px 12px;gap:4px;max-width:min(640px,94vw);max-height:94%;overflow:hidden}.capover .ftcard h2{font-size:15px;margin:0}.capover .ftcard .note{font-size:11px;margin:0}.capover .ftcard .eyebrow{font-size:10px}.capover .caplist{grid-template-columns:repeat(3,1fr);gap:4px;margin-top:2px;max-height:none;overflow:visible}.capover .caplist .btn{padding:3px 6px;min-height:0;font-size:11px;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.capover .caplist .pos{font-size:9px;padding:1px 3px}.capover .caplist .rchip{transform:scale(.85)}}
 .offers .offer{grid-template-columns:minmax(0,1fr) auto!important;row-gap:6px}.offers .offer .ohead{grid-column:1/-1}
 .offers .offer .oact{align-self:end}
 .benchgrid{display:grid;grid-auto-flow:column;column-gap:16px;justify-items:center;align-items:start}
@@ -597,7 +598,7 @@ html,body{margin:0}
 /* ===== 6.7" phone, landscape (about 915 x 412): everything fits the screen height ===== */
 @media (orientation:landscape) and (max-height:500px){
  /* sign-in and setup screens: no scrolling */
- .authwrap{min-height:100dvh;padding:6px 0;align-content:center}
+ .authwrap{min-height:var(--appH,calc(var(--appH,100dvh)*1.0));padding:6px 0;align-content:center}
  .authlogo{font-size:26px!important;line-height:1}.authcard h2,.authpick h2{font-size:15px;margin:2px 0}
  .authcard{gap:6px!important}.authcard input{padding:6px 10px!important;font-size:14px}.authcard .btn{padding:6px 14px}
  .authpick{gap:8px}.avbtn{width:110px!important;padding:6px!important}.avbtn svg,.avbtn img.upic,.avbtn.add .plus{width:62px!important;height:62px!important}.avbtn span{font-size:10px}
@@ -611,7 +612,7 @@ html,body{margin:0}
  .custom{margin-top:6px;padding-top:6px!important;gap:4px}.customrow{gap:8px}.customrow .fld span{font-size:10px}.customrow input{padding:4px 8px;font-size:13px}.preview .note{display:none}
 
  /* main screens: menu down the left, the page fills the rest */
- .wrap.hub{display:grid;grid-template-columns:96px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:'nav head' 'nav main';column-gap:10px;height:100dvh;padding:6px 0 0;max-width:none}
+ .wrap.hub{display:grid;grid-template-columns:96px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:'nav head' 'nav main';column-gap:10px;height:var(--appH,calc(var(--appH,100dvh)*1.0));padding:6px 0 0;max-width:none}
  .wrap.hub>.hubhead{grid-area:head;padding:0 0 4px;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
  .wrap.hub>.hubhead .badge,.wrap.hub>.hubhead .badge svg{width:26px!important;height:26px!important}
  .wrap.hub>.hubhead h1{font-size:18px!important;line-height:1}.wrap.hub>.hubhead .eyebrow{font-size:9px}
@@ -625,8 +626,8 @@ html,body{margin:0}
 
  /* matchday: next match fits the screen height on the left */
  #tabbody[data-t=match] .mdgrid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;align-items:start}
- #tabbody[data-t=match] .md-a>.panel{height:calc(100dvh - 62px);display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px}
- #tabbody .grid2>.stack>.cuphead:first-child{min-height:calc(100dvh - 62px);box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between} /* the cup's next-match panel fills the phone screen like the league one */
+ #tabbody[data-t=match] .md-a>.panel{height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 62px);display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px}
+ #tabbody .grid2>.stack>.cuphead:first-child{min-height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 62px);box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between} /* the cup's next-match panel fills the phone screen like the league one */
  #tabbody[data-t=match] .md-a .bigfix{padding:2px 0}#tabbody[data-t=match] .md-a .bigfix h3{font-size:15px}
  #tabbody[data-t=match] .md-a .bigfix .badge,#tabbody[data-t=match] .md-a .bigfix .badge svg{width:40px!important;height:40px!important}
  #tabbody[data-t=match] .md-a .venue{flex:1;min-height:40px;height:auto;max-height:110px}
@@ -642,7 +643,7 @@ html,body{margin:0}
  #tabbody[data-t=squad] .tools #auto{grid-column:1/-1}
  #tabbody[data-t=squad] .taccyc{display:grid;grid-template-columns:28px 1fr 28px;width:100%}#tabbody[data-t=squad] .taccyc .cycname{min-width:0}#tabbody[data-t=squad] .taccyc .cycname b{font-size:14px!important}
  #tabbody[data-t=squad] .tacdesc{font-size:11px;line-height:1.3}#tabbody[data-t=squad] .tacfam{font-size:11px}
- #tabbody[data-t=squad] .bigpitch.horiz{width:auto;height:calc(100dvh - 80px);aspect-ratio:88/68}
+ #tabbody[data-t=squad] .bigpitch.horiz{width:auto;height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 80px);aspect-ratio:88/68}
  #tabbody[data-t=squad] .ptile{--s:36px}#tabbody[data-t=squad] .ptile .tr{font-size:17px}#tabbody[data-t=squad] .ptile .tp{font-size:7px}
  #tabbody[data-t=squad] .ptile .tn{font-size:8px;bottom:-12px;max-width:54px}
  #tabbody[data-t=squad] .ptile .cstar{font-size:13px;top:-17px}
@@ -680,13 +681,13 @@ html,body{margin:0}
  /* matchday */
  .mdph{display:grid;gap:10px}
  .mdph .ph-top{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:10px;align-items:start}
- .mdph .md-a>.panel{height:calc(100dvh - 62px);display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px}
+ .mdph .md-a>.panel{height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 62px);display:flex;flex-direction:column;justify-content:space-between;padding:8px 10px}
  .mdph .md-a .venuebar{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap}.mdph .md-a .venuebar .eyebrow{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
  .mdph .md-a .venuebar>:last-child{font-size:11px;flex:none;padding:2px 8px}.mdph .md-a .venuebar svg{width:14px;height:14px}
  .mdph .md-a .bigfix{padding:2px 0}.mdph .md-a .bigfix h3{font-size:15px}.mdph .md-a .bigfix .badge,.mdph .md-a .bigfix .badge svg{width:40px!important;height:40px!important}
  .mdph .md-a .venue{flex:1;min-height:40px;height:auto;max-height:120px}.mdph .md-a .actions{gap:6px;margin-top:6px}.mdph .md-a .actions .btn{padding:6px 10px}
  .mdph .md-a .note{font-size:10px}.mdph .md-a p.note{margin-top:4px!important}
- .mdph .notes{height:calc(100dvh - 62px);overflow:hidden;display:flex;flex-direction:column;padding:8px 10px}.mdph .notes .nh,.mdph .notes .nd{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}.mdph .md-a>.panel{overflow:hidden;box-sizing:border-box} /* the two match-day boxes always fit the phone screen: a long story is trimmed, never spills */.mdph .notes .ntree{flex:0 1 auto;margin-bottom:6px}
+ .mdph .notes{height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 62px);overflow:hidden;display:flex;flex-direction:column;padding:8px 10px}.mdph .notes .nh,.mdph .notes .nd{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}.mdph .md-a>.panel{overflow:hidden;box-sizing:border-box} /* the two match-day boxes always fit the phone screen: a long story is trimmed, never spills */.mdph .notes .ntree{flex:0 1 auto;margin-bottom:6px}
  .mdph .notes .nh{font-size:13px!important;white-space:normal}.mdph .notes .nitem.lead .nh{font-size:15px!important}.mdph .notes .nd{font-size:11px!important}.mdph .notes #morenotes{align-self:flex-start;margin-top:0}
  .mdph .ph-mid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:10px;align-items:stretch}
  .mdph .ph-side{display:flex;flex-direction:column;gap:10px;min-width:0}.mdph .ph-side>section:last-child{flex:1}
@@ -694,14 +695,14 @@ html,body{margin:0}
  /* squad: portrait pitch, bench level with it, equal gaps */
  #tabbody[data-t=squad] .squadpanel{grid-template-columns:auto 168px!important;column-gap:14px!important}
  #tabbody[data-t=squad] .squadfield{display:flex!important;gap:14px!important;align-items:stretch}
- #tabbody[data-t=squad] .bigpitch{height:calc(100dvh - 82px)!important;width:auto!important;aspect-ratio:68/88;flex:none;margin:0}
+ #tabbody[data-t=squad] .bigpitch{height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 82px)!important;width:auto!important;aspect-ratio:68/88;flex:none;margin:0}
  #tabbody[data-t=squad] .bench{max-height:none!important;display:flex;flex-direction:column;justify-content:flex-start}
  /* market: the table fills the width, Sign finishing at the right edge */
  .mtable table{width:100%}.mtable .trcol{max-width:none;width:118px}.mtable .trcol>*{max-width:118px}
  /* league rows a touch shorter */
  #tabbody[data-t=league] td,#tabbody[data-t=league] th{padding-top:4px!important;padding-bottom:4px!important}
  /* full time on a phone */
- body.noscroll{overflow:hidden;height:100dvh}
+ body.noscroll{overflow:hidden;height:var(--appH,calc(var(--appH,100dvh)*1.0))}
  .ftphone{place-items:stretch;padding:6px!important}
  .ftph{display:grid;grid-template-columns:1fr 1px 1.35fr;gap:14px;background:#151b1c;border:1px solid var(--line);border-radius:12px;padding:10px 14px;height:100%;box-sizing:border-box}
  .ftph::before{content:'';grid-column:2;grid-row:1;background:rgba(255,255,255,.18)}
@@ -727,11 +728,11 @@ html,body{margin:0}
 .endwidget{display:flex;flex-direction:column;justify-content:space-between;gap:12px}
 .endmid{display:flex;gap:16px;align-items:center;justify-content:center;flex:1}.endmid h2{font-size:34px;margin:0}
 /* season summary */
-.fmpick{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:10px;box-sizing:border-box}.fmbox{background:var(--panel);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;max-width:min(560px,92vw);max-height:calc(100dvh - 24px);overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.6)}.fmgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.fmgrid.wide{grid-template-columns:repeat(3,1fr)}.fmgrid.wide .fmb{font-size:12px;padding:6px 4px}.fmb{font:inherit;font-size:14px;padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:inherit;cursor:pointer}.fmb.on{background:var(--accent,#e3a72f);color:#1a1a1a;border-color:transparent;font-weight:700}
+.fmpick{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:10px;box-sizing:border-box}.fmbox{background:var(--panel);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px;max-width:min(560px,92vw);max-height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 24px);overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.6)}.fmgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.fmgrid.wide{grid-template-columns:repeat(3,1fr)}.fmgrid.wide .fmb{font-size:12px;padding:6px 4px}.fmb{font:inherit;font-size:14px;padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:inherit;cursor:pointer}.fmb.on{background:var(--accent,#e3a72f);color:#1a1a1a;border-color:transparent;font-weight:700}
 .ballpanel .note.ballnote{margin:4px 0 8px!important;font-size:11.5px!important;line-height:1.3!important}.brc{display:block;margin:0 auto}
-.ballrev{position:fixed;inset:0;z-index:450;background:radial-gradient(circle at 50% 40%,rgba(60,40,10,.75),rgba(0,0,0,.88));display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;animation:brin .5s ease}@keyframes brin{from{opacity:0}to{opacity:1}}.brbox{text-align:center;max-width:420px;max-height:calc(100dvh - 24px);overflow:auto}.brbox h2{margin:2px 0 6px}.brbox p{margin:0 0 8px}.brc{width:min(200px,40dvh);height:min(200px,40dvh)}
+.ballrev{position:fixed;inset:0;z-index:450;background:radial-gradient(circle at 50% 40%,rgba(60,40,10,.75),rgba(0,0,0,.88));display:flex;align-items:center;justify-content:center;padding:12px;box-sizing:border-box;animation:brin .5s ease}@keyframes brin{from{opacity:0}to{opacity:1}}.brbox{text-align:center;max-width:420px;max-height:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 24px);overflow:auto}.brbox h2{margin:2px 0 6px}.brbox p{margin:0 0 8px}.brc{width:min(200px,calc(var(--appH,100dvh)*0.4));height:min(200px,calc(var(--appH,100dvh)*0.4))}
 .sumfade{position:fixed;inset:0;background:#000;z-index:500;pointer-events:none;animation:sumfade 1.3s ease-in forwards}@keyframes sumfade{0%{opacity:1}25%{opacity:1}100%{opacity:0;visibility:hidden}} /* the season's end fades up from black */
-.sumwrap{min-height:100dvh;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;
+.sumwrap{min-height:var(--appH,calc(var(--appH,100dvh)*1.0));box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;
  background:radial-gradient(ellipse at 50% 0,rgba(227,179,65,.18),transparent 60%)}
 .sumhead{display:flex;align-items:center;gap:22px;text-align:left}.sumpos{font-size:46px;margin:2px 0 0;line-height:1.05}
 .sumcup svg{filter:drop-shadow(0 6px 18px rgba(227,179,65,.45))}
@@ -743,7 +744,7 @@ html,body{margin:0}
  #tabbody[data-t=squad] .squadpanel{grid-template-columns:max-content 168px!important;justify-content:center;column-gap:14px!important}
  #tabbody[data-t=squad] .tools #autofit{grid-column:1/-1}
  .mdph .md-a>.endwidget .endmid h2{font-size:24px}
- .sumwrap{padding:8px 14px;gap:8px;min-height:100dvh}.sumhead{gap:14px}.sumpos{font-size:28px}.sumhead .note{font-size:11px}
+ .sumwrap{padding:8px 14px;gap:8px;min-height:var(--appH,calc(var(--appH,100dvh)*1.0))}.sumhead{gap:14px}.sumpos{font-size:28px}.sumhead .note{font-size:11px}
  .sumrow{flex-wrap:nowrap;gap:10px}.sumcard{min-width:0;padding:6px 10px;gap:3px}.sumcard b{font-size:13px}.sumcard .note{font-size:10px}
  .sumcard svg[viewBox="0 0 120 80"]{width:72px;height:48px}.sumcard canvas{width:60px;height:60px}.sumtile{padding:4px 0 12px}
  .sumwrap>.btn{padding:6px 18px}
@@ -1033,7 +1034,7 @@ body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;mar
 .aglist{display:grid;gap:6px}.agrow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:8px}.agrow b{display:block}.agcost{text-align:right}
 .scoutbtn{display:grid;justify-items:start;gap:2px;width:100%;text-align:left;padding:10px 12px;border-color:#e7b93c}.scoutbtn b{font-size:15px}
 .srwrap{position:fixed;inset:0;z-index:75;background:rgba(0,0,0,.6);display:grid;place-items:center;padding:10px}
-.srep{width:min(560px,96vw);max-height:min(90dvh,720px);overflow-y:auto;overscroll-behavior:contain;background:var(--panel,#1b2021);border:1px solid #e7b93c;border-radius:12px;padding:14px 16px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.srep{width:min(560px,96vw);max-height:min(calc(var(--appH,100dvh)*0.9),720px);overflow-y:auto;overscroll-behavior:contain;background:var(--panel,#1b2021);border:1px solid #e7b93c;border-radius:12px;padding:14px 16px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
 .srhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .srsec{margin:10px 0;padding-top:8px;border-top:1px solid var(--line)}.srsec>b{display:block;font:700 14px var(--data);letter-spacing:.06em;text-transform:uppercase;color:#ffd76a;margin-bottom:4px}.srsec p{margin:4px 0;font-size:14px}
 .srbar{display:grid;grid-template-columns:150px 1fr 24px;align-items:center;gap:8px;font-size:13px;margin:3px 0}.srbar i{height:8px;border-radius:4px;background:linear-gradient(90deg,#e7b93c,#ff8a3c)}.srbar b{text-align:right}
@@ -1068,7 +1069,7 @@ body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;mar
 .bigpitch .xpbox b{font:800 18px/1 'Big Shoulders Display',sans-serif}.bigpitch .xpbox span{font:800 9px/1 var(--data);letter-spacing:.12em}
 @keyframes xpglow{50%{box-shadow:0 0 0 6px rgba(255,224,138,.12),0 0 26px rgba(255,210,90,.95)}}
 .xpover{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.6);display:grid;place-items:center;padding:12px}
-.xppanel{width:min(460px,96vw);max-height:min(86dvh,640px);display:flex;flex-direction:column;background:var(--panel,#1b2021);border:1px solid #e7b93c;border-radius:12px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+.xppanel{width:min(460px,96vw);max-height:min(calc(var(--appH,100dvh)*0.86),640px);display:flex;flex-direction:column;background:var(--panel,#1b2021);border:1px solid #e7b93c;border-radius:12px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
 .xphead{display:flex;align-items:center;gap:10px;margin-bottom:6px}.xphead b{flex:1;font:800 20px var(--display,'Big Shoulders Display'),sans-serif;color:#ffd76a}
 .xplist{list-style:none;margin:0;padding:0;overflow-y:auto;overscroll-behavior:contain;display:grid;gap:4px}
 .xprow{width:100%;display:grid;grid-template-columns:44px 1fr auto auto;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;border:1px solid var(--line,#2c3436);background:rgba(255,255,255,.03);color:inherit;font:inherit;text-align:left;cursor:pointer}
@@ -1108,9 +1109,9 @@ body.twl .rdblock{border-top:1px solid rgba(255,255,255,.07);padding-top:8px;mar
 .nitem.npitem .npimg.crop{aspect-ratio:auto}
 .mdgrid .notes{display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box}.mdgrid .notes .ntree{flex:0 1 auto;margin-bottom:8px}.mdgrid .notes #morenotes{align-self:flex-start;margin-top:0}
 /* short phone screens: the pitch tiles shrink a little with the pitch, so stars and names keep clear of each other */
-@media (orientation:landscape) and (max-height:395px){#tabbody[data-t=squad] .bigpitch .ptile{--s:calc((100dvh - 82px)/9.3)}#tabbody[data-t=squad] .bigpitch .ptile .tr{font-size:calc((100dvh - 82px)/20)}#tabbody[data-t=squad] .bigpitch .ptile .tn{font-size:8px;bottom:-12px}#tabbody[data-t=squad] .bigpitch .ptile .cstar{font-size:15px}}
+@media (orientation:landscape) and (max-height:395px){#tabbody[data-t=squad] .bigpitch .ptile{--s:calc((var(--appH,calc(var(--appH,100dvh)*1.0)) - 82px)/9.3)}#tabbody[data-t=squad] .bigpitch .ptile .tr{font-size:calc((var(--appH,calc(var(--appH,100dvh)*1.0)) - 82px)/20)}#tabbody[data-t=squad] .bigpitch .ptile .tn{font-size:8px;bottom:-12px}#tabbody[data-t=squad] .bigpitch .ptile .cstar{font-size:15px}}
 /* phone squad page: the bench reads in rows of three, with room between rows so a star never touches the name above it */
-#tabbody[data-t=squad] .squadpanel:not(.prepmode) .benchgrid.phbench{grid-auto-flow:row!important;column-gap:18px!important;row-gap:clamp(8px,calc((100dvh - 120px - var(--rows,3)*66px)/(var(--rows,3))),26px);justify-content:center}
+#tabbody[data-t=squad] .squadpanel:not(.prepmode) .benchgrid.phbench{grid-auto-flow:row!important;column-gap:18px!important;row-gap:clamp(8px,calc((var(--appH,calc(var(--appH,100dvh)*1.0)) - 120px - var(--rows,3)*66px)/(var(--rows,3))),26px);justify-content:center}
 #tabbody[data-t=squad] .squadpanel:not(.prepmode) .bench{padding:6px 16px!important}
 #tabbody[data-t=squad] .squadpanel:not(.prepmode){justify-content:center}
 .ntree.scrolly{scrollbar-width:thin;padding-right:6px;overscroll-behavior:contain}
@@ -1147,7 +1148,7 @@ body.twl .prephang .phin{background:transparent;border:solid transparent;border-
 .benchgrid.prepbench.open{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
 .prepmode .bench{position:relative}
 .benchmore{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);z-index:5;width:40px;height:24px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:var(--chalk);font-size:11px;line-height:1;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,.5)}
-@media (orientation:landscape) and (max-height:500px){.benchgrid.prepbench{row-gap:clamp(4px,calc((100dvh - 300px)/8),10px)}
+@media (orientation:landscape) and (max-height:500px){.benchgrid.prepbench{row-gap:clamp(4px,calc((var(--appH,calc(var(--appH,100dvh)*1.0)) - 300px)/8),10px)}
  /* the pitch spans just the three control rows, so empty grid rows can't add height and push the panel off the bottom */
  #tabbody[data-t=squad] .squadpanel.prepmode{grid-template-rows:auto auto 1fr}
  #tabbody[data-t=squad] .squadpanel.prepmode>.squadfield{grid-row:1/span 3!important}}
@@ -1259,8 +1260,8 @@ body.twl .ticker.livescores{background:#15140f;border-color:#3a3224}
 .ptile .tinj svg{width:100%;height:100%;display:block}
 @media (max-width:640px),(max-height:500px){.ptile .tinj{top:-17px;width:11px;height:11px;left:calc(50% + 8px)}.ptile.informed .tinj{left:calc(50% + 14px)}}
 /* transfer talks */
-.ngwrap{position:fixed;top:0;left:0;width:100vw;height:100vh;height:100dvh;z-index:120;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
-.ngbox{width:min(310px,90vw);max-height:94dvh;overflow-y:auto;margin:auto;background:var(--panel,#1b2021);border:1px solid #3a4446;border-radius:12px;padding:10px 14px 12px;box-shadow:0 24px 60px rgba(0,0,0,.6);text-align:center}
+.ngwrap{position:fixed;top:0;left:0;width:100vw;height:100vh;height:var(--appH,calc(var(--appH,100dvh)*1.0));z-index:120;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
+.ngbox{width:min(310px,90vw);max-height:calc(var(--appH,100dvh)*0.94);overflow-y:auto;margin:auto;background:var(--panel,#1b2021);border:1px solid #3a4446;border-radius:12px;padding:10px 14px 12px;box-shadow:0 24px 60px rgba(0,0,0,.6);text-align:center}
 .nghead{display:flex;align-items:center;gap:8px;text-align:left}.ngwho{flex:1;min-width:0;display:flex;flex-direction:column}
 .ngwho b{font-size:17px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ngwho span{font-size:12px;color:#9fb0b5}
 .ngx{width:30px;height:30px;border-radius:8px;border:1px solid #3a4446;background:transparent;color:#cfd8da;font-size:14px;cursor:pointer;flex:0 0 auto}
@@ -1359,7 +1360,7 @@ img.npimg:not([src]){visibility:hidden}
  /* settings on a phone: the first screen is your profile and the match ball, filling the page; scroll once and it's your club and badge, filling it again */
  #tabbody[data-t=settings]{scroll-snap-type:y mandatory}
  #tabbody[data-t=settings]{padding-top:0!important;padding-bottom:0!important}
- #tabbody[data-t=settings] .setgrid{grid-template-rows:calc(100dvh - 48px) calc(100dvh - 48px);row-gap:0;align-content:start;margin:0!important}
+ #tabbody[data-t=settings] .setgrid{grid-template-rows:calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 48px) calc(var(--appH,calc(var(--appH,100dvh)*1.0)) - 48px);row-gap:0;align-content:start;margin:0!important}
  #tabbody[data-t=settings] .setgrid>.ppanel,#tabbody[data-t=settings] .setgrid>.ballpanel{scroll-snap-align:start;height:calc(100% - 12px);margin:6px 0;overflow:hidden}
  #tabbody[data-t=settings] .setrow2{scroll-snap-align:start;height:calc(100% - 12px);margin:6px 0;min-height:0;overflow:hidden}
  #tabbody[data-t=settings] .setrow2>.panel{height:100%;min-height:0;overflow:hidden;padding-top:8px!important;padding-bottom:8px!important}
@@ -1376,11 +1377,33 @@ img.npimg:not([src]){visibility:hidden}
 .genwrap{position:relative;display:block}.genwrap input{width:100%;padding-right:40px!important;box-sizing:border-box}
 .genbtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:6px;background:transparent;color:var(--amber,#e3b341);display:grid;place-items:center;cursor:pointer;padding:0}.genbtn:active{background:rgba(255,255,255,.08)}
 .nitem.clipped{overflow:hidden;-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)}
+.tacnudge{position:absolute;left:50%;top:44px;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:8px;background:rgba(12,18,16,.92);border:1.5px solid #e8c27a;border-radius:999px;padding:5px 6px 5px 14px;box-shadow:0 6px 18px rgba(0,0,0,.55);font-size:13px;white-space:nowrap;animation:tnpulse 1.6s ease-in-out infinite}
+.tacnudge .tnw{color:#f3ead6}.tacnudge .tngo{background:#e8c27a;color:#1a1408;border:0;border-radius:999px;padding:5px 12px;font-weight:700;font-size:13px;cursor:pointer}.tacnudge .tnx{background:transparent;border:0;color:#bbb;font-size:18px;line-height:1;padding:0 6px;cursor:pointer}
+@keyframes tnpulse{0%,100%{box-shadow:0 6px 18px rgba(0,0,0,.55),0 0 0 0 rgba(232,194,122,.6)}50%{box-shadow:0 6px 18px rgba(0,0,0,.55),0 0 0 6px rgba(232,194,122,0)}}
+@media (orientation:landscape) and (max-height:500px){.tacnudge{top:40px;font-size:11px;padding:3px 4px 3px 10px}.tacnudge .tngo{font-size:11px;padding:4px 9px}}
+.autotgl{display:flex;gap:8px;align-items:center;cursor:pointer}.autotgl input{width:18px;height:18px}
+.vwrap{position:relative}.pinfobtn{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,255,.85);background:rgba(10,14,12,.72);color:#fff;font:italic 700 15px/1 Georgia,serif;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.pinfobtn:hover{background:rgba(232,194,122,.9);color:#1a1408;border-color:#e8c27a}
+.pinfo{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:12px}
+.pibox{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;max-width:520px;width:100%;max-height:calc(var(--appH,100dvh) - 24px);overflow:auto;box-shadow:0 18px 50px rgba(0,0,0,.7)}
+.pithumb{height:150px;background-size:cover;background-position:center;border-radius:14px 14px 0 0}.pitext{padding:14px 18px 18px}.pitext h3{margin:2px 0 4px;font-size:24px}.pitext .vfx{margin:8px 0 0;padding-left:18px}.pitext .vfx li{margin:3px 0;font-size:14px}
+.pix{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:20px;cursor:pointer;z-index:2}
+@media (orientation:landscape) and (max-height:500px){.pibox{display:grid;grid-template-columns:42% 1fr;max-width:640px}.pithumb{height:auto;min-height:100%;border-radius:14px 0 0 14px}.pitext{padding:10px 14px}.pitext h3{font-size:18px}.pitext .vfx li{font-size:12px;margin:2px 0}.pitext .note{font-size:12px;margin:0}}
+.cupnext{position:relative;overflow:hidden}.cupnext .cntrim{position:absolute;inset:0;pointer-events:none;border-radius:inherit}
+.cn-euro{border:1px solid #2c4c9a;box-shadow:inset 0 3px 0 #1d3f8a,inset 0 5px 0 #e8c27a}.cn-euro .cntrim{background:radial-gradient(circle at 12px 12px,#e8c27a 0 2px,transparent 3px) 0 0/26px 26px repeat-x;height:24px;opacity:.55}
+.cn-world{border:1px solid #2f7a4f;box-shadow:inset 0 0 0 1px rgba(232,194,122,.35),inset 0 4px 0 #1f6b3a,inset 0 7px 0 #e8c27a}.cn-world .cntrim{background:linear-gradient(135deg,#e8c27a 0 16px,#1f6b3a 16px 22px,transparent 22px) top left/48px 48px no-repeat,linear-gradient(315deg,#e8c27a 0 16px,#1f6b3a 16px 22px,transparent 22px) bottom right/48px 48px no-repeat}
+.cn-mystery{border:1px solid #d9c27a;box-shadow:0 0 22px rgba(240,220,150,.18),inset 0 0 0 2px rgba(255,248,220,.12),inset 0 4px 0 #f3e3b0}.cn-mystery .cntrim{background:linear-gradient(180deg,rgba(255,244,210,.10),transparent 30%)}
+.cn-elite{border:1px solid #6b4fc4;box-shadow:inset 0 0 0 3px #1b1440,inset 0 0 0 4px #e8c46a}.cn-elite .cntrim{background:linear-gradient(135deg,#e8c46a 0 10px,transparent 10px),linear-gradient(225deg,#e8c46a 0 10px,transparent 10px),linear-gradient(45deg,#e8c46a 0 10px,transparent 10px),linear-gradient(315deg,#e8c46a 0 10px,transparent 10px)}
+.cn-emperor{border:1px solid #8a1c1c;box-shadow:inset 0 0 0 2px #e8c27a,inset 0 0 0 5px #5a0f12,inset 0 0 0 6px #e8c27a}.cn-emperor .cntrim{background:linear-gradient(90deg,#e8c27a,#e8c27a) top center/40% 3px no-repeat,linear-gradient(90deg,#e8c27a,#e8c27a) bottom center/40% 3px no-repeat}
+.cupwin .sumpos{text-transform:none}.cw-euro .sumline{background:linear-gradient(90deg,transparent,#2c4c9a,#e8c27a,#2c4c9a,transparent)}.cw-world .sumline{background:linear-gradient(90deg,transparent,#1f6b3a,#e8c27a,#1f6b3a,transparent)}.cw-mystery .sumline{background:linear-gradient(90deg,transparent,#f3e3b0,transparent)}.cw-elite .sumline{background:linear-gradient(90deg,transparent,#6b4fc4,#e8c46a,#6b4fc4,transparent)}
+.club .cpitch{height:54px;border-radius:8px;background-size:cover;background-position:center;margin:8px 0 2px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
 </style>
 <div id="rotate" role="dialog" aria-label="Rotate your phone"><div><svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M3 14a9 9 0 0 0 6 7M21 10a9 9 0 0 0-6-7"/><path d="M1 12l2 2 2-2M23 12l-2-2-2 2"/></svg><b>Turn your phone sideways</b><span>Ultimate Manager is built to be played in landscape.</span><button class="btn sm ghost" onclick="document.getElementById('rotate').classList.add('off')">Continue anyway</button></div></div>
 <div id="app"></div>
 <script>
 // ===== DATA =====
+(function(){let lw=0;const set=()=>{const w=innerWidth,h=innerHeight;if(w!==lw||!window._appH||Math.abs(h-window._appH)>h*0.3){lw=w;window._appH=h;document.documentElement.style.setProperty('--appH',h+'px');}};set();addEventListener('resize',set);addEventListener('orientationchange',()=>setTimeout(()=>{lw=0;set();},300));})();
+function appH(){return window._appH||window.innerHeight;}
 function mkRng(seed){let s=seed>>>0;return()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 function gaussR(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
@@ -2220,7 +2243,8 @@ function restart(m,teamIdx,x,y,kind){
   b.x=x<PL/2?Math.min(b.x,-0.3):Math.max(b.x,PL+0.3);b.y=clamp(b.y,-3,PW+3);
   {const clear=GW/2+GOAL_BODY+1.4;if(Math.abs(b.y-GY)<clear)b.y=GY+(b.y>=GY?1:-1)*clear;}
   m.outSide=out;m.cnT=0;m.cnPhase='fetch';m.cnSpot=[x,y];
- }else{b.x=x;b.y=y;b.vx=b.vy=0;}
+ }else if(kind==='throw'&&!m._ffw&&(b.y<0||b.y>PW)){const sp=hyp(b.vx,b.vy);if(sp>9){b.vx*=9/sp;b.vy*=9/sp;}m.thrSpot=[x,y];m.thrSide=b.y<0?-1:1;m.thrT=0;} /* it runs on over the touchline; the taker picks it up and brings it back to the line */
+ else{b.x=x;b.y=y;b.vx=b.vy=0;m.thrSpot=null;}
  b.owner=null;b.shot=null;b.intended=null;b.last=teamIdx;
  const T=m.teams[teamIdx];let taker;
  if(kind==='goalkick')taker=T.gk;
@@ -2279,7 +2303,7 @@ function step(m,dt){
  // players already substituted get their breath back on the bench: about a fifth of a point a minute,
  // so a man taken off at half-time is much fresher afterwards (and for the next game) than one taken off at 85
  if(m.state!=='goal'){const k=dt*0.2*90/m.dur*(m._ffw?0:1);if(k>0)for(const T of m.teams)for(const q of (T.side.bench||[]))if(q._endE!=null)q._endE=Math.min(100,q._endE+k*Math.max(0.6,q.sta/80));}
- if(m.cond.streak)streakers(m,dt);
+ /* no pitch invaders */
  // team lines (deepest opponent outfielder)
  for(const T of m.teams)T.wingT=T.tac.cross?(T.wingT||0)+dt:Math.max(0,(T.wingT||0)-dt*1.5);
  for(const T of m.teams){const O=m.teams[1-T.idx];let ln=0.5;for(const o of O.players){if(o.role==='GK')continue;const pr=progOf(T,o.x);if(pr>ln)ln=pr;}T.line=ln;}
@@ -2326,6 +2350,7 @@ function step(m,dt){
   goalCollide(m);gkSolid(m);
   if(m.state==='goal')netPhysics(m,dt);
   if((m.state==='goalkick'&&m.gkPhase==='fetch')||(m.state==='corner'&&m.cnPhase==='fetch'))rollBehindGoal(m,dt);
+  if(m.state==='throw'&&m.thrSpot){const [sx,sy]=m.thrSpot;m.thrT=(m.thrT||0)+dt;if(m.stateT<=0.45&&m.taker&&dist(m.taker,b)>1.6&&m.thrT<4)m.stateT=0.46; /* the ball waits where it stopped until the taker gets to it */if(m.stateT>0.45){const f=Math.exp(-2.4*dt);b.vx*=f;b.vy*=f;b.x+=b.vx*dt;b.y+=b.vy*dt;b.x=clamp(b.x,-2,PL+2);b.y=clamp(b.y,-3.6,PW+3.6);if(m.taker){m.taker.tx=b.x;m.taker.ty=clamp(b.y,-3.4,PW+3.4);}}else{const k=Math.min(1,dt*9);b.vx=b.vy=0;b.x+=(sx-b.x)*k;b.y+=(sy-b.y)*k;if(m.taker){m.taker.tx=sx-m.teams[m.taker.team].dir*0.5;m.taker.ty=sy;}}if(m.stateT<=0){b.x=sx;b.y=sy;m.thrSpot=null;m.thrT=0;}}
   if(m.state==='offside'&&typeof offsideTick==='function'&&offsideTick(m,dt))return;
   // the penalty: once everyone is set, the taker makes his short run-up and strikes it
   if(m.state==='pen'&&m.stateT<=0&&!m.penRun&&m.taker){const tk=m.taker;if(hyp(tk.x-tk.tx,tk.y-tk.ty)>1.2){tk.x=tk.tx;tk.y=tk.ty;}tk.vx=tk.vy=0;m.penRun=true;m.stateT=99;ev(m,'pentake',`${tk.p.name} steps up...`,tk.team);}
@@ -2904,6 +2929,20 @@ function carrierAI(m,pl,dt){
   const dG=dist(pl,g);
   // shooting
   const ang=Math.abs(pl.y-GY)/Math.max(1,Math.abs(g.x-pl.x));
+  // the final ball. Clear on the wing: he looks for the simple one into the middle for a tap-in; if nobody's there (or he's marked tight) he has a go himself.
+  // Through the middle: he shoots when it's the better option, but slips it out wide to a team-mate who's in a better spot when the way to goal is blocked.
+  if(m.state==='play'&&pl.role!=='GK'&&progOf(T,pl.x)>0.72&&dG<34&&!pl.duel&&!pl.cut){
+   const nearO=(x,y)=>{let d=99;for(const o of O){if(o.role==='GK')continue;const q=hyp(o.x-x,o.y-y);if(q<d)d=q;}return d;};
+   const laneOK2=q=>!O.some(o=>o.role!=='GK'&&segDist(o.x,o.y,pl.x,pl.y,q.x,q.y)<1.4);
+   const offQ=q=>typeof isOff==='function'&&isOff(m,T,q,0.3);
+   const wide=Math.abs(pl.y-GY)>13;
+   if(wide&&dG<21&&ang<1.5&&near<=2.4&&m.rng()<0.3){m.nWingShot=(m.nWingShot||0)+1;return loadUp(()=>doShot(m,pl,{}),0.1,false);} /* marked tight out wide with nothing on inside: he has a go */
+   else if(Math.abs(pl.y-GY)<10&&dG>11&&dG<28){
+    let blk=0;for(const o of O){if(o.role==='GK')continue;if(segDist(o.x,o.y,pl.x,pl.y,g.x,GY)<1.6&&dist(o,pl)<dG)blk++;}
+    if(blk>=1){let best=null,bs=-9;for(const q of T.players){if(q===pl||q.role==='GK')continue;if(Math.abs(q.y-GY)<11||progOf(T,q.x)<progOf(T,pl.x)-0.03)continue;const op=nearO(q.x,q.y);const dq=dist(q,g);if(op<4.5||dq>dG+5||!laneOK2(q)||offQ(q))continue;const sc=op/5-dq/30;if(sc>bs){bs=sc;best=q;}}
+     if(best&&m.rng()<0.5){m.nOutWide=(m.nOutWide||0)+1;return act(()=>doPass(m,pl,best));}}
+   }
+  }
   const rng_=(T.urgent?42:37)+(pl.whim==='long'?5:0)+(T.tac.longRange||0)+(pl.bst==='sniper'?6:0)+(hasT(pl,'longshot')?9:0)+(hasT(pl,'selfish')?4:0)+(ovv(pl.p.str)>=82||ovv(pl.p.sho)>=82?6:0);
   {const gk=O.find(q=>q.role==='GK');const gOff=gk?hyp(gk.x-g.x,gk.y-g.y):99;
    // initiative 1: the goal is (nearly) open - the keeper can't get across to a corner in time, and nobody is in the way, so he just puts it in
@@ -2948,11 +2987,11 @@ function carrierAI(m,pl,dt){
    }
   }
   // initiative, whatever the style: out wide in the final third with a team-mate free in the middle, the ball goes in for him to tap home rather than the winger trying it alone
-  if(!(pl.xInitCD>m.t)&&Math.abs(pl.y-GY)>11&&progOf(T,pl.x)>0.66&&dG<38){pl.xInitCD=m.t+0.8;let tgt=null,ts=0;
-   for(const r of T.players){if(r===pl||r.role==='GK')continue;const rg=dist(r,g);if(rg>15||Math.abs(r.y-GY)>10)continue;let open=99;for(const o of O){if(o.role==='GK')continue;const od=dist(o,r);if(od<open)open=od;}if(open<3.2)continue;
+  if(!(pl.xInitCD>m.t)&&Math.abs(pl.y-GY)>11&&progOf(T,pl.x)>0.66&&dG<38){pl.xInitCD=m.t+0.5;let tgt=null,ts=0;
+   for(const r of T.players){if(r===pl||r.role==='GK')continue;const rg=dist(r,g);if(rg>17||Math.abs(r.y-GY)>10)continue;let open=99;for(const o of O){if(o.role==='GK')continue;const od=dist(o,r);if(od<open)open=od;}if(open<2.7)continue;
     const low=!cutOut(m,pl.team,pl.x,pl.y,r.x,r.y,Math.min(dist(pl,r)*(b.k||0.8)+9,38),2);const sc=open*0.4-rg*0.1+(low?1.2:0);if(sc>ts){ts=sc;tgt=[r,low];}}
    const sel=hasT(pl,'selfish')?0.45:1;const angOK=ang<0.75&&dG<20;
-   if(tgt&&!angOK&&m.rng()<(0.55+(pl.tw??0.5)*0.35)*sel){const [r,low]=tgt;methTry(m,T,'cross');m.cross=true;m.nInitX=(m.nInitX||0)+1;r.dart=m.t+1.5;r.burst=Math.max(r.burst||0,m.t+1.2);r.crossT=m.t;
+   if(tgt&&(!angOK||near>3.2)&&m.rng()<(near>3.2?0.8:0.55+(pl.tw??0.5)*0.35)*sel){ /* clear on the wing: the simple ball into the middle comes first, even with a sight of goal */const [r,low]=tgt;methTry(m,T,'cross');m.cross=true;m.nInitX=(m.nInitX||0)+1;r.dart=m.t+1.5;r.burst=Math.max(r.burst||0,m.t+1.2);r.crossT=m.t;
     if(low)return act(()=>doPass(m,pl,r,{cross:true}));const sp=[r.x,r.y];return crossWind(m,pl,sp,()=>doPass(m,pl,r,{tx:sp[0],ty:sp[1],loft:true,cross:true}),near>SEP+1?0.3:0.2,loadUp);}}
   // the very best strikers will occasionally have a go from right out wide, even by the touchline
   if((ovv(pl.p.str)>=80||ovv(pl.p.sho)>=80)&&progOf(T,pl.x)>0.8&&Math.abs(pl.y-GY)>GW/2&&dG<34&&ang>=1.6&&near>SEP&&m.rng()<0.07){m.nWide=(m.nWide||0)+1;return loadUp(()=>doShot(m,pl,{power:true,force:true}),0.45+m.rng()*0.1,true);}
@@ -3260,6 +3299,9 @@ function doPass(m,pl,r,o){o=o||{};if(o.thru&&hasT(pl,'playmaker'))tFx(m,pl,'Play
  b.crossBall=!!o.cross&&!loft;
  b.longK=(d>32&&loft)?b.kickT:-1;b.thruK=o.thru?b.kickT:-1;if(Math.abs(pl.y-r.y)>26&&Math.abs(r.y-GY)>15&&!o.cross&&progOf(T,r.x)>0.4)methTry(m,T,'switch');
  m.stats.passes[pl.team]++;m.cross=false;pl.st.pa++;b.passBy=pl;b.loft=loft?{t0:m.t,T:(isCross||o.cross)?Math.min(2.2,Math.log(Math.max(1.01,v/Math.max(1,v-dd*k)))/k*0.95):Math.min(2.2,dd/Math.max(8,v)*1.5),prot:isCross?1:0.55,cross:!!(isCross||o.cross)}:null;if(b.loft){/* in the air the ball floats: a steady 14-20 m/s, landing on the spot it was aimed at (it used to fly off at 35+ m/s) */const KA=0.12,Tf=clamp((b.loft.cross?0.65:0.75)+dd/(b.loft.cross?23:21),0.9,4.2);const v2=dd*KA/(1-Math.exp(-KA*Tf));const sp0=hyp(b.vx,b.vy)||1;b.vx*=v2/sp0;b.vy*=v2/sp0;b.loft.T=Tf;b.loft.ka=KA;}if(isCross){m.nCross=(m.nCross||0)+1;(m.crossBy=m.crossBy||[0,0])[pl.team]++;}
+ if(o.aim){/* the keeper's sights: no error, and the ball comes down right on the marker, then checks up */const dxa=tx-b.x,dya=ty-b.y,da=hyp(dxa,dya)||1,ux=dxa/da,uy=dya/da;
+  if(loft){const ka=0.35,Tf=clamp(da/24,0.7,2.2);const va=da*ka/(1-Math.exp(-ka*Tf));b.vx=ux*va;b.vy=uy*va;b.loft={t0:m.t,T:Tf,ka,prot:0.9,aimStop:1};}
+  else{const k0=b.k||0.8;b.vx=ux*da*k0;b.vy=uy*da*k0;}}
  b.swing=null;if(o.cross&&pl.swingNext){/* the whip: it starts out wide of the target and bends back on to it */const sw=pl.swingNext;pl.swingNext=null;const sp0=hyp(b.vx,b.vy)||1;const ux=b.vx/sp0,uy=b.vy/sp0;const px=-uy,py=ux;
   const awaySign=Math.sign(px*-T.dir)||1;const side=sw==='out'?awaySign:-awaySign;const th=0.2*side;const tf=b.loft?b.loft.T:Math.min(1.6,dd/Math.max(8,v)*1.6);
   const c=Math.cos(th),s0=Math.sin(th);const nvx=b.vx*c-b.vy*s0,nvy=b.vx*s0+b.vy*c;b.vx=nvx;b.vy=nvy;b.swing={w:-2*th/tf,end:m.t+tf};m.nSwing=(m.nSwing||0)+1;}
@@ -3500,7 +3542,7 @@ function updateBall(m,dt){
      const ts=sp*1.85+4.6+m.rng()*1.6; /* clearly pushed ahead, but he stays close to it *//* knocked a clear few metres ahead of him, so you see it leave his feet */if(knockSafe(m,o,ts)){b.vx=o.face[0]*ts;b.vy=o.face[1]*ts;b.knock=true;o.knockT=m.t;m.nKnock=(m.nKnock||0)+1;}}}
   }
   }else{
-  const inAir=b.loft&&b.loft.ka&&m.t-b.loft.t0<b.loft.T;if(b.loft&&b.loft.ka&&!inAir&&!b.loft.land){b.loft.land=1;b.vx*=0.5;b.vy*=0.5;} /* it lands and checks up */
+  const inAir=b.loft&&b.loft.ka&&m.t-b.loft.t0<b.loft.T;if(b.loft&&b.loft.ka&&!inAir&&!b.loft.land){b.loft.land=1;const lf=b.loft.aimStop?0.06:0.5;b.vx*=lf;b.vy*=lf;} /* it lands and checks up */
   const k=b.shot?0.25:inAir?b.loft.ka:(b.k||0.8);const f=Math.exp(-k*dt);b.vx*=f;b.vy*=f;
   if(b.swing){if(m.t<b.swing.end&&!b.shot){const a=b.swing.w*dt,c=Math.cos(a),s0=Math.sin(a);const nvx=b.vx*c-b.vy*s0;b.vy=b.vx*s0+b.vy*c;b.vx=nvx;}else b.swing=null;}
   if(m.wind&&m.twl&&b.last!==m.twl.team){b.vy+=m.wind*dt*(b.loft?1:0.3);}
@@ -4210,20 +4252,40 @@ const PITCH_STYLES=[
  {kind:'stadium',grass:['#2e8c3b','#277e33'],seat:['#b3262b','#cf3a3a','#8e1b20']},
 ];
 const _pcache=new Map();
+// every club has its own ground: a home pitch made from the club itself - its own shade of grass and mowing pattern,
+// and its own surroundings (stands in the club's colours for the big clubs; parkland, trees, gravel or worn grass further down)
+const _tpCol=new Map();
+function teamPitchIdx(t){if(!t)return 0;const h=hashStr('pitch|'+(t.id||t.name));const lg=t.league==null?5:(t.league===ELG?0:t.league);
+ const kind=t.elite||lg<=1?0:lg<=2?(h%4===0?1:0):lg<=3?(h%3===0?0:1):(h%3===0?2:1);const idx=10000+kind*1000+(h%997);_tpCol.set(idx,[t.c1||'#2c55a8',t.c2||'#ffffff']);return idx;}
+function _hsl(h,s,l){return `hsl(${h.toFixed(1)},${s.toFixed(1)}%,${l.toFixed(1)}%)`;}
+function pitchStyleOf(idx){if(idx>=0&&idx<100)return PITCH_STYLES[idx]||PITCH_STYLES[0];const snow=idx<0,a=Math.abs(idx),kind=Math.floor((a-10000)/1000),sd=a%1000;const r=mkRng(sd*7919+kind*31+13);
+ const hue=(kind===2?74:84)+r()*(kind===2?26:50),sat=30+r()*36,lit=(kind===2?33:24)+r()*(kind===2?12:20),dl=2.4+r()*6;const n=2*(5+Math.floor(r()*7));
+ const grass=[_hsl(hue,sat,lit+dl/2),_hsl(hue+(r()-.5)*4,sat-2,lit-dl/2)];
+ const shades=['deep','rich','bright','lush','pale','dark'];const tone=lit<28?'deep':lit<32?'rich':lit<37?'bright':'pale';
+ if(snow)return {kind:'snow',grass:['#7f977a','#788f72'],surround:'#e9eef2',stripes:n,desc:['Snow-covered: the ball holds up and passes skid']};
+ if(kind===0){const [c1,c2]=_tpCol.get(a)||['#2c55a8','#ffffff'];const lc=lum(c1)<0.12?c2:c1;
+  return {kind:'stadium',grass,stripes:n,seat:[shade(lc,-0.15),shade(lc,0.12),shade(lc,-0.45)],runoff:_hsl(hue,sat,Math.max(20,lit-6)),
+   desc:[`Grass: ${tone} green, mown in ${n} stripes`,'A stadium: stands all round in the club colours','Short, quick surface: the ball runs true']};}
+ const surr=['#3b5a2a','#4a5e2e','#2f4a25','#55603a','#5f5b3c','#4d5348','#3f4f33','#6a6442','#8a7d5a','#7a5a40','#55585a','#6e7b4a','#2a3a2a'][Math.floor(r()*13)];const leaf=r()<0.28?['#5a3a1a','#8a5a20','#c08a32']:r()<0.2?['#1f3a2a','#2f5a3c','#4f7f5a']:null;
+ const trees=Math.floor(8+r()*44),path=r()<0.6,lights=r()<0.55,hut=r()<0.35;
+ const st={kind:kind===2?'worn':'park',grass,stripes:n,surround:surr,trees,path,lights,hut,tex:.06+r()*.09,leaf};
+ st.desc=[`Grass: ${kind===2?'a worn, ':''}${tone} green, mown in ${n} stripes`,kind===2?'Bare patches in the goalmouths and the centre circle':'A neat community pitch',`Surroundings: ${trees>36?'thick woodland':trees>18?'trees and open ground':'open ground'}${path?', a footpath':''}${hut?', the groundsman\'s hut':''}`,lights?'Floodlights for night games':'No floodlights'];
+ return st;}
+function teamPitch(t){const st=pitchStyleOf(teamPitchIdx(t));return {notes:st.desc||[]};}
 function pitchXform(c,s,port,dpr){
  if(port)c.setTransform(0,-s*dpr,-s*dpr,0,(PW+MY)*s*dpr,(PL+MX)*s*dpr);
  else c.setTransform(s*dpr,0,0,s*dpr,MX*s*dpr,MY*s*dpr);
 }
 function pitchCanvas(idx,w,h,port,dpr){
  const key=[idx,w,h,port,dpr].join('|');if(_pcache.has(key))return _pcache.get(key);
- if(_pcache.size>8)_pcache.clear();
+ if(_pcache.size>40){for(const k of [..._pcache.keys()])if(!String(k).startsWith('thumb'))_pcache.delete(k);}
  const cv=document.createElement('canvas');cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);
  const c=cv.getContext('2d');const s=port?w/(PW+2*MY):w/(PL+2*MX);
  pitchXform(c,s,port,dpr);if(typeof idx==='string'){if(typeof VIMG!=='undefined'&&VIMG[idx]){if(!drawVenueImg(c,idx))return cv;}else{const tc=document.createElement('canvas');tc.width=cv.width;tc.height=cv.height;const t=tc.getContext('2d');pitchXform(t,s,port,dpr);drawVenue(c,idx,s,t);}}else drawGround(c,idx,s);
  _pcache.set(key,cv);return cv;
 }
 function drawGround(c,idx,s){
- const st=PITCH_STYLES[idx];const r=mkRng(idx*991+7);const R=(a,b)=>a+r()*(b-a);
+ const st=pitchStyleOf(idx);const r=mkRng(idx*991+7);const R=(a,b)=>a+r()*(b-a);
  const X0=-MX,Y0=-MY,X1=PL+MX,Y1=PW+MY;
  const circle=(x,y,rad,fill)=>{c.fillStyle=fill;c.beginPath();c.arc(x,y,rad,0,7);c.fill();};
  // ---- surroundings ----
@@ -4253,7 +4315,7 @@ function drawGround(c,idx,s){
   c.fillStyle='#15191c';c.fillRect(PL/2-2,PW+5.6,4,4.5);
   for(const dx of [-9,5]){c.fillStyle='#d9dde0';c.fillRect(PL/2+dx,PW+3.9,4,1.3);c.fillStyle=st.seat[0];c.fillRect(PL/2+dx+0.2,PW+4.1,3.6,0.8);}
   // run-off
-  c.fillStyle='#24702f';c.fillRect(-4.2,-3.6,PL+8.4,PW+7.2);
+  c.fillStyle=st.runoff||'#24702f';c.fillRect(-4.2,-3.6,PL+8.4,PW+7.2);
   // advertising boards
   c.lineWidth=0.5;const segs=['#f3b23a','#e9eef2','#1d3a8a','#d32a24','#1b1b1b'];
   for(const [ax,ay,bx,by] of [[-4.2,-3.6,PL+4.2,-3.6],[-4.2,PW+3.6,PL+4.2,PW+3.6]]){for(let x=ax;x<bx;x+=5){c.strokeStyle=segs[Math.floor(r()*segs.length)];c.beginPath();c.moveTo(x,ay);c.lineTo(Math.min(bx,x+4.8),by);c.stroke();}}
@@ -4277,7 +4339,7 @@ function drawGround(c,idx,s){
   }else{
    for(let i=0;i<st.trees;i++){let x,y,g=0;do{x=R(X0,X1);y=R(Y0,Y1);}while(!outside(x,y,1.4)&&g++<40);const rad=R(1.6,3.3);
     circle(x+rad*0.45,y+rad*0.4,rad,'rgba(10,20,5,.35)');
-    const dark=st.kind==='worn'?'#3c5a24':'#2c4d1d',mid=st.kind==='worn'?'#4f7330':'#3c6a29',lite=st.kind==='worn'?'#6c8f40':'#5b8b3a';
+    const dark=st.leaf?st.leaf[0]:st.kind==='worn'?'#3c5a24':'#2c4d1d',mid=st.leaf?st.leaf[1]:st.kind==='worn'?'#4f7330':'#3c6a29',lite=st.leaf?st.leaf[2]:st.kind==='worn'?'#6c8f40':'#5b8b3a';
     circle(x,y,rad,dark);for(let k=0;k<6;k++)circle(x+R(-.45,.45)*rad,y+R(-.45,.45)*rad,rad*R(.35,.6),mid);circle(x-rad*0.3,y-rad*0.3,rad*0.35,lite);}
   }
   // dugouts / benches
@@ -4288,7 +4350,7 @@ function drawGround(c,idx,s){
  }
  // ---- playing surface ----
  const ex=st.kind==='stadium'?3.2:3.6,ey=st.kind==='stadium'?2.8:3.4;
- const n=16;for(let i=0;i<n;i++){const x0=-ex+i*(PL+2*ex)/n;c.fillStyle=st.grass[i%2];c.fillRect(x0,-ey,(PL+2*ex)/n+0.02,PW+2*ey);}
+ const n=st.stripes||16;for(let i=0;i<n;i++){const x0=-ex+i*(PL+2*ex)/n;c.fillStyle=st.grass[i%2];c.fillRect(x0,-ey,(PL+2*ex)/n+0.02,PW+2*ey);}
  // grass texture
  const tex=st.tex||.06;
  for(let i=0;i<3200;i++){const x=R(-ex,PL+ex),y=R(-ey,PW+ey);c.fillStyle=r()<.5?`rgba(255,255,220,${tex*R(.4,1)})`:`rgba(0,30,0,${tex*R(.4,1.2)})`;c.fillRect(x,y,R(.12,.35),R(.12,.35));}
@@ -5109,7 +5171,7 @@ drawVenueAnim=function(c,key,t,m,layer){
    const len=230/(CV.img?CV.img.ppm:10),sc=len/jl,mx=(J.nose[0]+J.tail[0])/2,my=(J.nose[1]+J.tail[1])/2;
    const jet=(x,y,a)=>{c.save();if(SH){c.translate(x+sd[0]*11,y+sd[1]*11);c.globalAlpha=.25;}else c.translate(x,y);c.rotate(a-ja);c.scale(sc,sc);c.drawImage(SH?_jetShadow:im,-mx,-my);c.restore();};
    // always from the bottom-right corner, out over the top-left
-   const fly=fn=>{const D=5,P=13,ci=Math.floor(t/P),p=(t-ci*P)/D;if(p>1)return;const j1=(hsh(ci*3.3)-.5)*.3,j2=(hsh(ci*5.7)-.5)*.3;
+   const fly=fn=>{const D=5,P=80,ci=Math.floor(t/P),p=(t-ci*P)/D;if(p>1)return;const j1=(hsh(ci*3.3)-.5)*.3,j2=(hsh(ci*5.7)-.5)*.3;
     const xa=X1+14,ya=Y1+10-(Y1-Y0)*(.15+j1),xb=X0-14,yb=Y0-10+(Y1-Y0)*(.15+j2);fn(xa+(xb-xa)*p,ya+(yb-ya)*p,Math.atan2(yb-ya,xb-xa));};
    fly((x,y,a)=>{for(let k=0;k<3;k++){const ca=Math.cos(a),sa=Math.sin(a);const bx=-k*len*.9,by=(k===0?0:(k%2?1:-1))*len*.85;jet(x+bx*ca-by*sa,y+bx*sa+by*ca,a);}});}
  }else if(key==='warzone'){
@@ -5118,6 +5180,62 @@ drawVenueAnim=function(c,key,t,m,layer){
    c.save();c.translate(x,y);c.rotate(a);c.fillStyle='#d9d9d4';c.fillRect(-1.6,-.18,3.2,.36);c.fillStyle='#b0262b';c.beginPath();c.moveTo(1.6,-.18);c.lineTo(2.2,0);c.lineTo(1.6,.18);c.fill();c.fillStyle='#8a8f94';c.beginPath();c.moveTo(-1.6,-.18);c.lineTo(-2,-.6);c.lineTo(-1.2,-.18);c.moveTo(-1.6,.18);c.lineTo(-2,.6);c.lineTo(-1.2,.18);c.fill();glo(-1.9,0,1.2,'rgba(255,180,70,A)',.95);c.restore();});
  }
 };
+// ===== life around the edges of each international pitch (drawn outside the touchlines; the pitch itself is left clear) =====
+function edgeFx(c,key,t){if(typeof VB==='undefined'||!VB)return;const {X0,Y0,X1,Y1}=VB;
+ const dot=(x,y,r,f)=>{c.fillStyle=f;c.beginPath();c.arc(x,y,Math.max(.02,r),0,7);c.fill();};
+ const glow=(x,y,r,rgb,a)=>{const g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,`rgba(${rgb},${a})`);g.addColorStop(1,`rgba(${rgb},0)`);c.fillStyle=g;c.fillRect(x-r,y-r,r*2,r*2);};
+ const outside=(x,y)=>x<-2.5||x>PL+2.5||y<-2.5||y>PW+2.5;
+ c.save();
+ if(key==='city'){
+  // traffic lights at the four crossings, and cars with their lights on going round the block
+  const L=[[-7.5,-6.5,0],[PL+5,-6.5,1],[-7.5,PW+3.5,1],[PL+5,PW+3.5,0]];
+  for(const [x,y,ph] of L){const cyc=(t/14+ph*0.5)%1;const st=cyc<0.42?2:cyc<0.5?1:0;c.save();c.translate(x,y);c.scale(1.5,1.5);c.translate(-x,-y);c.fillStyle='#111';c.fillRect(x-0.45,y-1.3,0.9,2.6);c.strokeStyle='#555';c.lineWidth=0.12;c.strokeRect(x-0.45,y-1.3,0.9,2.6);
+   const cols=[['255,40,40','#ff3b3b'],['255,190,40','#ffbe2a'],['60,255,120','#3dff7a']];for(let k=0;k<3;k++){const on=(k===0&&st===0)||(k===1&&st===1)||(k===2&&st===2);dot(x,y-0.8+k*0.8,0.27,on?cols[k][1]:'#2a2a2a');if(on)glow(x,y-0.8+k*0.8,1.8,cols[k][0],0.55);}c.restore();}
+  for(let k=0;k<4;k++){const dir=k%2?1:-1,lane=k<2?PW+5.2+(k%2)*2.2:-3.2-(k%2)*1.8;const span=PL+40,sp=7+k*1.3;const u=((t*sp+k*41)%span);const x=dir>0?-20+u:PL+20-u;
+   c.fillStyle=['#d8b62a','#c9ccd1','#b3262b','#2d2f33'][k];c.fillRect(x-1.8,lane-0.75,3.6,1.5);glow(x+dir*2.2,lane,2.2,'255,240,200',0.55);dot(x-dir*1.75,lane-0.45,0.16,'#ff2a2a');dot(x-dir*1.75,lane+0.45,0.16,'#ff2a2a');}
+ }else if(key==='beach'){
+  // the tide washing in along the shore
+  for(let k=0;k<4;k++){const p=((t*0.11+k*0.25)%1);const x=-29+p*8;const a=Math.sin(p*Math.PI)*0.45;c.strokeStyle=`rgba(255,255,255,${a.toFixed(3)})`;c.lineWidth=0.5+0.6*(1-p);c.beginPath();
+   for(let y=Y0-2;y<=Y1+2;y+=1.5){const xx=x+Math.sin(y*0.35+k*1.7+t*0.6)*0.8;y===Y0-2?c.moveTo(xx,y):c.lineTo(xx,y);}c.stroke();}
+  for(let k=0;k<26;k++){const y=Y0+(Y1-Y0)*hsh(k*3.7);const x=-21.5+hsh(k*1.1)*3+Math.sin(t*0.7+k)*0.6;dot(x,y,0.25+0.2*Math.abs(Math.sin(t*1.3+k)),'rgba(255,255,255,.45)');}
+ }else if(key==='alaska'||key==='arctic'){
+  // a light snow shower (Alaska); wind-blown snow off the ice (Arctic)
+  const n=key==='alaska'?70:36;for(let k=0;k<n;k++){const sp=key==='alaska'?2.2+hsh(k)*1.6:7+hsh(k)*5;const W=X1-X0+20,H=Y1-Y0+20;
+   const x=X0-10+((hsh(k*1.3)*W+t*(key==='alaska'?0.9:sp))%W);const y=Y0-10+((hsh(k*2.9)*H+t*(key==='alaska'?sp:1.2))%H);
+   if(key==='arctic'&&!outside(x,y))continue;dot(x+Math.sin(t*1.5+k)*0.4,y,key==='alaska'?0.2+hsh(k*5.1)*0.22:0.18,'rgba(255,255,255,.8)');
+   if(key==='arctic'){c.strokeStyle='rgba(255,255,255,.35)';c.lineWidth=0.12;c.beginPath();c.moveTo(x,y);c.lineTo(x-2.4,y-0.3);c.stroke();}}
+ }else if(key==='jungle'){
+  // fireflies blinking in the undergrowth
+  for(let k=0;k<26;k++){const side=k%4;const u=hsh(k*1.9);let x=side<2?-6+u*(PL+12):side===2?-7:PL+6,y=side===0?-5.5:side===1?PW+5:-4+u*(PW+8);x+=Math.sin(t*0.5+k)*1.4;y+=Math.cos(t*0.43+k*1.3)*1.1;
+   const a=Math.max(0,Math.sin(t*1.6+k*2.3));if(a>0.05){glow(x,y,1.3,'220,255,120',0.6*a);dot(x,y,0.13,`rgba(240,255,170,${a.toFixed(2)})`);}}
+ }else if(key==='spaceship'){
+  // chase lights running round the frame, and the stars twinkling beyond it
+  const per=2*(PL+PW+12);for(let k=0;k<64;k++){const d=(k/64)*per;const off=((d+t*18)%per);let x,y;const w=PL+6,h=PW+6;
+   if(off<w){x=-3+off;y=-3;}else if(off<w+h){x=PL+3;y=-3+(off-w);}else if(off<2*w+h){x=PL+3-(off-w-h);y=PW+3;}else{x=-3;y=PW+3-(off-2*w-h);}
+   const a=0.35+0.65*Math.max(0,Math.sin(k*0.9-t*6));glow(x,y,0.9,'90,200,255',0.5*a);dot(x,y,0.14,`rgba(160,230,255,${a.toFixed(2)})`);}
+  for(let k=0;k<30;k++){const x=X0+(X1-X0)*hsh(k*7.7),y=Y0+(Y1-Y0)*hsh(k*3.1);if(!outside(x,y)||(x>-1&&x<PL+1&&y>-6&&y<PW+6))continue;const a=0.3+0.7*Math.abs(Math.sin(t*2+k));dot(x,y,0.12,`rgba(255,255,255,${a.toFixed(2)})`);}
+ }else if(key==='desert'||key==='savannah'){
+  // heat haze over the surrounds, and the odd tumbleweed (desert) or dust devil (savannah) crossing behind the goal-line
+  for(let k=0;k<5;k++){const y=(k<3?-5.5-k*1.4:PW+4+(k-3)*1.6);c.strokeStyle=`rgba(255,240,210,${(0.08+0.05*Math.sin(t*2+k)).toFixed(3)})`;c.lineWidth=0.6;c.beginPath();for(let x=X0;x<=X1;x+=2){const yy=y+Math.sin(x*0.25+t*2.4+k)*0.35;x===X0?c.moveTo(x,yy):c.lineTo(x,yy);}c.stroke();}
+  const P=26,u=(t%P)/P;if(u<0.6){const x=-15+(PL+30)*(u/0.6),y=PW+5.5+Math.sin(u*40)*0.4;
+   if(key==='desert'){c.save();c.translate(x,y);c.rotate(t*3);c.strokeStyle='rgba(120,85,45,.9)';c.lineWidth=0.12;for(let k=0;k<9;k++){c.beginPath();c.arc(0,0,0.5+k*0.08,k,k+2.4);c.stroke();}c.restore();dot(x+0.5,y+1.1,0.9,'rgba(0,0,0,.12)');}
+   else{for(let k=0;k<14;k++){const a=t*5+k*0.7,rr=0.3+k*0.18;dot(x+Math.cos(a)*rr,y-k*0.15+Math.sin(a)*rr*0.4,0.35+k*0.04,`rgba(190,150,90,${(0.32-k*0.018).toFixed(3)})`);}}}
+ }else if(key==='carrier'){
+  // the sea running past the hull, and the deck-edge lights flashing
+  for(let k=0;k<22;k++){const side=k%2;const y=side?PW+8+hsh(k)*3:-10.5-hsh(k)*2.5;const W=X1-X0+30;const x=X0-15+((hsh(k*2.1)*W+t*6)%W);c.strokeStyle='rgba(255,255,255,.5)';c.lineWidth=0.25;c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x-1.5,y+(side?0.4:-0.4),x-3.5,y);c.stroke();}
+  const on=Math.floor(t*1.5)%2;for(const [x,y] of [[-5,-4.5],[PL+5,-4.5],[-5,PW+4.5],[PL+5,PW+4.5]]){if(on){glow(x,y,1.6,'255,60,60',0.7);dot(x,y,0.22,'#ff4a4a');}else dot(x,y,0.22,'#5a1a1a');}
+ }else if(key==='warzone'){
+  // smoke drifting up from the rubble, and distant shell flashes
+  for(const [sx,sy,ph] of [[-8,-5,0],[PL+7,12,1.7],[PL*0.62,PW+7,3.1],[-9,PW-6,4.4]]){for(let k=0;k<7;k++){const p=((t*0.12+k/7+ph*0.13)%1);const x=sx+p*4+Math.sin(t*0.4+k)*0.8,y=sy-p*5;glow(x,y,1.2+p*3.2,'90,88,84',0.42*(1-p));}}
+  const fl=(t%9)/9;if(fl<0.06){const x=X0+(X1-X0)*hsh(Math.floor(t/9)*3.3),y=Y0+2;glow(x,y,9,'255,190,110',0.5*(1-fl/0.06));}
+ }else if(key==='volcano'){
+  // the lava glowing and embers rising off it
+  const pu=0.5+0.5*Math.sin(t*1.3);for(const [x,y] of [[-9,10],[-9,40],[PL+8,25],[PL+8,55],[20,-7],[75,-7],[30,PW+7],[85,PW+7]])glow(x,y,6,'255,110,30',0.18+0.18*pu);
+  for(let k=0;k<40;k++){const side=k%4;const u=hsh(k*1.7);let x=side<2?-8+u*(PL+16):side===2?-8:PL+7,y=side===0?-6:side===1?PW+6:-6+u*(PW+12);const p=((t*0.3+hsh(k*4.1))%1);
+   x+=Math.sin(t+k)*0.6;y-=p*5;const a=(1-p)*0.9;glow(x,y,0.7,'255,140,40',a*0.6);dot(x,y,0.1,`rgba(255,${180+Math.floor(70*(1-p))},90,${a.toFixed(2)})`);}
+ }
+ c.restore();}
+{const _dva=drawVenueAnim;drawVenueAnim=function(c,key,t,m,layer){_dva(c,key,t,m,layer);if((layer||'top')==='top'&&!(typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches)){try{edgeFx(c,key,t);}catch(e){}}};}
 // lighting helpers used by the match renderer
 // how much spotlight falls on a point of the pitch
 function poolLight(LT,x,y,t){if(!LT||!LT.pools)return 0;let s=0;for(const q of LT.pools){const dx=x-q[0],dy=y-q[1];s+=Math.exp(-(dx*dx+dy*dy)/(q[2]*q[2]));}
@@ -6549,7 +6667,7 @@ function matchCond(home,round,tag){
  const night=r()<(summer?0.5:0.35);if(night&&w==='sun')w='clear';
  const wembley=tag==='cup-sf'||tag==='cup-final';
  if(!wembley&&home.homeVenue&&VENUES[home.homeVenue]){const v=venueCond(home.homeVenue,`${round}|${tag||''}`);v.night=night||v.night;v.homeV=true;return v;}
- const pitch=wembley?5:(w==='snow'&&[0,2,4].includes(home.pitch)?3:home.pitch);
+ const own=teamPitchIdx(home);const pitch=wembley?5:(w==='snow'&&pitchStyleOf(own).kind!=='stadium'?-own:own);
  return {w,night,wembley,pitch,ground:wembley?'Wembley Stadium':home.ground};
 }
 function engineCond(c){const base=weatherCond(c);if(c.venue){const V=VENUES[c.venue];Object.assign(base,V.phys,{streak:V.streak});}base.neutral=!!(c.wembley||(c.venue&&!c.homeV));base.night=!!c.night;base.venue=c.venue||null;return base;}
@@ -6566,6 +6684,8 @@ function wxIcon(c){
  return `<span class="wx">${svg}<span>${label}</span></span>`;
 }
 function groundName(H,c){return c.venue?(c.tname||VENUES[c.venue].name):c.wembley?'Wembley Stadium':H.ground;}
+function domPitchOpt(ti){const T=T_();const t=ti==null?null:typeof ti==='object'?ti:T[ti];const P=t&&typeof teamPitch==='function'?teamPitch(t):null;const own=t===T[S.me];
+ return {label:own?'Your home pitch':'Home pitch',name:t?(t.ground||t.name):'The pitch',where:t?`${esc(t.name)}'s ground${own?' - home advantage is yours':''}.`:'',effects:P&&P.notes?P.notes:['A standard grass pitch: no special effects']};}
 function venueLine(home,c,isHome){return c.wembley?`Neutral venue · Wembley Stadium`:isHome?`Home · your ground, ${esc(c.ground)}`:`Away at ${esc(c.ground)}`;}
 function venuePitch(homeIdx,round){return matchCond(T_()[homeIdx],round).pitch;}
 // ---------- season stats: appearances, goals, assists, saves, clean sheets, average match rating ----------
@@ -6911,6 +7031,7 @@ function payPlace(SUM){SUM.prize=placePrize(SUM.lg,SUM.pos);SUM.xp=SUM.pos===1?5
 function buildPreSummary(){
  const me=myTeam();const tb=table(myLg());const wonLeague=tb[0].i===S.me;
  const SUM={pre:true,season:S.season,lg:myLg(),pos:tb.findIndex(r=>r.i===S.me)+1,won:wonLeague,pts:(tb.find(r=>r.i===S.me)||{}).pts,earn:(S.seasonEarn||0)+(S.lastEarn&&!S.seasonEarn?S.lastEarn:0),prize:wonLeague?LEAGUES[myLg()].title:0};
+ if(wonLeague&&myLg()===1&&!S.autoMgr){S.autoMgr=true;S.autoOn=true;SUM.autoMgr=true;}
  {const cand=me.squad.filter(p=>(p.rn||0)>=3).map(p=>({p,avg:p.rs/p.rn})).sort((a,b)=>b.avg-a.avg)[0];if(cand)SUM.best={id:cand.p.id,avg:Math.round(cand.avg*100)/100,goals:cand.p.goals||0,apps:cand.p.apps||0};}
  SUM.titles=(S.titles||0)+(wonLeague?1:0);
  payPlace(SUM); // the prize lands before any cup starts
@@ -6922,7 +7043,7 @@ function buildPreSummary(){
   mp.num=0;mp.mystery=true;me.squad.push(mp);numberSquad(me);SUM.mystery=mp.id;S.news=(S.news||[]).concat(`Mystery player! ${mp.name} (${mp.pos}, rated ${mp.ovr}) joins as a reward for winning the league.`);S.boosters={};}
  return SUM;
 }
-function cupChain(){const list=wonElite()?['emperor']:(wonPL()||qualifiedForCup())?['euro']:[];if(!list.length){nextSeason();return;}
+function cupChain(){const list=wonElite()?['emperor']:wonPL()?['world','euro']:qualifiedForCup()?['euro']:[]; /* champions choose: the World Cup is offered first, and turning it down brings up the European Cup */if(!list.length){nextSeason();return;}
  const step=i=>cupPreview(list[i],()=>{createCup(list[i]);UI.tab='match';renderHub();},()=>{if(i+1<list.length)step(i+1);else nextSeason();});step(0);}
 // ---------- the Elite League ----------
 function eliteTeam(t){t.league=ELG;t.elite=true;t.euro=t.euro||false;t.budget=t.budget||0;for(const p of t.squad){p.id=S.nextId++;p.num=p.num||0;p.retiring=false;p.ovr=overall(p);p.value=valueOf(p);}numberSquad(t);t.xi=autoPick(t.squad,t.formation);t.captain=null;return t;}
@@ -6954,6 +7075,8 @@ function fillPyramid(news){const T=T_();
 function nextSeason(){
  S.cup=null;const T=T_();const news=[];const me=myTeam();const wonLeague=table(myLg())[0].i===S.me;
  const SUM={season:S.season,lg:myLg(),pos:table(myLg()).findIndex(r=>r.i===S.me)+1,won:wonLeague,pts:(table(myLg()).find(r=>r.i===S.me)||{}).pts,earn:(S.seasonEarn||0)+(S.lastEarn&&!S.seasonEarn?S.lastEarn:0),prize:wonLeague?LEAGUES[myLg()].title:0};
+ if(wonLeague&&SUM.lg===1&&!S.autoMgr){S.autoMgr=true;S.autoOn=true;SUM.autoMgr=true;}
+ if(S.autoMgr&&!S.autoNews){S.autoNews=1;news.unshift('Auto manager unlocked! Your assistant can now switch tactics for you during matches when the game calls for it. Turn it on or off in Settings.');}
  {const cand=me.squad.filter(p=>(p.rn||0)>=3).map(p=>({p,avg:p.rs/p.rn})).sort((a,b)=>b.avg-a.avg)[0];if(cand)SUM.best={id:cand.p.id,avg:Math.round(cand.avg*100)/100,goals:cand.p.goals||0,apps:cand.p.apps||0};}
  if(wonLeague)S.titles=(S.titles||0)+1;SUM.titles=S.titles||0;
  {const zn=zoneOf(myLg());const n=table(myLg()).length;SUM.up=SUM.pos<=zn.up?upLg(myLg()):null;SUM.down=zn.down&&SUM.pos>n-zn.down?downLg(myLg()):null;}
@@ -7048,6 +7171,7 @@ function renderSummary(){
  if(best)cards.push(card('Player of the season',`<div class="sumtile">${tileHTML(best,{bare:true})}</div><b>${esc(best.name)}</b><span class="note">Average rating ${X.best.avg.toFixed(2)} · ${X.best.goals} goal${X.best.goals===1?'':'s'}</span>`));
  if(X.prize)cards.push(card(X.won?'Title prize':`${ord(X.pos)} place prize`,`${cashSVG()}<b class="num">${fmt(X.prize)}</b><span class="note">Added to your wallet</span>`));
  if(X.xp)cards.push(card('Squad XP',`<div class="xpbig">+${X.xp}<small>XP</small></div><b>${X.xp} XP to award</b><span class="note">Spend 2 XP on a scout report before a match: drag the XP tile onto the scout on the tactics page</span>`));
+ if(X.autoMgr)cards.push(card('Auto manager',`<div class="xpbig" style="font-size:34px">AUTO</div><b>Unlocked</b><span class="note">Your assistant now switches tactics for you during matches when the game calls for it. Turn it on or off in Settings.</span>`));
  if(X.won&&X.ball)cards.push(card('New match ball',`<canvas width="84" height="84" data-sball="${X.ball}"></canvas><b>${BALLS[X.ball]}</b><span class="note">Pick it in Settings or during a match</span>`));
  if(X.won&&myst)cards.push(card('Mystery player',`<div role="button" tabindex="0" class="flip ${X.revealed?'done':''}" id="mflip" aria-label="${X.revealed?esc(myst.name):'Tap to reveal your mystery player'}"><span class="fface fback"><svg viewBox="0 0 100 100" width="64" height="64" aria-hidden="true"><circle cx="50" cy="36" r="17" fill="#2a3134"/><path d="M18 92 Q20 62 50 60 Q80 62 82 92Z" fill="#2a3134"/></svg><b>?</b><small>Tap to reveal</small></span>
    <span class="fface ffront"><span class="sumtile">${tileHTML(myst,{bare:true})}</span><b>${esc(myst.name)}</b><span class="note">${POS_NAME[myst.pos]} · age ${myst.age}</span></span></div>`));
@@ -7083,6 +7207,7 @@ function renderSelect(){
  <div class="clubs">${picks.map(([t,i])=>{const top=t.squad.slice().sort((a,b)=>b.ovr-a.ovr).slice(0,3);
   return `<button class="club ${sel===i?'sel':''}" style="--c1:${lum(t.c1)<0.15?t.c2:t.c1}" data-pick="${i}">
   <div class="top">${badge(t,48)}<div><h3>${esc(t.name)}</h3><div class="note">${esc(t.ground)}</div></div></div>
+  <div class="cpitch" style="background-image:url(${pitchThumb(teamPitchIdx(t))})" aria-hidden="true"></div>
   <div class="meta"><span>Rating<br>${chip(teamOvr(t),'sm')}</span><span>Budget<br><b>${fmt(t.budget)}</b></span><span>Shape<br><b>${t.formation}</b></span></div>
   <div class="meta"><span>Strength ${stars(t.stars)}</span></div>
   <div class="note">Key men: ${top.map(p=>esc(surname(p.name))+' ('+p.ovr+')').join(', ')}</div></button>`;}).join('')}</div>
@@ -7140,7 +7265,7 @@ function tabMatch(el){
   const cnd=matchCond(h,S.round);
   main=`<section class="panel"><div class="venuebar"><span class="eyebrow">Next match · ${venueLine(h,cnd,home)}</span>${wxIcon(cnd)}</div>
   <div class="bigfix"><div class="t">${badge(h,72)}<h3>${esc(h.name)}</h3><span class="note">${chip(teamOvr(h),'sm')} ${h.formation} · ${TACTICS[h.tactic].name}</span></div><div class="vs">VS</div><div class="t">${badge(a,72)}<h3>${esc(a.name)}</h3><span class="note">${chip(teamOvr(a),'sm')} ${a.formation} · ${TACTICS[a.tactic].name}</span></div></div>
-  <div class="venue" style="background-image:url(${pitchThumb(pi)})" role="img" aria-label="${esc(PITCHES[pi]?PITCHES[pi].name:VENUES[pi]?VENUES[pi].name:"Pitch")}"></div>
+  <div class="venue vwrap" style="background-image:url(${pitchThumb(pi)})" role="img" aria-label="${esc(PITCHES[pi]?PITCHES[pi].name:VENUES[pi]?VENUES[pi].name:"Pitch")}">${pitchBtn(pi,VENUES[pi]?{label:'Venue'}:domPitchOpt(f.h))}</div>
   <div class="actions"><button class="btn primary" id="watch">Kick off</button><button class="btn" id="tolineup">Tactics</button><button class="btn ghost" id="quick">Quick result</button></div><p class="note" style="text-align:center;margin:12px 0 0">Prize money: win ${fmt(LEAGUES[l].match)} · draw ${fmt(LEAGUES[l].match/2)} · defeat ${fmt(LEAGUES[l].match/4)} · title ${fmt(LEAGUES[l].title)}</p></section>`;
  }else{
   main=`<section class="panel" style="display:grid;gap:12px;justify-items:start"><span class="eyebrow">Round ${S.round+1}</span><h2 style="font-size:32px">No match this round</h2><button class="btn primary" id="simround">Play the round</button></section>`;
@@ -7453,12 +7578,14 @@ function badgeColours(c,N){let d;try{d=c.getImageData(0,0,N,N).data;}catch(e){re
  const tot=L.reduce((a,e)=>a+e.n,0);let main=L.find(e=>sat(e.c)>50&&e.n>tot*0.08)||L[0];let trim=L.find(e=>e!==main&&cdist(e.c,main.c)>120)||{c:lum(main.c)>0.55?'#1b1b1b':'#f4f4f0'};
  const away=L.find(e=>e!==main&&e!==trim&&cdist(e.c,main.c)>150&&e.n>tot*0.04);const a1=away?away.c:(lum(main.c)>0.55?'#1b1b1b':'#f4f4f0');const a2=cdist(main.c,a1)>120?main.c:trim.c;
  return [main.c,trim.c,a1,a2];}
+document.addEventListener('change',e=>{const t=e.target;if(t&&t.id==='automgr'&&S){S.autoOn=!!t.checked;save();toast(S.autoOn?'Auto manager on':'Auto manager off');}});
 function tabSettings(el){
  const me=myTeam();
  if(!UI.bd||UI.bdFor!==me.id){const i=BADGE_IDS.indexOf(me.id);UI.bd=Object.assign({shape:i%4,pat:Math.floor(i/4)%8,c1:me.c1,c2:me.c2,star:false},me.badge||{});UI.bdFor=me.id;}
  const DESIGNS=[0,1,2,3].flatMap(sh=>[0,2,4,6].map((pt,j)=>[sh,(pt+sh)%8]));
  if(!UI.bmode||UI.bmode==='design')UI.bmode=UI.bd.own?'own':'tpl';const bmode=UI.bmode;
  el.innerHTML=`<div class="setgrid">${twlStylePanel()}${USER?`<section class="panel ppanel"><span class="eyebrow">Your profile</span><div class="setbody"><div class="prow">${userPic(USER,84)}<div><b class="pname">${esc(USER.name)}</b><div class="bdgrow" style="margin-top:8px"><label class="btn sm" for="upimg" style="cursor:pointer">${USER.img?'Change profile picture':'Add a profile picture'}</label><input type="file" id="upimg" accept="image/*" hidden>${USER.img?'<button class="btn sm ghost" id="upimgx">Remove picture</button>':''}</div></div></div>${CLOUD_ON?cloudPanel():''}${fsPanel()}${installPanel()}</div></section>`:''}
+ ${S.autoMgr?`<section class="panel autopanel"><span class="eyebrow">Auto manager</span><div class="setbody"><label class="autotgl"><input type="checkbox" id="automgr" ${S.autoOn?'checked':''}> <span>Switch tactics automatically during matches</span></label><p class="note" style="margin:6px 0 0">When your scout spots a change, or the opposition have worked out how you play, your assistant makes the switch for you.</p></div></section>`:''}
  <section class="panel ballpanel"><span class="eyebrow">Match ball</span><div class="setbody"><div class="balls">${Object.keys(BALLS).map(k=>{const own=ownedBalls().includes(k);return own?`<button class="ballopt ${(curBall())===k?'on':''}" data-ball="${k}"><canvas width="96" height="96" data-bp="${k}" aria-hidden="true"></canvas><span>${BALLS[k]}</span></button>`:`<div class="ballopt locked" title="Locked: ${esc(ballHint(k))}"><canvas width="96" height="96" data-bp="${k}" data-lock="1" aria-hidden="true"></canvas><span>Locked</span><small>${esc(ballHint(k))}</small></div>`;}).join('')}</div><p class="note ballnote">Change the ball mid-match too. ${ownedBalls().length} of ${Object.keys(BALLS).length} collected. Cup balls change how the game plays for both sides (a little more for yours) and build on each other.</p></div></section>
  <div class="setrow2">
  <section class="panel clubsec"><span class="eyebrow">Your club</span><div class="setbody">
@@ -7644,7 +7771,7 @@ function sndEvent(e,mine){
 function sndTick(){if(!SND.bed)return;const now=performance.now();if(now>SND.chantT){SND.chantT=now+16000+Math.random()*22000;if(LIVE&&!LIVE.paused)sndChant();}}
 let CV={};
 // pixels per metre the standard stadium uses in this window (same sums as sizeCanvas, without touching the page)
-function stdScale(AW){let mx=13;const H=window.innerHeight;
+function stdScale(AW){let mx=13;const H=appH();
  if(PHONE()){const s1=H/(PW+2*MY);mx=Math.max(13,(AW/s1-PL)/2);const TW=PL+2*mx;return Math.min(H/(PW+2*MY),AW/TW);}
  const TW=PL+2*mx,TH=PW+2*MY;const w=Math.min(AW,Math.max(560,(H-150))*TW/TH);return w/TW;}
 function sizeCanvas(){
@@ -7652,12 +7779,12 @@ function sizeCanvas(){
  const vk=LIVE.cnd&&LIVE.cnd.venue&&typeof VIMG!=='undefined'&&VIMG[LIVE.cnd.venue]?LIVE.cnd.venue:null;if(vk)return sizeCanvasImg(vk);pw.style.background='';
  MX=13;
  const AW=pw.parentElement.clientWidth||window.innerWidth;
- if(PHONE()){const s1=window.innerHeight/(PW+2*MY);MX=Math.max(13,(AW/s1-PL)/2);}
+ if(PHONE()){const s1=appH()/(PW+2*MY);MX=Math.max(13,(AW/s1-PL)/2);}
  const TW=PL+2*MX,TH=PW+2*MY;
  pw.style.height='';cv.style.marginTop='';
- if(PHONE()){const vis=PW+2*MY;const H=window.innerHeight;let s0=H/vis;s0=Math.min(s0,AW/TW);w=TW*s0;
+ if(PHONE()){const vis=PW+2*MY;const H=appH();let s0=H/vis;s0=Math.min(s0,AW/TW);w=TW*s0;
   const h0=TH*s0;pw.style.height=Math.min(H,h0)+'px';cv.style.marginTop=(-Math.max(0,(h0-H)/2))+'px';}
- else if(!port)w=Math.min(w,Math.max(560,(window.innerHeight-150))*TW/TH);
+ else if(!port)w=Math.min(w,Math.max(560,(appH()-150))*TW/TH);
  const h=port?w*TW/TH:w*TH/TW;const dpr=Math.min(2,window.devicePixelRatio||1);
  cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.width=w+'px';cv.style.height=h+'px';
  const s=port?w/TH:w/TW;
@@ -7672,7 +7799,7 @@ function sizeCanvasImg(key){
  let AW=pw.parentElement.clientWidth||window.innerWidth;pw.style.position='';pw.style.left='';
  if(ph){const pe=pw.parentElement,cs=getComputedStyle(pe),cl=pe.getBoundingClientRect().left+parseFloat(cs.paddingLeft||0)+parseFloat(cs.borderLeftWidth||0);AW=window.innerWidth;pw.style.position='relative';pw.style.left=(-cl)+'px';pw.style.setProperty('max-width','none','important');pw.style.borderLeftWidth=pw.style.borderRightWidth='0';pw.style.borderRadius='0';}
  const port=!ph&&AW<620;
- const aW=port?Infinity:AW,aH=port?AW:(ph?window.innerHeight:Math.max(420,window.innerHeight-150));
+ const aW=port?Infinity:AW,aH=port?AW:(ph?appH():Math.max(420,appH()-150));
  const ax=(lx1-lx0)/PL,ay=(ly1-ly0)/PW;
  const nx0=Math.max(0,lx0-7*ax),nx1=Math.min(W,lx1+7*ax),ny0=Math.max(0,ly0-2*ay),ny1=Math.min(H,ly1+2*ay);
  const kfit=Math.min(aW/W,aH/H),kneed=Math.min(aW/(nx1-nx0),aH/(ny1-ny0)),kfill=Math.max(aW===Infinity?0:aW/W,aH/H);
@@ -7709,7 +7836,7 @@ function imgXform(c,uni){const I=CV.img,dpr=CV.dpr;let m=uni?[I.k*I.ppm,0,0,I.k*
  if(CV.port){const [a,b,cc,d,e,f]=m;m=[-b,-a,-d,-cc,I.hl-f,I.wl-e];}
  c.setTransform(m[0]*dpr,m[1]*dpr,m[2]*dpr,m[3]*dpr,m[4]*dpr,m[5]*dpr);
  if(uni){const u=I.k*I.ppm;VB={X0:-I.e/u,Y0:-I.f/u,X1:(I.wl+2*(I.gap||0)-I.e)/u,Y1:(I.hl-I.f)/u};}}
-window.addEventListener('resize',()=>{if(LIVE)sizeCanvas();else{clearTimeout(UI.rzT);UI.rzT=setTimeout(()=>{const ph=PHONE();if(ph!==UI.wasPhone&&S&&!document.querySelector('.portal')){UI.wasPhone=ph;render();}},120);}});
+window.addEventListener('resize',()=>{const sk=innerWidth+'x'+appH();if(sk===UI.lastSz)return;UI.lastSz=sk; /* the nav bar sliding in or out doesn't resize anything */if(LIVE)sizeCanvas();else{clearTimeout(UI.rzT);UI.rzT=setTimeout(()=>{const ph=PHONE();if(ph!==UI.wasPhone&&S&&!document.querySelector('.portal')){UI.wasPhone=ph;render();}},120);}});
 UI.wasPhone=PHONE();
 // on a pictured venue the goal mouth is pinned to the centre of the painted 6-yard box: a smooth bend across the width (zero at both touchlines)
 function P(x,y){const M=CV.M;let X,Y;const Qd=CV.quad;if(Qd){const c=CV.ycT;const t=c?(y<GY?y/GY*c:c+(y-GY)/(PW-GY)*(1-c)):y/PW,u=x/PL;const l=Qd[0]+(Qd[2]-Qd[0])*t,r=Qd[1]+(Qd[3]-Qd[1])*t;X=l+(r-l)*u;Y=Qd[4]+(Qd[5]-Qd[4])*t;}else{X=M[0]*x+M[2]*y+M[4];Y=M[1]*x+M[3]*y+M[5];}const B=CV.bend;if(B){const t=y/PW;if(t>0&&t<1){const q=4*t*(1-t);X+=B[0]*q;Y+=B[1]*q;}}return [X,Y];}
@@ -7720,13 +7847,15 @@ function loop(now){
  if(L.mq&&L.mq.length){const due=L.mq.filter(q=>m.t>=q.at);if(due.length){L.mq=L.mq.filter(q=>m.t<q.at);L.fromQ=true;due.forEach(q=>{try{q.fn();}catch(e){}});L.fromQ=false;toast('Your instructions have reached the bench');}}
  // a whistle (foul, free kick, penalty, card): the action freezes for a moment, whatever the speed, so it can't be missed
  m.simSpd=L.speed;if(m.flash&&m.flash.whistle&&m.flash!==L.whF){L.whF=m.flash;/* a foul with a flip: the roundel goes over first, then the notice comes up */const fl=m.players.some(q=>q.flipT!=null&&m.t-q.flipT<0.1);L.flashAt=fl&&!L.skipping?performance.now()+760:0;if(!L.skipping)L.holdUntil=performance.now()+1100+(L.flashAt?760:0);}
- if(!L.paused&&!m.finished&&!(L.holdUntil>performance.now())){const h0=m.half;L.pb={x:m.ball.x,y:m.ball.y,vx:m.ball.vx,vy:m.ball.vy,ps:m.players.map(q=>[q,q.x,q.y])};L.acc+=dt*L.speed;let n=0;while(L.acc>=1/60&&n<600){step(m,1/60);L.acc-=1/60;n++;if(m.half!==h0||m.finished)break;}
+ if(!L.paused&&!m.finished&&!L.roll&&!(L.holdUntil>performance.now())){const h0=m.half;L.pb={x:m.ball.x,y:m.ball.y,vx:m.ball.vx,vy:m.ball.vy,ps:m.players.map(q=>[q,q.x,q.y])};L.acc+=dt*L.speed;let n=0;while(L.acc>=1/60&&n<600){step(m,1/60);L.acc-=1/60;n++;if(m.half!==h0||m.finished)break;}
   /* the whistle for half-time or full-time: the ball runs on and slows to a stop where it was going, rather than freezing */
-  if((m.half!==h0||m.finished)&&!L.skipping&&m._bp&&!L.roll){const B=m._bp;L.roll={x:B[0],y:B[1],vx:B[2],vy:B[3],ps:m._pp||[],t0:now,until:now+1500};L.acc=0} /* the whistle sounds on the first frame of this (hud below); the ball runs on from exactly where it was and the players ease up */}
+  if((m.half!==h0||m.finished)&&!L.skipping&&m._bp&&!L.roll){const B=m._bp;L.roll={x:B[0],y:B[1],vx:B[2],vy:B[3],ps:m._pp||[],t0:now,until:now+1500};L.acc=0;if(m.flash&&m.flash.text!=='GOAL')m.flash=null;document.querySelectorAll('#tacnudge,.subtip').forEach(x=>x.remove());} /* the whistle sounds on the first frame of this (hud below); the ball runs on from exactly where it was and the players ease up */}
  if(L.roll){const R0=L.roll;const k=Math.exp(-1.6*dt);R0.vx*=k;R0.vy*=k;R0.x=clamp(R0.x+R0.vx*dt,-3,PL+3);R0.y=clamp(R0.y+R0.vy*dt,-3,PW+3);const kp=Math.exp(-3.2*dt);for(const r of R0.ps){if(r.length>3){r[3]*=kp;r[4]*=kp;r[1]+=r[3]*dt;r[2]+=r[4]*dt;}}
   const b=m.ball,sv={x:b.x,y:b.y,o:b.owner,sh:b.shot,lo:b.loft};const sp=R0.ps.map(([q,x,y])=>[q,q.x,q.y,q._sx,q._sy]);b.x=R0.x;b.y=R0.y;b.owner=null;b.shot=null;b.loft=null;for(const [q,x,y] of R0.ps){q.x=x;q.y=y;q._sx=x;q._sy=y;}
   draw(m);b.x=sv.x;b.y=sv.y;b.owner=sv.o;b.shot=sv.sh;b.loft=sv.lo;for(const [q,x,y,a,c] of sp){q.x=x;q.y=y;q._sx=a;q._sy=c;}hud(m);sndTick();
-  if(now<R0.until){L.raf=requestAnimationFrame(loop);return;}L.roll=null;for(const q of m.players){q._sx=null;}}
+  if(now<R0.until||(!m.finished&&L.paused&&L.htShown)){L.raf=requestAnimationFrame(loop);return;} /* at half-time the pitch stays exactly as the roll left it while the break is on */
+  if(!m.finished&&m.half===2&&!L.htShown){L.htShown=true;if(!L.skipping){L.paused=true;showHT();L.raf=requestAnimationFrame(loop);return;}}
+  L.roll=null;{/* the ball stays where it rolled to (no jump back to where it was at the whistle); players stay where they eased up */const b=m.ball;if(m.finished)m.flash=null;if(!b.owner&&m.finished){b.x=R0.x;b.y=R0.y;b.vx=b.vy=0;b.shot=null;b.loft=null;}if(m.finished)for(const r of R0.ps){if(r[0]&&r.length>2){r[0].x=r[1];r[0].y=r[2];r[0].vx=r[0].vy=0;}}}for(const q of m.players){q._sx=null;}}
  else{draw(m);hud(m);sndTick();}
  if(m.capPick===L.mine&&!L.capOpen){L.capOpen=true;showCapPick();}
  if(!L.paused&&!m.finished&&!L.skipping)subTip(L,m);
@@ -7745,6 +7874,7 @@ function hud(m){
   const sides=[m.teams[0].side,m.teams[1].side];
   feed.innerHTML=m.events.slice().reverse().map(e=>`<div class="${e.type==='clue'?'clue':e.type==='injury'?'injury':''}"><span class="m">${e.type==='pen'?'Pen':(e.lab||e.min)+'′'}</span><span class="dot" style="background:${e.team<0?'var(--dim)':sides[e.team].fill};box-shadow:0 0 0 1px ${e.team<0?'transparent':sides[e.team].ring}"></span><span class="${e.type==='goal'?'goal':''}">${esc(e.text)}</span></div>`).join('');}
  {const rc=$('#recchip');if(rc){rc.hidden=true;}}
+ try{tacNudge(m,L);}catch(e){}
  if(false){const rc=null;if(rc){const U=m.teams[L.mine];const A=m.advOn;const D=m.advDone&&m.t-m.advDone.t<m.dur*3/90?m.advDone:null;rc.hidden=!(A||D)||m.finished;
    if(A||D){const same=!A;const txt=A?A.msg:`✓ Switched to ${TACTICS[D.k].name}`;
     if(rc.dataset.t!==txt){rc.dataset.t=txt;rc.innerHTML=`<span class="rct">${esc(txt)}</span>${same?'':`<b class="rcgo">Switch to ${esc(TACTICS[A.k].name)} ›</b>`}`;}
@@ -7861,6 +7991,24 @@ function showCapPick(){
  $('#pw').appendChild(d);
  d.querySelectorAll('[data-newcap]').forEach(b=>b.onclick=()=>{const q=T.players.find(x=>x.id===+b.dataset.newcap);if(!q)return;q.cap=true;T.side.captain=q.p.id;myTeam().captain=q.p.id;save();ev(m,'cap',`${q.p.name} is the new captain`,L.mine);m.capPick=null;L.capOpen=false;d.remove();});
 }
+// time to change? a clear prompt on the pitch (tap it to switch) - or, with the auto manager on, the switch is made for you
+function tacNudge(m,L){const pw=$('#pw');if(!pw)return;let el=$('#tacnudge');const now=performance.now();
+ if(L.nudgeT&&now-L.nudgeT<700)return;L.nudgeT=now;
+ const U=m.teams[L.mine];const cur=U.side.tactic;let k=null,why='';
+ if(!m.finished&&!L.skipping&&!L.pensCtl&&!L.paused&&!L.roll&&U&&!document.querySelector('.ftover,.ftwhistle')){
+  const A=m.advise;
+  if(A&&A.u===L.mine&&cur!==A.k&&m.t-A.t<m.dur*0.3&&TACTICS[A.k]){k=A.k;why=`They've switched to ${TACTICS[A.from].name}`;}
+  else if(workedOut(m,U)){const a=tacAdvice(m,U);k=a&&!a.stay?a.k:TAC_ORDER.find(x=>x!==cur&&!tacKnown(m,U,x));why=`They've worked out your ${TACTICS[cur].name}`;}
+  else if(U.urgent&&(cur==='park'||cur==='defensive')){k='attacking';why='We need a goal';}
+  if(k===cur||!TACTICS[k])k=null;}
+ const setBox=k2=>{const box=document.querySelector('[data-cyc="live"] .cycname');if(box)box.innerHTML=`<b>${TACTICS[k2].name}</b><small>${STYLES.indexOf(k2)+1} / ${STYLES.length}</small>`;};
+ if(k&&S.autoMgr&&S.autoOn&&!(L.autoT>m.t)&&L.setTac){L.autoT=m.t+m.dur*0.05;L.setTac(k);setBox(k);toast(`Auto manager: ${why} - switched to ${TACTICS[k].name}`);k=null;}
+ const key=k?k+'|'+why:'';
+ if(!k||L.nudgeOff===key){if(el)el.remove();return;}
+ if(!el){el=document.createElement('div');el.id='tacnudge';el.className='tacnudge';pw.appendChild(el);}
+ if(el.dataset.k!==key){el.dataset.k=key;el.innerHTML=`<span class="tnw">${esc(why)}</span><button class="tngo">Switch to ${esc(TACTICS[k].name)} ›</button><button class="tnx" aria-label="Dismiss">×</button>`;
+  el.querySelector('.tngo').onclick=e=>{e.stopPropagation();if(L.setTac){L.setTac(k);setBox(k);}el.remove();};
+  el.querySelector('.tnx').onclick=e=>{e.stopPropagation();L.nudgeOff=key;el.remove();};}}
 // sent to the stands: changes take a few minutes to reach the bench
 function mgrDelay(fn){const L=LIVE;if(!L||L.fromQ||L.paused||!L.m.mgrOff||!L.m.mgrOff[L.mine]||L.m.finished)return false;(L.mq=L.mq||[]).push({at:L.m.t+L.m.dur*3/90,fn});toast('You are in the stands: your message will take a few minutes to reach the bench');return true;}
 function showHT(){
@@ -8464,8 +8612,8 @@ function draw(m){
   if(sd.roundel==='raf')rafTile(c,X,Y,R);else if(sd.emblem)emblemTile(c,X,Y,R,sd);else tile3d(c,X,Y,R,sd.ring,sd.fill);
   if(LT){litTile(c,X,Y,R,LT,port);if(LT.pools)spotTile(c,X,Y,R,LT,poolLight(LT,pl.x,pl.y,tnow));}
   if(cnd.w==='rain'||cnd.w==='snow')wetTile(c,X,Y,R,pl,m,!!(pl.duel||(pl.duelOn&&pl.duelOn.duel))||(pl.windup>0&&pl.windBig&&b.owner===pl)||flipped);
-  if(pl.p.superstar||pl.p.ovr>=100){c.strokeStyle='#2a44d6';c.lineWidth=2.4;c.beginPath();c.arc(X,Y,R+1.2,0,7);c.stroke();c.strokeStyle='#0d1a66';c.lineWidth=1;c.beginPath();c.arc(X,Y,R+2.8,0,7);c.stroke();}
-  else if(isGold(pl.p.ovr)){c.strokeStyle=GOLD;c.lineWidth=1.2;c.beginPath();c.arc(X,Y,R+0.6,0,7);c.stroke();}
+  /* the rings sit on the roundel's own edge, so every player is the same size whatever his ring */if(pl.p.superstar||pl.p.ovr>=100){c.strokeStyle='#0d1a66';c.lineWidth=1;c.beginPath();c.arc(X,Y,R-0.5,0,7);c.stroke();c.strokeStyle='#2a44d6';c.lineWidth=2.2;c.beginPath();c.arc(X,Y,R-2.0,0,7);c.stroke();}
+  else if(isGold(pl.p.ovr)){c.strokeStyle=GOLD;c.lineWidth=1.4;c.beginPath();c.arc(X,Y,R-0.7,0,7);c.stroke();}
   if(flipped)c.restore();
   if(sd.hat)hatQ.push([X,Y,sd.hat==='irq'?'irqc':sd.hat,hatFace(m,pl),camo,pl]);
   c.globalAlpha=1;
@@ -8821,11 +8969,35 @@ function venueCard(key){
  ${V.streak?`<p class="note" style="margin:8px 0 0">Watch out for the odd pitch invader: ${V.streak.map(s=>s[0]+' '+esc(s[3])).join(', ')}.</p>`:''}</div></section>`;
 }
 function leaveBtn(){const rp=S.cup&&S.cup.replay;return `<button class="btn ghost" id="leavecup">${UI.confirmLeave?(rp?'Click again to abandon this competition':'Click again to leave and start season '+(S.season+1)):(rp?'Leave this competition':'Return to domestic football')}</button>`;}
+// a cup won: the same kind of screen as winning the league - the trophy, the prize money, and anything that comes with it
+function cupWinScreen(c){const kind=c.kind||'euro';const me=myTeam();const nm=CUP_KIND[kind].name;
+ const card=(title,body)=>`<div class="sumcard"><span class="eyebrow">${title}</span>${body}</div>`;const cards=[];
+ cards.push(card('Prize money',`${cashSVG()}<b class="num">${fmt(c.earn||0)}</b><span class="note">Added to your wallet</span>`));
+ if(c.legend&&c.legend!=='-'){const i=c.legendInfo||{};cards.push(card('Joins your squad',`${i.ovr?chip(i.ovr):''}<b>${esc(c.legend)}</b><span class="note">${i.pos?esc(i.pos)+' · ':''}${i.from?'from '+esc(i.from):''}</span>`));}
+ const next=c.replay?'':kind==='euro'?'The World Cup':kind==='world'?'The Eternal Cup':kind==='mystery'?'Promotion to the Elite League':kind==='elite'?"The Emperor's Cup":'';
+ if(next)cards.push(card('Unlocked',`<div class="xpbig" style="font-size:30px">★</div><b>${esc(next)}</b><span class="note">${kind==='mystery'?'Your league football from next season':'Waiting for you on the next screen'}</span>`));
+ const wins=(S.cupsWon&&S.cupsWon[kind])||1;
+ app.innerHTML=`<div class="sumfade" aria-hidden="true"></div><div class="sumwrap cupwin cw-${kind}"><div class="sumhead"><div class="sumcup">${trophyImg(kind,PHONE()?110:190)}</div>
+  <div><span class="eyebrow">Season ${S.season} · ${esc(nm)}</span><h1 class="sumpos">${esc(me.name)} are ${esc(CUP_KIND[kind].champs)}!</h1>
+  <p class="note" style="margin:4px 0 0">${esc(nm)} winners${wins>1?` for the ${ord(wins)} time`:''}. Prize money from the competition: <b>${fmt(c.earn||0)}</b></p></div></div>
+  <div class="sumline"></div><div class="sumrow">${cards.join('')}</div>
+  <button class="btn primary" id="cwgo">Continue</button></div>`;
+ $('#cwgo').onclick=()=>{c.winShown=1;save();UI.tab='match';renderHub();};window.scrollTo(0,0);}
+// the pitch, explained: a pop-up (sized for a phone, in the middle of the screen) instead of a panel on the page
+function pitchInfo(key,opt){opt=opt||{};document.querySelectorAll('.pinfo').forEach(x=>x.remove());const V=VENUES[key];
+ const name=V?V.name:opt.name||'The pitch';const where=V?`Played at ${esc(V.where)}.`:opt.where||'';
+ const fx=V?V.effects:(opt.effects||[]);
+ const d=document.createElement('div');d.className='pinfo';d.innerHTML=`<div class="pibox" role="dialog" aria-modal="true" aria-label="${esc(name)}"><button class="pix" aria-label="Close">×</button>
+  <div class="pithumb" style="background-image:url(${pitchThumb(key)})"></div><div class="pitext"><span class="eyebrow">${esc(opt.label||'The pitch')}</span><h3>${esc(name)}</h3><p class="note">${where}</p>${fx.length?`<ul class="vfx">${fx.map(e=>`<li>${esc(e)}</li>`).join('')}</ul>`:''}</div></div>`;
+ document.body.appendChild(d);const close=()=>d.remove();d.onclick=e=>{if(e.target===d)close();};d.querySelector('.pix').onclick=close;}
+function pitchBtn(key,opt){UI._pinfo=UI._pinfo||{};const id='p'+Math.random().toString(36).slice(2,8);UI._pinfo[id]=[key,opt||{}];return `<button class="pinfobtn" data-pinfo="${id}" aria-label="About this pitch">i</button>`;}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-pinfo]');if(!b||!UI._pinfo)return;const v=UI._pinfo[b.dataset.pinfo];if(v){e.preventDefault();pitchInfo(v[0],v[1]);}});
 function cupView(el){
  if(S.cup.kind==='temporal'){twlView(el);return;}
  // knocked out: the rest of the competition is played out and you see who won
  if(S.cup.out&&S.cup.stage!=='done'){while(S.cup.stage!=='done')cupAdvance(null);save();}
  cupRewardCheck();const c=S.cup;const kind=c.kind||'euro';const nm=cupName();const P=cupPrize();const mf=c.stage!=='done'&&!c.out?cupMyFix():null;
+ if(c.stage==='done'&&c.winner===myCid()&&!c.winShown&&kind!=='emperor'){cupWinScreen(c);return;}
  const myG=(c.groups||[]).findIndex(g=>g.includes(myCid()));
  let head;
  if(c.stage==='done'&&kind==='emperor'&&c.winner===myCid()){
@@ -8852,8 +9024,10 @@ function cupView(el){
   nextOffer||backBtn}</section>`;
  }else if(mf){const f=mf.f;const h=cupT(f.h),a=cupT(f.a);
   const cnd=cupCond();const where=cupVenue()?`${esc(VENUES[cupVenue()].name)}`:venueLine(h,cnd,f.h===myCid());
-  head=`<section class="panel cuphead"><div class="venuebar"><span class="eyebrow">${nm} · ${STAGE_NAME[c.stage]}${c.stage==='groups'?` · Matchday ${c.md+1} of 3`:c.stage==='league'?` · Matchday ${c.md+1} of ${c.gfx.length}`:''}${where?' · '+where:''}</span>${wxIcon(cnd)}</div>
-  <div class="bigfix"><div class="t">${badge(h,72)}<h3>${esc(h.name)}</h3><span class="note">${chip(teamOvr(h),'sm')} ${h.formation}</span></div><div class="vs">VS</div><div class="t">${badge(a,72)}<h3>${esc(a.name)}</h3><span class="note">${chip(teamOvr(a),'sm')} ${a.formation}</span></div></div>
+  const vk=cupVenue();const pk=vk||teamPitchIdx(h);
+  head=`<section class="panel cuphead cupnext cn-${kind}"><span class="cntrim" aria-hidden="true"></span><div class="venuebar"><span class="eyebrow">${nm} · ${STAGE_NAME[c.stage]}${c.stage==='groups'?` · Matchday ${c.md+1} of 3`:c.stage==='league'?` · Matchday ${c.md+1} of ${c.gfx.length}`:''}${where?' · '+where:''}</span>${wxIcon(cnd)}</div>
+  <div class="bigfix"><div class="t">${badge(h,72)}<h3>${esc(h.name)}</h3><span class="note">${chip(teamOvr(h),'sm')} ${h.formation} · ${TACTICS[styleOf(h.tactic)]?TACTICS[styleOf(h.tactic)].name:''}</span></div><div class="vs">VS</div><div class="t">${badge(a,72)}<h3>${esc(a.name)}</h3><span class="note">${chip(teamOvr(a),'sm')} ${a.formation} · ${TACTICS[styleOf(a.tactic)]?TACTICS[styleOf(a.tactic)].name:''}</span></div></div>
+  <div class="venue vwrap" style="background-image:url(${pitchThumb(pk)})" role="img" aria-label="${esc(vk?VENUES[vk].name:'Pitch')}">${pitchBtn(pk,vk?{label:'Host venue'}:domPitchOpt(h))}</div>
   <div class="actions"><button class="btn primary" id="cwatch">Kick off</button><button class="btn" id="tolineup">Tactics</button><button class="btn ghost" id="cquick">Quick result</button></div>
   <p class="note" style="text-align:center;margin:12px 0 0">${c.stage==='league'?`${fmt(P.win)} a win${P.draw?`, ${fmt(P.draw)} a draw, ${fmt(P.loss)} a defeat`:''}. The champions take ${fmt(P.champ)}.`:c.stage==='groups'?`Top two reach the last 16. Prize money is paid when you go out, for the round you reached, or ${fmt(P.champ)} if you win it.`:c.stage==='final'?`Winner takes ${fmt(P.champ)}${P.runner?`, the runner-up ${fmt(P.runner)}`:'; the loser gets nothing'}. Draws go to penalties.`:`Go out here and you take ${P[c.stage]?fmt(P[c.stage]):'nothing'}; win and the ${STAGE_NAME[STAGES[STAGES.indexOf(c.stage)+1]].toLowerCase()} is worth ${fmt(STAGES[STAGES.indexOf(c.stage)+1]==='final'?P.runner:P[STAGES[STAGES.indexOf(c.stage)+1]])} or more. Prize money is paid once, for the round you reach. Draws go to penalties.`}</p>
   ${kind!=='euro'?`<div class="actions" style="margin-top:6px">${leaveBtn()}</div>`:''}</section>`;
@@ -8867,7 +9041,7 @@ function cupView(el){
  const powerLine=t=>t.power&&typeof POWERS!=='undefined'?`<span class="note"><b>${esc(POWERS[t.power].name)}</b>: ${esc(POWERS[t.power].desc)}</span>`:'';
  const side=kind==='elite'?`<section class="panel">${leagueHTML(c.teams)}</section>`:(c.groups||[]).length?`${myG>=0?`<section class="panel">${groupHTML(c.groups[myG],myG)}</section>`:''}<section class="panel"><span class="eyebrow">All groups</span><div class="cgroups">${c.groups.map((g,i)=>i===myG?'':groupHTML(g,i)).join('')}</div></section>`
   :`<section class="panel"><span class="eyebrow">The field</span><div class="list">${c.euro.map(t=>`<div class="fieldrow">${badge(t,26)}<b>${esc(t.name)}</b>${chip(teamOvr(t),'sm')}<span class="note">${esc(t.squad.slice().sort((a,b)=>b.ovr-a.ovr).slice(0,3).map(p=>p.name).join(', '))}</span>${powerLine(t)}</div>`).join('')}</div></section>`;
- el.innerHTML=`<div class="grid2"><div class="stack">${head}${cupVenue()&&c.stage!=='done'?venueCard(cupVenue()):''}${koHTML}${thisRound}</div><div class="stack">${notesHTML()}${side}</div></div>`;wireNotes(el);
+ el.innerHTML=`<div class="grid2"><div class="stack">${head}${koHTML}${thisRound}</div><div class="stack">${notesHTML()}${side}</div></div>`;wireNotes(el);
  wireCupBtns(el,c,mf);
 }
 function wireCupBtns(el,c,mf){
